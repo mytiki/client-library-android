@@ -30,12 +30,13 @@ import com.mytiki.publish.client.ui.UiService
  * simplify the integration process or opt for individual libraries based on their specific needs.
  */
 class TikiClient {
-
-    val auth = AuthService()
-    val capture = CaptureService()
-    val clo = CloService()
-    val email = EmailService()
-    val license = LicenseService()
+    companion object {
+        val auth = AuthService()
+        val capture = CaptureService()
+        val clo = CloService()
+        val email = EmailService()
+        val license = LicenseService()
+    }
     private val ui = UiService()
 
     /**

@@ -33,18 +33,22 @@ android {
 }
 
 dependencies {
+    val composeBom = platform("androidx.compose:compose-bom:2023.03.00")
+
+    implementation("com.mytiki:tiki-sdk-android:2.2.1")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
-
-    implementation("com.mytiki:tiki-sdk-android:2.2.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
 
     //Jetpack Compose
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.activity:activity-compose:1.8.2")
+    androidTestImplementation(composeBom)
+    implementation(composeBom)
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

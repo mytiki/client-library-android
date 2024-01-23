@@ -23,7 +23,7 @@ data class Theme(
     val secondaryBackgroundColor: Color = Color(0x15000000),
     val accentColor: Color = Color(0xFF00B272),
     val fontFamily: FontFamily = FontFamily(
-        Font(R.font.space_grotesk_light, FontWeight.Light), //300
+        Font(com.mytiki.tiki_sdk_android.R.font.space_grotesk_light, FontWeight.Light), //300
         Font(R.font.space_grotesk_regular, FontWeight.Normal), //400
         Font(R.font.space_grotesk_medium, FontWeight.Medium), //500
         Font(R.font.space_grotesk_semi_bold, FontWeight.SemiBold), //600
