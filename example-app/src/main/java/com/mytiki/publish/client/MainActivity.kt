@@ -1,7 +1,9 @@
 package com.mytiki.publish.client
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,6 +28,7 @@ import com.mytiki.sdk.capture.receipt.capacitor.MainButton
 
 class MainActivity : AppCompatActivity() {
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -63,8 +66,8 @@ class MainActivity : AppCompatActivity() {
                         )
 
                         Spacer(modifier = Modifier.height(30.dp))
-                        MainButton(text = "Example") {
-
+                        MainButton(text = "Camera") {
+                            TikiClient.capture.camera(this@MainActivity)
                         }
                     }
                 }
