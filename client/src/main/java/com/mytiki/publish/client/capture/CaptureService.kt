@@ -1,6 +1,10 @@
 package com.mytiki.publish.client.capture
 
+import android.app.Activity
 import android.graphics.Bitmap
+import android.util.Log
+
+
 
 class CaptureService {
 
@@ -8,7 +12,7 @@ class CaptureService {
      * Captures an image of a receipt for processing.
      * @return The captured receipt image.
      */
-    fun camera(): Bitmap? {
+    fun camera(activity: Activity): Bitmap? {
         return null
     }
 
@@ -24,6 +28,7 @@ class CaptureService {
      * @return The ID of the uploaded data to check publishing status.
      */
     fun publish(data: Bitmap): String{
+        Log.d("*******************", "Worked!!!!")
         return ""
     }
 
