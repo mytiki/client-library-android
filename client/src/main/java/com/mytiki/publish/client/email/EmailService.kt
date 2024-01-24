@@ -1,6 +1,10 @@
 package com.mytiki.publish.client.email
 
-class EmailService {
+import android.content.Context
+import com.mytiki.publish.client.repository.EmailAccountRepository
+
+class EmailService() {
+    val emailAccountRepository = EmailAccountRepository()
     /**
      * Authenticates with OAuth and adds an email account for scraping receipts.
      * @param provider The email provider (GOOGLE or OUTLOOK).

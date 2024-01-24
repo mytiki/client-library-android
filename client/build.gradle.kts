@@ -40,6 +40,11 @@ dependencies {
 
     implementation("com.mytiki:tiki-sdk-android:2.2.1")
 
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
+    implementation ("com.google.code.gson:gson:2.10.1")
+
+
     //Jetpack Compose
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.compose.ui:ui")
