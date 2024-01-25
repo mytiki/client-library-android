@@ -4,16 +4,13 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-import com.google.gson.Gson
 import com.mytiki.publish.client.auth.AuthToken
-
 
 class EmailAccountRepository() {
 
     private var masterKey: MasterKey? = null
     private var sharedPreferences: SharedPreferences? = null
     private var editor:  SharedPreferences.Editor? = null
-    private val gson = Gson()
 
     private fun check(context: Context){
         if (masterKey == null){
@@ -36,22 +33,22 @@ class EmailAccountRepository() {
     fun saveToken(context: Context, email: String, token: AuthToken){
         check(context)
         if (sharedPreferences!!.contains(email)){
-            updateToken(email, token)
+            updateToken(email, token.toString())
         } else {
-            editor!!.putString(email, gson.toJson(token))
+            editor!!.putString(email, token.toString()).commit()
         }
     }
 
-    private fun updateToken(email: String, token: AuthToken){
+    private fun updateToken(email: String, token: String){
         editor!!.remove(email)
-        editor!!.putString(email, gson.toJson(token))
+        editor!!.putString(email, token)
     }
 
     fun getToken(context: Context, email: String): AuthToken? {
         check(context)
         val token = sharedPreferences!!.getString(email, null)
         return if (token != null){
-            gson.fromJson(token, AuthToken::class.java)
+           AuthToken.fromString(token)
         } else {
             null
         }
@@ -61,5 +58,4 @@ class EmailAccountRepository() {
         check(context)
         editor!!.remove(email)
     }
-
 }

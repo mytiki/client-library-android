@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+
     val composeBom = platform("androidx.compose:compose-bom:2023.03.00")
 
     implementation("com.mytiki:tiki-sdk-android:2.2.1")
@@ -48,11 +49,8 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
-    implementation ("com.google.code.gson:gson:2.10.1")
-
 
     //Jetpack Compose
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -63,8 +61,9 @@ dependencies {
     implementation(composeBom)
 
     testImplementation("junit:junit:4.13.2")
+    testImplementation("org.json:json:20230227")
+    testImplementation ("io.mockk:mockk:1.13.9")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-
-
+    androidTestImplementation ("io.mockk:mockk-android:1.13.9")
 }
