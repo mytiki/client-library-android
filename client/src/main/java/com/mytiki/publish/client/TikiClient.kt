@@ -29,14 +29,17 @@ import com.mytiki.publish.client.ui.UiService
  * that calls the underlying libraries to perform common operations. Programmers can use it to
  * simplify the integration process or opt for individual libraries based on their specific needs.
  */
-class TikiClient {
 
-    val auth = AuthService()
-    val capture = CaptureService()
-    val clo = CloService()
-    val email = EmailService()
-    val license = LicenseService()
-    private val ui = UiService()
+class TikiClient {
+    companion object {
+        val auth = AuthService()
+        val capture = CaptureService()
+        val clo = CloService()
+        val email = EmailService()
+        val license = LicenseService()
+        private val ui = UiService()
+    }
+
 
     /**
      * Initializes the TikiClient with the application context and sets its parameters.
