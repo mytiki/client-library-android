@@ -1,4 +1,4 @@
-package com.mytiki.publish.client.theme
+package com.example.mytiki.publish.client.theme
 
 import android.app.Activity
 import android.os.Build

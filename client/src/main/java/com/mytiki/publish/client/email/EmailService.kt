@@ -1,15 +1,24 @@
 package com.mytiki.publish.client.email
 
-import android.content.Context
+import android.net.Uri
 import com.mytiki.publish.client.repository.EmailAccountRepository
+import net.openid.appauth.AuthorizationServiceConfiguration
+
 
 class EmailService() {
     val emailAccountRepository = EmailAccountRepository()
+
+
     /**
      * Authenticates with OAuth and adds an email account for scraping receipts.
      * @param provider The email provider (GOOGLE or OUTLOOK).
      */
-    fun login(provider: EmailProviderEnum){
+    fun login(provider: EmailProviderEnum, clientID: String, clientSecret: String = ""){
+        val serviceConfig = AuthorizationServiceConfiguration(
+            Uri.parse(provider.authorizationEndpoint),  // authorization endpoint
+            Uri.parse(provider.tokenEndpoint) // token endpoint
+        )
+
 
     }
 

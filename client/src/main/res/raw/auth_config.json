@@ -1,0 +1,6 @@
+{
+  "client_id": "1069507745611-ccoh4pjgfpoqf5t2p2poanuqiovtnjun.apps.googleusercontent.com",
+  "redirect_uri": "com.googleusercontent.apps.PREFIX:/oauth2redirect",
+  "authorization_scope": "openid email profile",
+  "discovery_uri": "https://accounts.google.com/.well-known/openid-configuration"
+}

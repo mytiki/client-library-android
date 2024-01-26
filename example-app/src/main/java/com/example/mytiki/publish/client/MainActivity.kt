@@ -1,4 +1,4 @@
-package com.mytiki.publish.client
+package com.example.mytiki.publish.client
 
 import android.os.Build
 import android.os.Bundle
@@ -23,8 +23,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.auth.AuthToken
-import com.mytiki.publish.client.theme.TikiClientTheme
+import com.example.mytiki.publish.client.theme.TikiClientTheme
 import com.mytiki.sdk.capture.receipt.capacitor.MainButton
 import java.time.Instant
 import java.time.LocalDate

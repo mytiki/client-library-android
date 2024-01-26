@@ -12,6 +12,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+        manifestPlaceholders["appAuthRedirectScheme"] = "com.googleusercontent.apps.1069507745611-ccoh4pjgfpoqf5t2p2poanuqiovtnjun"
     }
 
     buildTypes {
@@ -37,6 +38,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.8"
     }
+
 }
 
 dependencies {
@@ -51,6 +53,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
+
+    implementation ("net.openid:appauth:0.11.1")
 
     //Jetpack Compose
     implementation("androidx.appcompat:appcompat:1.6.1")

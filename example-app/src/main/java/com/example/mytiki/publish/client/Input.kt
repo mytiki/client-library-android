@@ -1,4 +1,4 @@
-package com.mytiki.publish.client
+package com.example.mytiki.publish.client
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border

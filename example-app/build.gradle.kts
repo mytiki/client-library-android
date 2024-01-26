@@ -4,17 +4,18 @@ plugins {
 }
 
 android {
-    namespace = "com.mytiki.publish.client"
+    namespace = "com.example.mytiki.publish.client"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.mytiki.publish.client"
+        applicationId = "com.example.mytiki.publish.client"
         minSdk = 26
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders["appAuthRedirectScheme"] = "com.googleusercontent.apps.1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e"
     }
 
     buildTypes {
