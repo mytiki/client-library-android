@@ -1,4 +1,4 @@
-package com.mytiki.publish.client.repository
+package com.mytiki.publish.client.email
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -6,7 +6,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.mytiki.publish.client.auth.AuthToken
 
-class EmailAccountRepository() {
+class EmailRepository   () {
 
     private var masterKey: MasterKey? = null
     private var sharedPreferences: SharedPreferences? = null
@@ -21,7 +21,7 @@ class EmailAccountRepository() {
         if (sharedPreferences == null){
             sharedPreferences = EncryptedSharedPreferences.create(
                 context,
-                "secret_shared_prefs",
+                "email_repository",
                 masterKey!!,
                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
@@ -57,5 +57,10 @@ class EmailAccountRepository() {
     fun removeToken(context: Context, email: String){
         check(context)
         editor!!.remove(email)
+    }
+
+    fun accounts(context: Context): Set<String>{
+        val allEntries: Map<String, *> = sharedPreferences!!.all
+        return allEntries.keys
     }
 }

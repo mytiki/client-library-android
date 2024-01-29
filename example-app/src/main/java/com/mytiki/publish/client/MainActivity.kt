@@ -26,10 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.mytiki.publish.client.auth.AuthToken
 import com.mytiki.publish.client.theme.TikiClientTheme
 import com.mytiki.sdk.capture.receipt.capacitor.MainButton
-import java.time.Instant
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.Month
 import java.time.ZoneOffset
 import java.util.Date
 
@@ -74,12 +71,12 @@ class MainActivity : AppCompatActivity() {
 
                         Spacer(modifier = Modifier.height(30.dp))
                         MainButton(text = "Token repository") {
-                            TikiClient.email.emailAccountRepository.saveToken(
+                            TikiClient.email.emailRepository.saveToken(
                                 this@MainActivity,
                                 "tiki@email.com",
                                 AuthToken("auth", "refresh", Date.from(LocalDateTime.of(2024,7,30,12,30).toInstant(ZoneOffset.UTC)))
                             )
-                            loginOutput = TikiClient.email.emailAccountRepository.getToken(this@MainActivity,"tiki@email.com").toString()
+                            loginOutput = TikiClient.email.emailRepository.getToken(this@MainActivity,"tiki@email.com").toString()
                         }
 
                         Spacer(modifier = Modifier.height(30.dp))
