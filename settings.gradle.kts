@@ -14,5 +14,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "TIKI Client Library"
-include(":example-app")
 include(":client")
+include(":client:example")
