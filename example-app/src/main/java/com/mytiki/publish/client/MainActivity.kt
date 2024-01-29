@@ -71,12 +71,12 @@ class MainActivity : AppCompatActivity() {
 
                         Spacer(modifier = Modifier.height(30.dp))
                         MainButton(text = "Token repository") {
-                            TikiClient.email.emailRepository.saveToken(
+                            TikiClient.email.emailRepository.save(
                                 this@MainActivity,
                                 "tiki@email.com",
                                 AuthToken("auth", "refresh", Date.from(LocalDateTime.of(2024,7,30,12,30).toInstant(ZoneOffset.UTC)))
                             )
-                            loginOutput = TikiClient.email.emailRepository.getToken(this@MainActivity,"tiki@email.com").toString()
+                            loginOutput = TikiClient.email.emailRepository.get(this@MainActivity,"tiki@email.com").toString()
                         }
 
                         Spacer(modifier = Modifier.height(30.dp))

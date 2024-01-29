@@ -24,5 +24,7 @@ class EmailService() {
      * Removes a previously added email account.
      * @param email The email account to be removed.
      */
-    fun logout(email: String){}
+    fun logout(context: Context, email: String){
+        emailRepository.remove(context, email)
+    }
 }
