@@ -30,21 +30,21 @@ class EmailRepository   () {
         }
     }
 
-    fun saveToken(context: Context, email: String, token: AuthToken){
+    fun save(context: Context, email: String, token: AuthToken){
         check(context)
         if (sharedPreferences!!.contains(email)){
-            updateToken(email, token.toString())
+            update(email, token.toString())
         } else {
             editor!!.putString(email, token.toString()).commit()
         }
     }
 
-    private fun updateToken(email: String, token: String){
+    private fun update(email: String, token: String){
         editor!!.remove(email)
         editor!!.putString(email, token)
     }
 
-    fun getToken(context: Context, email: String): AuthToken? {
+    fun get(context: Context, email: String): AuthToken? {
         check(context)
         val token = sharedPreferences!!.getString(email, null)
         return if (token != null){
@@ -54,12 +54,13 @@ class EmailRepository   () {
         }
     }
     
-    fun removeToken(context: Context, email: String){
+    fun remove(context: Context, email: String){
         check(context)
         editor!!.remove(email)
     }
 
     fun accounts(context: Context): Set<String>{
+        check(context)
         val allEntries: Map<String, *> = sharedPreferences!!.all
         return allEntries.keys
     }
