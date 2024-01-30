@@ -26,7 +26,7 @@ class EmailService() {
 
         val intent = Intent(context, EmailActivity::class.java)
 
-        intent.putExtra("provider", provider)
+        intent.putExtra("provider", provider.toString())
         intent.putExtra("clientID", clientID)
         intent.putExtra("clientSecret", clientSecret)
         intent.putExtra("redirectURI", redirectURI)

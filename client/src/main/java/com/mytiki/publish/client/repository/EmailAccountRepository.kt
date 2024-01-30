@@ -53,7 +53,19 @@ class EmailAccountRepository() {
             null
         }
     }
-    
+
+    fun getToken(context: Context): List<AuthToken> {
+        check(context)
+        val token = sharedPreferences!!.all
+        val tokenList = mutableListOf<AuthToken>()
+        token.forEach{
+            if (it.value is String && it.value != null) {
+                tokenList.add(AuthToken.fromString(it.value as String))
+            }
+        }
+        return tokenList.toList()
+    }
+
     fun removeToken(context: Context, email: String){
         check(context)
         editor!!.remove(email)

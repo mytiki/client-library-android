@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "TIKI Client Library"
-include(":client")
-include(":client:example-app")
+rootProject.name = "example-app"
+include(":app")
+ 
