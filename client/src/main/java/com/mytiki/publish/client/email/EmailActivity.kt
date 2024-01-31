@@ -7,12 +7,10 @@ import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import com.google.gson.Gson
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.auth.AuthToken
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.async
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.openid.appauth.AuthorizationException
 import net.openid.appauth.AuthorizationRequest
@@ -22,6 +20,7 @@ import net.openid.appauth.ResponseTypeValues
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
+import org.json.JSONObject
 import java.util.Date
 
 
@@ -68,7 +67,7 @@ class EmailActivity : AppCompatActivity() {
                                         Date(authResponse.accessTokenExpirationTime!!)
                                     )
                                     TikiClient.email.authState.update(authResponse, ex)
-                                    lifecycleScope.launch {
+                                    CoroutineScope(Dispatchers.IO).launch{
                                        val client = OkHttpClient.Builder()
                                            .addInterceptor(HttpLoggingInterceptor().apply {
                                                level = HttpLoggingInterceptor.Level.BODY
@@ -76,17 +75,12 @@ class EmailActivity : AppCompatActivity() {
                                            .build()
                                        val request = Request.Builder()
                                            .url(provider?.userInfoEndpoint!!)
-                                           .addHeader("Authorization", "Bearer (${authToken.auth})")
+                                           .addHeader("Authorization", "Bearer ${authToken.auth}")
                                            .get()
                                            .build()
                                        val apiResponse = client.newCall(request).execute()
                                        if (apiResponse.code in 200..299) {
-                                           val gson = Gson()
-                                           val data = gson.fromJson(
-                                               apiResponse.body?.string(),
-                                               EmailResponse::class.java
-                                           )
-
+                                           val data = EmailResponse.fromJson(JSONObject(apiResponse.body?.string()!!))
                                            TikiClient.email.emailAccountRepository.saveToken(
                                                this@EmailActivity,
                                                data.email,

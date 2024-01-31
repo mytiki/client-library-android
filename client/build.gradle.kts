@@ -66,7 +66,6 @@ dependencies {
 
 //    Okhttp
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
-    implementation("io.nem:api-okhttp-gson-client:0.8.2")
 
     //Jetpack Compose
     implementation("androidx.appcompat:appcompat:1.6.1")

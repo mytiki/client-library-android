@@ -3,7 +3,6 @@ package com.mytiki.publish.client.email
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.repository.EmailAccountRepository
 import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationServiceConfiguration
@@ -33,6 +32,31 @@ class EmailService() {
 
         context.startActivity(intent)
     }
+
+//    fun getEmailResponse(authToken: AuthToken, provider: EmailProviderEnum): CompletableDeferred<EmailResponse?> {
+//        val emailResponse = CompletableDeferred<EmailResponse?>()
+//       MainScope().async {  }
+//            val client = OkHttpClient.Builder()
+//                .addInterceptor(HttpLoggingInterceptor().apply {
+//                    level = HttpLoggingInterceptor.Level.BODY
+//                })
+//                .build()
+//            val request = Request.Builder()
+//                .url(provider.userInfoEndpoint)
+//                .addHeader("Authorization", "Bearer (${authToken.auth})")
+//                .get()
+//                .build()
+//            val apiResponse = client.newCall(request).execute()
+//            emailResponse.complete(
+//                if (apiResponse.code in 200..299) {
+//                    Gson().fromJson(
+//                        apiResponse.body?.string(),
+//                        EmailResponse::class.java
+//                    )
+//                } else null
+//            )
+//
+//    }
 
     /**
      * Retrieves the list of connected email accounts.

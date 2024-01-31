@@ -75,8 +75,8 @@ class MainActivity : AppCompatActivity() {
 
                         Spacer(modifier = Modifier.height(30.dp))
                         MainButton(text = "get token") {
-                            val tokenList = TikiClient.email.emailAccountRepository.getToken(this@MainActivity)
-                            loginOutput = if(tokenList.isEmpty()) tokenList[0].toString() else "token does not exist"
+                            val tokenList = TikiClient.email.emailAccountRepository.getToken(this@MainActivity, "gabrielschuler3@gmail.com")
+                            loginOutput = tokenList.toString()
                         }
 
                         Spacer(modifier = Modifier.height(30.dp))
