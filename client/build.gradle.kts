@@ -12,7 +12,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-        manifestPlaceholders["appAuthRedirectScheme"] = "com.googleusercontent.apps.1069507745611-ccoh4pjgfpoqf5t2p2poanuqiovtnjun"
     }
 
     buildTypes {
