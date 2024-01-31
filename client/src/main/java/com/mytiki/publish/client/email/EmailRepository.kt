@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.mytiki.publish.client.auth.AuthToken
+import net.openid.appauth.AuthState
 
 class EmailRepository   () {
 
@@ -32,16 +33,16 @@ class EmailRepository   () {
 
     fun save(context: Context, email: String, token: AuthToken){
         check(context)
-        if (sharedPreferences!!.contains(email)){
-            update(email, token.toString())
-        } else {
-            editor!!.putString(email, token.toString()).commit()
-        }
+        val tokenJson = token.toString()
+//        if (sharedPreferences!!.contains(email)){
+//            update(email, tokenJson)
+//        } else {
+            editor!!.putString(email, tokenJson).commit()
+//        }
     }
 
     private fun update(email: String, token: String){
-        editor!!.remove(email)
-        editor!!.putString(email, token)
+//        editor!!putString(email, token)
     }
 
     fun get(context: Context, email: String): AuthToken? {
@@ -52,18 +53,6 @@ class EmailRepository   () {
         } else {
             null
         }
-    }
-
-    fun get(context: Context): List<AuthToken> {
-        check(context)
-        val token = sharedPreferences!!.all
-        val tokenList = mutableListOf<AuthToken>()
-        token.forEach{
-            if (it.value is String && it.value != null) {
-                tokenList.add(AuthToken.fromString(it.value as String))
-            }
-        }
-        return tokenList.toList()
     }
     
     fun remove(context: Context, email: String){

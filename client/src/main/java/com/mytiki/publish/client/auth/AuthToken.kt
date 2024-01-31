@@ -1,16 +1,20 @@
 package com.mytiki.publish.client.auth
 
+import android.util.Log
+import com.mytiki.publish.client.email.EmailProviderEnum
 import org.json.JSONObject
 import java.util.Date
 
-class AuthToken (val auth: String, val refresh: String, val expiration: Date){
+class AuthToken (val auth: String, val refresh: String, val expiration: Date, val provider: EmailProviderEnum){
     companion object{
         fun fromString(data: String): AuthToken{
             val json = JSONObject(data)
+            Log.d("**************", json.toString())
             return AuthToken(
                 json.getString("auth"),
                 json.getString("refresh"),
-                Date(json.getLong("expiration"))
+                Date(json.getLong("expiration")),
+                EmailProviderEnum.fromString(json.getString("provider"))
             )
         }
     }
@@ -19,6 +23,7 @@ class AuthToken (val auth: String, val refresh: String, val expiration: Date){
             .put("auth", auth)
             .put("refresh", refresh)
             .put("expiration", expiration.time)
+            .put("provider" , provider.toString())
             .toString()
     }
 
