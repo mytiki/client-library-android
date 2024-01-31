@@ -26,7 +26,6 @@ import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.example_app.theme.TikiClientTheme
 
 class MainActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -38,7 +37,6 @@ class MainActivity : AppCompatActivity() {
             fun onError(error: Throwable) {
                 error.message?.let { loginOutput = it }
             }
-
 
             TikiClientTheme {
                 Surface(
@@ -75,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 
                         Spacer(modifier = Modifier.height(30.dp))
                         MainButton(text = "get token") {
-                            val tokenList = TikiClient.email.emailAccountRepository.getToken(this@MainActivity, "gabrielschuler3@gmail.com")
+                            val tokenList = TikiClient.email.emailRepository.get(this@MainActivity, "gabrielschuler3@gmail.com")
                             loginOutput = tokenList.toString()
                         }
 

@@ -42,7 +42,7 @@ class EmailActivity : AppCompatActivity() {
                             )
                             MainScope().async {
                                val emailResponse = TikiClient.email.getEmailResponse(authToken, provider).await()
-                               TikiClient.email.emailAccountRepository.saveToken(
+                               TikiClient.email.emailRepository.save(
                                    this@EmailActivity,
                                    emailResponse.email,
                                    authToken
