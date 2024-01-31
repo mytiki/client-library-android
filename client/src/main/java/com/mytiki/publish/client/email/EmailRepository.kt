@@ -1,4 +1,4 @@
-package com.mytiki.publish.client.repository
+package com.mytiki.publish.client.email
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -6,7 +6,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.mytiki.publish.client.auth.AuthToken
 
-class EmailAccountRepository() {
+class EmailRepository   () {
 
     private var masterKey: MasterKey? = null
     private var sharedPreferences: SharedPreferences? = null
@@ -21,7 +21,7 @@ class EmailAccountRepository() {
         if (sharedPreferences == null){
             sharedPreferences = EncryptedSharedPreferences.create(
                 context,
-                "secret_shared_prefs",
+                "email_repository",
                 masterKey!!,
                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
@@ -30,21 +30,21 @@ class EmailAccountRepository() {
         }
     }
 
-    fun saveToken(context: Context, email: String, token: AuthToken){
+    fun save(context: Context, email: String, token: AuthToken){
         check(context)
         if (sharedPreferences!!.contains(email)){
-            updateToken(email, token.toString())
+            update(email, token.toString())
         } else {
             editor!!.putString(email, token.toString()).commit()
         }
     }
 
-    private fun updateToken(email: String, token: String){
+    private fun update(email: String, token: String){
         editor!!.remove(email)
         editor!!.putString(email, token)
     }
 
-    fun getToken(context: Context, email: String): AuthToken? {
+    fun get(context: Context, email: String): AuthToken? {
         check(context)
         val token = sharedPreferences!!.getString(email, null)
         return if (token != null){
@@ -54,7 +54,7 @@ class EmailAccountRepository() {
         }
     }
 
-    fun getToken(context: Context): List<AuthToken> {
+    fun get(context: Context): List<AuthToken> {
         check(context)
         val token = sharedPreferences!!.all
         val tokenList = mutableListOf<AuthToken>()
@@ -65,9 +65,15 @@ class EmailAccountRepository() {
         }
         return tokenList.toList()
     }
-
-    fun removeToken(context: Context, email: String){
+    
+    fun remove(context: Context, email: String){
         check(context)
         editor!!.remove(email)
+    }
+
+    fun accounts(context: Context): Set<String>{
+        check(context)
+        val allEntries: Map<String, *> = sharedPreferences!!.all
+        return allEntries.keys
     }
 }

@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.mytiki.publish.client.auth.AuthToken
-import com.mytiki.publish.client.repository.EmailAccountRepository
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,16 +20,12 @@ import org.json.JSONObject
 
 
 class EmailService() {
-    val emailAccountRepository = EmailAccountRepository()
-
+    val emailRepository = EmailRepository()
     /**
      * Authenticates with OAuth and adds an email account for scraping receipts.
      * @param provider The email provider (GOOGLE or OUTLOOK).
      */
     fun login(context: Context, provider: EmailProviderEnum, clientID: String, redirectURI: String, clientSecret: String = ""){
-
-
-
         val intent = Intent(context, EmailActivity::class.java)
 
         intent.putExtra("provider", provider.toString())
@@ -86,13 +81,15 @@ class EmailService() {
      * Retrieves the list of connected email accounts.
      * @return List of connected email accounts.
      */
-    fun accounts(): List<String>{
-        return listOf()
+    fun accounts(context: Context): Set<String>{
+        return emailRepository.accounts(context)
     }
 
     /**
      * Removes a previously added email account.
      * @param email The email account to be removed.
      */
-    fun logout(email: String){}
+    fun logout(context: Context, email: String){
+        emailRepository.remove(context, email)
+    }
 }

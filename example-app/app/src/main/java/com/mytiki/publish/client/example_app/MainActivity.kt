@@ -24,6 +24,12 @@ import androidx.compose.ui.unit.dp
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.example.theme.TikiClientTheme
+import com.mytiki.publish.client.auth.AuthToken
+import com.mytiki.publish.client.theme.TikiClientTheme
+import com.mytiki.sdk.capture.receipt.capacitor.MainButton
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.util.Date
 
 class MainActivity : AppCompatActivity() {
 
@@ -66,11 +72,15 @@ class MainActivity : AppCompatActivity() {
                         Spacer(modifier = Modifier.height(30.dp))
                         MainButton(text = "Token repository") {
                             TikiClient.email.login(
+                            TikiClient.email.emailRepository.save(
                                 this@MainActivity,
                                 EmailProviderEnum.GOOGLE,
                                 "1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e.apps.googleusercontent.com",
                                 "mytiki-example://com.example.mytiki.publish.client"
                             )
+
+                            loginOutput = TikiClient.email.emailRepository.get(this@MainActivity,"tiki@email.com").toString()
+
                         }
 
                         Spacer(modifier = Modifier.height(30.dp))
