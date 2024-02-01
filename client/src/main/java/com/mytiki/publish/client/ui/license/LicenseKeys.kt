@@ -1,7 +1,7 @@
-package com.mytiki.apps_receipt_rewards.license
+package com.mytiki.publish.client.ui.license
 
 data class LicenseKeys (
     val tikiPublishingID: String,
-    val microblinkLicenseKey: String,
-    val productIntelligenceKey: String,
+    val googleClientID: String,
+    val outlookClientID: String,
 )

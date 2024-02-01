@@ -1,6 +1,5 @@
 package com.mytiki.publish.client.email
 
-import com.mytiki.apps_receipt_rewards.email.EmailEnum
 import com.mytiki.publish.client.R
 
 /**

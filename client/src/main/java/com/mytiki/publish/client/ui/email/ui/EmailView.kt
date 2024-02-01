@@ -35,7 +35,6 @@ import com.mytiki.apps_receipt_rewards.Rewards
 import com.mytiki.publish.client.ui.account.Account
 import com.mytiki.publish.client.ui.account.ui.AccountCard
 import com.mytiki.publish.client.ui.account.ui.AccountDisplay
-import com.mytiki.apps_receipt_rewards.email.EmailEnum
 import com.mytiki.apps_receipt_rewards.utils.components.Header
 import com.mytiki.apps_receipt_rewards.utils.components.LoginForm
 import kotlinx.coroutines.MainScope

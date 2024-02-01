@@ -3,7 +3,12 @@
  * MIT license. See LICENSE file in the root directory.
  */
 
-package com.mytiki.apps_receipt_rewards.license
+package com.mytiki.publish.client.ui.license
+
+import com.mytiki.publish.client.ui.license.Company
+import com.mytiki.publish.client.ui.license.LicenseEarnings
+import com.mytiki.publish.client.ui.license.LicenseEstimate
+import com.mytiki.publish.client.ui.license.LicenseKeys
 
 /**
  * [LicenseService] manages licensing-related functionalities using TIKI infrastructure,

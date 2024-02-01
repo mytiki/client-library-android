@@ -13,7 +13,7 @@ import androidx.compose.ui.text.font.FontFamily
 import com.mytiki.apps_receipt_rewards.capture.CaptureService
 import com.mytiki.apps_receipt_rewards.card.Card
 import com.mytiki.apps_receipt_rewards.card.CardService
-import com.mytiki.apps_receipt_rewards.license.LicenseService
+import com.mytiki.publish.client.ui.license.LicenseService
 import java.util.UUID
 
 /**

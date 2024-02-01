@@ -3,7 +3,7 @@
  * MIT license. See LICENSE file in the root directory.
  */
 
-package com.mytiki.apps_receipt_rewards.license
+package com.mytiki.publish.client.ui.license
 
 data class LicenseEarnings(
     val lifetime: Double,

@@ -1,4 +1,4 @@
-package com.mytiki.apps_receipt_rewards.license
+package com.mytiki.publish.client.ui.license
 
 data class Company (
     val name: String,
