@@ -8,7 +8,6 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationRequest
 import net.openid.appauth.AuthorizationService
 import net.openid.appauth.AuthorizationServiceConfiguration
@@ -18,9 +17,9 @@ import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
 
-
 class EmailService() {
     val emailRepository = EmailRepository()
+
     /**
      * Authenticates with OAuth and adds an email account for scraping receipts.
      * @param provider The email provider (GOOGLE or OUTLOOK).
@@ -36,7 +35,23 @@ class EmailService() {
         context.startActivity(intent)
     }
 
-    fun getEmailResponse(authToken: AuthToken, provider: EmailProviderEnum): CompletableDeferred<EmailResponse> {
+    fun authRequest(context: Context, provider: EmailProviderEnum,  clientID: String, redirectURI: String): Pair<Intent?,  AuthorizationService> {
+        val authServiceConfig = AuthorizationServiceConfiguration(
+            Uri.parse(provider.authorizationEndpoint),
+            Uri.parse(provider.tokenEndpoint)
+        )
+        val authRequest = AuthorizationRequest.Builder(
+            authServiceConfig,
+            clientID,
+            ResponseTypeValues.CODE,
+            Uri.parse(redirectURI)
+        )
+        authRequest.setScope("openid email profile")
+        val authService = AuthorizationService(context)
+        return Pair(authService.getAuthorizationRequestIntent(authRequest.build()), authService)
+    }
+
+    fun getEmailResponse(authToken: AuthToken): CompletableDeferred<EmailResponse> {
         val emailResponse = CompletableDeferred<EmailResponse>()
         CoroutineScope(Dispatchers.IO).launch {
             val client = OkHttpClient.Builder()
@@ -45,7 +60,7 @@ class EmailService() {
                 })
                 .build()
             val request = Request.Builder()
-                .url(provider.userInfoEndpoint)
+                .url(authToken.provider.userInfoEndpoint)
                 .addHeader("Authorization", "Bearer ${authToken.auth}")
                 .get()
                 .build()
@@ -56,25 +71,6 @@ class EmailService() {
             } else throw Exception("error on user info request")
         }
         return emailResponse
-    }
-
-    fun authRequest(context: Context, provider: EmailProviderEnum, clientID: String, redirectURI: String): Pair<Intent?,  AuthorizationService> {
-        val authServiceConfig = AuthorizationServiceConfiguration(
-            Uri.parse(provider.authorizationEndpoint),
-            Uri.parse(provider.tokenEndpoint)
-        )
-
-
-        val authRequest = AuthorizationRequest.Builder(
-            authServiceConfig,
-            clientID,
-            ResponseTypeValues.CODE,
-            Uri.parse(redirectURI)
-        )
-        authRequest.setScope("openid email profile")
-
-        val authService = AuthorizationService(context)
-        return Pair(authService.getAuthorizationRequestIntent(authRequest.build()), authService)
     }
 
     /**

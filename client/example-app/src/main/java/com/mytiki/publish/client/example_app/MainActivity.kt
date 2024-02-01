@@ -72,9 +72,19 @@ class MainActivity : AppCompatActivity() {
                         }
 
                         Spacer(modifier = Modifier.height(30.dp))
-                        MainButton(text = "get token") {
+                        MainButton(text = "Get Token") {
                             val tokenList = TikiClient.email.emailRepository.get(this@MainActivity, "gabrielschuler3@gmail.com")
                             loginOutput = tokenList.toString()
+                        }
+
+                        Spacer(modifier = Modifier.height(30.dp))
+                        MainButton(text = "Refresh Token") {
+                            val token = TikiClient.auth.refresh(
+                                this@MainActivity,
+                                "gabrielschuler3@gmail.com",
+                                "1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e.apps.googleusercontent.com"
+                            )
+                            loginOutput = token.toString()
                         }
 
                         Spacer(modifier = Modifier.height(30.dp))
