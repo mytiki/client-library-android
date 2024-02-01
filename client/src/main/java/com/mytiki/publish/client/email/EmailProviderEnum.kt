@@ -1,5 +1,8 @@
 package com.mytiki.publish.client.email
 
+import com.mytiki.apps_receipt_rewards.email.EmailEnum
+import com.mytiki.publish.client.R
+
 /**
  * Email provider enum
  */
@@ -16,6 +19,15 @@ enum class EmailProviderEnum(val authorizationEndpoint: String, val tokenEndpoin
     }
 
     override fun toString() = this.name
+
+    fun displayName() = this.toString().replace("_", " ").lowercase().replaceFirstChar(Char::titlecase)
+
+
+    fun resId() = when (this) {
+        GOOGLE -> R.drawable.gmail
+        OUTLOOK -> R.drawable.outlook
+    }
+
     companion object {
         fun fromString(name: String) = entries.first{name == it.toString()}
     }

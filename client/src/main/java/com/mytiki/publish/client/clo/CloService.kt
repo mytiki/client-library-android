@@ -1,5 +1,8 @@
 package com.mytiki.publish.client.clo
 
+import com.mytiki.apps_receipt_rewards.more.MoreContributor
+import com.mytiki.apps_receipt_rewards.retailer.RetailerOffer
+
 class CloService {
 
     /**
@@ -32,4 +35,17 @@ class CloService {
      * @param transaction The transaction information.
      */
     fun transaction(transaction: Transaction){}
+
+    /**
+     * Retrieves a list of the largest contributors to the rewards program.
+     *
+     * @return A list of [MoreContributor] objects containing contributor details.
+     */
+    fun largestContributors(): List<MoreContributor> {
+        return listOf(
+            MoreContributor("Walmart", 0.4),
+            MoreContributor("Kroger", 0.3),
+            MoreContributor("Dollar General", 0.2)
+        )
+    }
 }

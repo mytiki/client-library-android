@@ -7,7 +7,7 @@ import androidx.security.crypto.MasterKey
 import com.mytiki.publish.client.auth.AuthToken
 import net.openid.appauth.AuthState
 
-class EmailRepository   () {
+class EmailRepository() {
 
     private var masterKey: MasterKey? = null
     private var sharedPreferences: SharedPreferences? = null
@@ -34,15 +34,7 @@ class EmailRepository   () {
     fun save(context: Context, email: String, token: AuthToken){
         check(context)
         val tokenJson = token.toString()
-//        if (sharedPreferences!!.contains(email)){
-//            update(email, tokenJson)
-//        } else {
-            editor!!.putString(email, tokenJson).commit()
-//        }
-    }
-
-    private fun update(email: String, token: String){
-//        editor!!putString(email, token)
+        editor!!.putString(email, tokenJson).commit()
     }
 
     fun get(context: Context, email: String): AuthToken? {
