@@ -1,9 +1,7 @@
 package com.mytiki.publish.client
 
-import android.content.Context
 import com.mytiki.publish.client.auth.AuthService
 import com.mytiki.publish.client.capture.CaptureService
-import com.mytiki.publish.client.capture.Company
 import com.mytiki.publish.client.clo.CloService
 import com.mytiki.publish.client.clo.Offer
 import com.mytiki.publish.client.clo.Reward
@@ -12,7 +10,6 @@ import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.email.EmailService
 import com.mytiki.publish.client.license.LicenseService
 import com.mytiki.publish.client.ui.Theme
-import com.mytiki.publish.client.ui.UiService
 
 
 /**
@@ -30,26 +27,18 @@ import com.mytiki.publish.client.ui.UiService
  * simplify the integration process or opt for individual libraries based on their specific needs.
  */
 
-class TikiClient {
+class TikiClient{
     companion object {
         val auth = AuthService()
         val capture = CaptureService()
         val clo = CloService()
         val email = EmailService()
         val license = LicenseService()
-        private val ui = UiService()
     }
 
 
-    /**
-     * Initializes the TikiClient with the application context and sets its parameters.
-     * @param context The application context.
-     * @param providerId The TIKI Publishing ID of the data provider.
-     * @param userId The user identification from the provider.
-     * @param company The legal information of the company.
-     */
-    fun initialize(context: Context, providerId: String, userId: String, company: Company) {
-    }
+
+
 
     /**
      * Initiates the process of scanning a physical receipt and returns the receipt ID.

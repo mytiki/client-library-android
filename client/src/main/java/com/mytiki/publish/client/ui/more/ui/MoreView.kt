@@ -23,26 +23,26 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.mytiki.apps_receipt_rewards.Rewards
 import com.mytiki.apps_receipt_rewards.utils.components.Header
+import com.mytiki.publish.client.ProvidersInterface
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
 
-var providers by mutableStateOf<List<AccountProvider>?>(null)
-fun updateProviders(context: Context, provider: AccountProvider){
+var providers by mutableStateOf<List<ProvidersInterface>?>(null)
+fun updateProviders(context: Context, provider: ProvidersInterface){
     MainScope().async {
         providers = Rewards.account.providers(context)
     }
 }
 @Composable
 fun MoreView(
-    onProvider: (AccountProvider) -> Unit,
+    onProvider: (ProvidersInterface) -> Unit,
     onTerms: () -> Unit,
     onDecline: () -> Unit,
     onBackButton: () -> Unit
 ) {
     val context = LocalContext.current
-    var accList by mutableStateOf<List<AccountProvider>?>(null)
+    var accList by mutableStateOf<List<ProvidersInterface>?>(null)
     MainScope().async {
         accList = Rewards.account.accounts(context).map { it.provider }.distinctBy{it.toString()}
     }

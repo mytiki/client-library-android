@@ -3,7 +3,7 @@
  * MIT license. See LICENSE file in the root directory.
  */
 
-package com.mytiki.apps_receipt_rewards.navigation.ui
+package com.mytiki.publish.client.ui.navigation.ui
 
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
@@ -21,16 +21,18 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.mytiki.apps_receipt_rewards.Rewards
 import com.mytiki.apps_receipt_rewards.email.ui.EmailView
-import com.mytiki.apps_receipt_rewards.home.ui.HomeView
+import com.mytiki.publish.client.ui.home.ui.HomeView
 import com.mytiki.apps_receipt_rewards.license.ui.LicenseTerms
-import com.mytiki.apps_receipt_rewards.license.ui.LicenseView
+import com.mytiki.publish.client.ui.license.ui.LicenseView
 import com.mytiki.apps_receipt_rewards.more.ui.MoreView
 import com.mytiki.apps_receipt_rewards.navigation.NavigationRoute
-import com.mytiki.apps_receipt_rewards.retailer.ui.RetailerView
+import com.mytiki.publish.client.ProvidersInterface
+import com.mytiki.publish.client.TikiClient
+import com.mytiki.publish.client.email.EmailProviderEnum
+import com.mytiki.publish.client.ui.merchant.ui.MerchantView
 
-private val accountProvider = mutableStateOf<AccountProvider?>(null)
+private val accountProvider = mutableStateOf<ProvidersInterface?>(null)
 
 @Composable
 fun NavigationHost(activity: AppCompatActivity, navController: NavHostController = rememberNavController()) {
@@ -40,7 +42,7 @@ fun NavigationHost(activity: AppCompatActivity, navController: NavHostController
         if (finish) (context as Activity).finish()
     }
 
-    val startRoute: NavigationRoute = if (Rewards.license.isLicensed()) {
+    val startRoute: NavigationRoute = if (TikiClient.license.isLicensed()) {
         NavigationRoute.HOME
     } else {
         NavigationRoute.LICENSE
@@ -182,7 +184,7 @@ fun NavigationHost(activity: AppCompatActivity, navController: NavHostController
                 onBackButton = { navController.popBackStack() }
             )
         }
-        composable(NavigationRoute.RETAILER.name,
+        composable(NavigationRoute.OFFER_PROVIDER.name,
             enterTransition = {
                 slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Left,
@@ -207,7 +209,7 @@ fun NavigationHost(activity: AppCompatActivity, navController: NavHostController
                     animationSpec = tween(700)
                 )
             }) {
-            RetailerView(
+            MerchantView(
                 activity,
                 provider = accountProvider.value!!,
                 onBackButton = { navController.popBackStack() }
@@ -247,10 +249,11 @@ fun NavigationHost(activity: AppCompatActivity, navController: NavHostController
     }
 }
 
-fun onProvider(prov: AccountProvider, navController: NavController) {
-    accountProvider.value = prov
-    when (prov.type()) {
-        AccountType.RETAILER -> navController.navigate(NavigationRoute.RETAILER.name)
-        AccountType.EMAIL -> navController.navigate(NavigationRoute.EMAIL.name)
+fun onProvider(provider: ProvidersInterface, navController: NavController) {
+    accountProvider.value = provider
+    if (provider is EmailProviderEnum){
+        navController.navigate(NavigationRoute.EMAIL.name)
+    } else {
+        navController.navigate(NavigationRoute.OFFER_PROVIDER.name)
     }
 }

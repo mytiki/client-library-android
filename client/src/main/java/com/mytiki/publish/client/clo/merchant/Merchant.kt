@@ -3,10 +3,10 @@
  * MIT license. See LICENSE file in the root directory.
  */
 
-package com.mytiki.apps_receipt_rewards.retailer
+package com.mytiki.publish.client.clo.merchant
 
-data class RetailerOffer(
-    val accountProvider: AccountProvider,
+data class Merchant(
+    val accountProvider: MerchantEnum,
     val discount: String,
     val offerLink: String
 )

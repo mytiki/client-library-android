@@ -10,7 +10,7 @@ enum class NavigationRoute {
     TERMS,
     HOME,
     MORE,
-    RETAILER,
+    OFFER_PROVIDER,
     EMAIL,
     NONE
 }

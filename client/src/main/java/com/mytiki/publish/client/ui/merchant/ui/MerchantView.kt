@@ -3,9 +3,8 @@
  * MIT license. See LICENSE file in the root directory.
  */
 
-package com.mytiki.apps_receipt_rewards.retailer.ui
+package com.mytiki.publish.client.ui.merchant.ui
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,7 +24,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.mytiki.apps_receipt_rewards.Rewards
 import com.mytiki.publish.client.ui.account.Account
 import com.mytiki.publish.client.ui.account.ui.AccountCard
 import com.mytiki.publish.client.ui.account.ui.AccountDisplay
@@ -33,20 +31,21 @@ import com.mytiki.apps_receipt_rewards.license.ui.OfferCard
 import com.mytiki.apps_receipt_rewards.utils.components.Header
 import com.mytiki.apps_receipt_rewards.utils.components.LoginForm
 import com.mytiki.apps_receipt_rewards.utils.components.MainButton
+import com.mytiki.publish.client.ProvidersInterface
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
 
 var accounts by mutableStateOf<List<Account>?>(null)
-fun updateAccounts(context: Context, provider: AccountProvider){
-    MainScope().async {
-        accounts = Rewards.account.accounts(context, provider)
-    }
-}
+//fun updateAccounts(context: Context, provider: ProvidersInterface){
+//    MainScope().async {
+//        accounts = TikiClient.account.accounts(context, provider)
+//    }
+//}
 
 @Composable
-fun RetailerView(
+fun MerchantView(
     activity: AppCompatActivity,
-    provider: AccountProvider,
+    provider: ProvidersInterface,
     onBackButton: () -> Unit
 ) {
     val context = LocalContext.current

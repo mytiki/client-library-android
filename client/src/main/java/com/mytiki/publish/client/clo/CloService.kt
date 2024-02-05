@@ -1,7 +1,6 @@
 package com.mytiki.publish.client.clo
 
 import com.mytiki.apps_receipt_rewards.more.MoreContributor
-import com.mytiki.apps_receipt_rewards.retailer.RetailerOffer
 
 class CloService {
 

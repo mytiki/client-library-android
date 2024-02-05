@@ -8,7 +8,7 @@ package com.mytiki.publish.client.ui.account
 import android.content.Context
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.email.EmailProviderEnum
-import com.mytiki.publish.client.ui.Rewards
+import com.mytiki.publish.client.ui.TikiUI
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
 import java.util.Date
@@ -47,7 +47,7 @@ class Account private constructor(
                         TikiClient.auth.refresh(
                             context,
                             username,
-                            if (provider == EmailProviderEnum.GOOGLE) Rewards.googleClientID!! else Rewards.outlookClientID!!
+                            if (provider == EmailProviderEnum.GOOGLE) TikiUI.googleClientID!! else TikiUI.outlookClientID!!
                         ).await()
                         AccountStatus.VERIFIED
 

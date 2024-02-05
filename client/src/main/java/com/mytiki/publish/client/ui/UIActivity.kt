@@ -8,11 +8,11 @@ package com.mytiki.publish.client.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import com.mytiki.apps_receipt_rewards.databinding.RewardsActivityBinding
-import com.mytiki.apps_receipt_rewards.navigation.ui.NavigationHost
-import com.mytiki.apps_receipt_rewards.utils.theme.RewardsTheme
+import com.mytiki.publish.client.databinding.RewardsActivityBinding
+import com.mytiki.publish.client.ui.navigation.ui.NavigationHost
+import com.mytiki.publish.client.ui.theme.UITheme
 
-class RewardsActivity : AppCompatActivity() {
+class UIActivity : AppCompatActivity() {
 
     private var _binding: RewardsActivityBinding? = null
     private val binding get() = _binding!!
@@ -23,8 +23,8 @@ class RewardsActivity : AppCompatActivity() {
         binding.composeView.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                RewardsTheme(Rewards.theme.colorScheme) {
-                    NavigationHost(this@RewardsActivity)
+                UITheme(TikiUI.theme.colorScheme) {
+                    NavigationHost(this@UIActivity)
                 }
             }
         }

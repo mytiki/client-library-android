@@ -30,8 +30,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.mytiki.apps_receipt_rewards.R
-import com.mytiki.apps_receipt_rewards.retailer.RetailerOffer
+import com.mytiki.publish.client.R
 
 @Composable
 fun OfferCard(retailerOffer: RetailerOffer, onClick: () -> Unit) {

@@ -3,7 +3,7 @@
  * MIT license. See LICENSE file in the root directory.
  */
 
-package com.mytiki.apps_receipt_rewards.license.ui
+package com.mytiki.publish.client.ui.license.ui
 
 import BottomSheet
 import androidx.compose.foundation.layout.Arrangement
@@ -17,19 +17,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import com.mytiki.apps_receipt_rewards.Rewards
 import com.mytiki.apps_receipt_rewards.utils.components.BottomSheetHeader
 import com.mytiki.apps_receipt_rewards.utils.components.DisplayCard
 import com.mytiki.apps_receipt_rewards.utils.components.MainButton
+import com.mytiki.publish.client.TikiClient
 
 @Composable
 fun LicenseView(
     onGetEstimate: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    val estimate = Rewards.license.estimate()
+    val estimate = TikiClient.license.estimate()
     BottomSheet {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

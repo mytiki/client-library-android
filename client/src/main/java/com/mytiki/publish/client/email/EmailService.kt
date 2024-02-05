@@ -3,6 +3,7 @@ package com.mytiki.publish.client.email
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.auth.AuthToken
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -19,6 +20,8 @@ import org.json.JSONObject
 
 class EmailService() {
     val emailRepository = EmailRepository()
+    var googleKeys: EmailKeys? = null
+    var outlookKeys: EmailKeys? = null
 
     /**
      * Authenticates with OAuth and adds an email account for scraping receipts.
@@ -87,5 +90,13 @@ class EmailService() {
      */
     fun logout(context: Context, email: String){
         emailRepository.remove(context, email)
+    }
+    fun googleKeys( clientId: String, clientSecrete: String) {
+        googleKeys = EmailKeys(clientId, clientSecrete)
+
+    }
+
+    fun outlookKeys( clientId: String, clientSecrete: String) {
+        outlookKeys = EmailKeys(clientId, clientSecrete)
     }
 }

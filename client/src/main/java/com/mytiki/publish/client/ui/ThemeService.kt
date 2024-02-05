@@ -22,22 +22,15 @@ class ThemeService {
     )
         private set
 
-    fun theme(
-        primaryTextColor: Color,
-        secondaryTextColor: Color,
-        primaryBackgroundColor: Color,
-        secondaryBackgroundColor: Color,
-        accentColor: Color,
-        fontFamily: FontFamily
-    ){
+    fun theme(theme: Theme){
         colorScheme = lightColorScheme(
-            primary = accentColor,
+            primary = theme.accentColor,
             error = Color(0xFFC73000),
-            background = primaryBackgroundColor,
-            onBackground = secondaryBackgroundColor,
-            outline = primaryTextColor,
-            outlineVariant = secondaryTextColor,
+            background = theme.primaryBackgroundColor,
+            onBackground = theme.secondaryBackgroundColor,
+            outline = theme.primaryTextColor,
+            outlineVariant = theme.secondaryTextColor,
         )
-        this.fontFamily = fontFamily
+        this.fontFamily = theme.fontFamily
     }
 }

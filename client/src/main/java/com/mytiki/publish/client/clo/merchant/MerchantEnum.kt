@@ -3,14 +3,17 @@
  * MIT license. See LICENSE file in root directory.
  */
 
-package com.mytiki.apps_receipt_rewards.retailer
+package com.mytiki.publish.client.clo.merchant
 
-import com.mytiki.apps_receipt_rewards.R
+import com.mytiki.publish.client.ProvidersInterface
+import com.mytiki.publish.client.R
+import com.mytiki.publish.client.email.EmailProviderEnum
+
 
 /**
  * [RetailerEnum] enum represents various retailer names as raw string values.
  */
-enum class RetailerEnum {
+enum class MerchantEnum: ProvidersInterface {
     ACME_MARKETS,
     ALBERTSONS,
     AMAZON,
@@ -68,11 +71,15 @@ enum class RetailerEnum {
     WALMART,
     WEGMANS;
 
+    companion object {
+        fun fromString(name: String) = EmailProviderEnum.entries.first{name == it.toString()}
+    }
+
     override fun toString(): String {
         return this.name
     }
 
-    fun resId(): Int {
+    override fun resId(): Int {
         when (this) {
             ACME_MARKETS -> return R.drawable.acme
             ALBERTSONS -> return R.drawable.albertsons

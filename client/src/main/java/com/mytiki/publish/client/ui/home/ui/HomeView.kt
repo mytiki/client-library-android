@@ -3,11 +3,9 @@
  * MIT license. See LICENSE file in the root directory.
  */
 
-package com.mytiki.apps_receipt_rewards.home.ui
+package com.mytiki.publish.client.ui.home.ui
 
 import BottomSheet
-import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,29 +21,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.mytiki.apps_receipt_rewards.Rewards
 import com.mytiki.apps_receipt_rewards.utils.components.BottomSheetHeader
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.async
+import com.mytiki.publish.client.ProvidersInterface
 
 val isExpanded = mutableStateOf(false)
 
-var providers by mutableStateOf<List<AccountProvider>?>(null)
-fun updateAccounts(context: Context){
-    MainScope().async {
-        providers = Rewards.account.providers(context)
-        Log.e("************", providers.toString())
-    }
-}
+var providers by mutableStateOf<List<ProvidersInterface>?>(null)
+//fun updateAccounts(context: Context){
+//    MainScope().async {
+//        providers = TikiUI.account.providers(context)
+//        Log.e("************", providers.toString())
+//    }
+//}
 
 @Composable
 fun HomeView(
-    onProvider: (AccountProvider) -> Unit,
+    onProvider: (ProvidersInterface) -> Unit,
     onMore: () -> Unit,
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
-    if(providers == null) updateAccounts(context)
+//    if(providers == null) updateAccounts(context)
 
     BottomSheet {
         Column(

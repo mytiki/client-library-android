@@ -124,9 +124,9 @@ fun EmailView(
                         contentAlignment = Alignment.Center
                     ) {
                         EmailGoogleBtn {
-//                            Rewards.account.login(activity,"authKeys@gmail.com", "213", provider)
+//                            TikiUI.account.login(activity,"authKeys@gmail.com", "213", provider)
 //                            MainScope().async {
-//                                accounts = Rewards.account.accounts.toList().filter {it.provider.name() == provider.name()}
+//                                accounts = TikiUI.account.accounts.toList().filter {it.provider.name() == provider.name()}
 //                            }
                             val alertDialog = AlertDialog.Builder(activity)
                                 .setTitle(null)

@@ -5,10 +5,13 @@
 
 package com.mytiki.publish.client.ui
 
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import com.mytiki.publish.client.R
 
 data class Theme(
     val primaryTextColor: Color = Color(0xFF000000),
