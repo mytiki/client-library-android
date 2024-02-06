@@ -19,14 +19,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.mytiki.apps_receipt_rewards.Rewards
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mytiki.apps_receipt_rewards.utils.components.Header
 import com.mytiki.apps_receipt_rewards.utils.components.MainButton
+import com.mytiki.publish.client.ui.license.LicenseViewModel
 
 @Composable
 fun LicenseTerms(
+    licenseViewModel: LicenseViewModel,
     onBackButton: () -> Unit,
     onAccept: () -> Unit
 ) {
@@ -51,11 +54,11 @@ fun LicenseTerms(
                 Column {
                     Divider(color = MaterialTheme.colorScheme.primary, thickness = 1.dp)
                     Spacer(modifier = Modifier.height(42.dp))
-                    if (!Rewards.license.isLicensed()) {
+                    if (licenseViewModel.isLicensed.collectAsStateWithLifecycle().value) {
                         MainButton(
                             text = "I agree", isfFilled = true
                         ) {
-                            Rewards.license.accept()
+                            licenseViewModel.acceptLicense()
                             onAccept()
                         }
                         Spacer(modifier = Modifier.height(40.dp))
@@ -74,7 +77,7 @@ fun LicenseTerms(
                         .verticalScroll(rememberScrollState())
                 ) {
                     Text(
-                        text = Rewards.license.terms(),
+                        text = licenseViewModel.terms(),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }

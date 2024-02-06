@@ -22,7 +22,7 @@ class ThemeService {
     )
         private set
 
-    fun theme(theme: Theme){
+    fun setTheme(theme: Theme){
         colorScheme = lightColorScheme(
             primary = theme.accentColor,
             error = Color(0xFFC73000),

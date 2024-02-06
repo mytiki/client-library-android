@@ -22,13 +22,14 @@ import com.mytiki.apps_receipt_rewards.utils.components.BottomSheetHeader
 import com.mytiki.apps_receipt_rewards.utils.components.DisplayCard
 import com.mytiki.apps_receipt_rewards.utils.components.MainButton
 import com.mytiki.publish.client.TikiClient
+import com.mytiki.publish.client.ui.license.LicenseViewModel
 
 @Composable
 fun LicenseView(
+    licenseViewModel: LicenseViewModel,
     onGetEstimate: () -> Unit,
-    onDismiss: () -> Unit
 ) {
-    val estimate = TikiClient.license.estimate()
+
     BottomSheet {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -48,7 +49,7 @@ fun LicenseView(
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "\$${estimate.min} - \$${estimate.max}",
+                        text = "\$${licenseViewModel.estimate().min} - \$${licenseViewModel.estimate().max}",
                         color = MaterialTheme.colorScheme.primary,
                         style = MaterialTheme.typography.displayLarge,
                     )
