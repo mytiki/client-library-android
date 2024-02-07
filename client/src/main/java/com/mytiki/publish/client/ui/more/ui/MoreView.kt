@@ -23,7 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.mytiki.apps_receipt_rewards.utils.components.Header
+import com.mytiki.publish.client.ui.components.Header
 import com.mytiki.publish.client.ProvidersInterface
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async

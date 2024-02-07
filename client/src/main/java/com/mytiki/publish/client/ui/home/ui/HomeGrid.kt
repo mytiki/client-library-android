@@ -19,12 +19,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.mytiki.publish.client.ProvidersInterface
 import com.mytiki.publish.client.ui.account.AccountStatus
 import com.mytiki.publish.client.ui.account.ui.AccountTile
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun HomeGrid(providers: List<AccountProvider>?, onAccountProvider: (AccountProvider) -> Unit) {
+fun HomeGrid(providers: Set<ProvidersInterface>, onAccountProvider: (ProvidersInterface) -> Unit) {
 
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item {
@@ -45,13 +46,12 @@ fun HomeGrid(providers: List<AccountProvider>?, onAccountProvider: (AccountProvi
                 horizontalArrangement = Arrangement.SpaceBetween,
                 maxItemsInEachRow = 3
             ) {
-                providers?.forEach { provider ->
+                providers.forEach { provider ->
                     AccountTile(
                         provider = provider,
                         accountStatus = AccountStatus.VERIFIED,
-                        padding = PaddingValues(horizontal = 10.dp),
-                        onClick = { onAccountProvider(provider) }
-                    )
+                        padding = PaddingValues(horizontal = 10.dp)
+                    ) { onAccountProvider(provider) }
                 }
             }
         }

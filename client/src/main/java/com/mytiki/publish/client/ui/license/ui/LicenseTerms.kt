@@ -19,12 +19,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mytiki.apps_receipt_rewards.utils.components.Header
-import com.mytiki.apps_receipt_rewards.utils.components.MainButton
+import com.mytiki.publish.client.ui.components.Header
+import com.mytiki.publish.client.ui.components.MainButton
 import com.mytiki.publish.client.ui.license.LicenseViewModel
 
 @Composable

@@ -10,6 +10,7 @@ import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.email.EmailService
 import com.mytiki.publish.client.license.LicenseService
 import com.mytiki.publish.client.ui.Theme
+import com.mytiki.publish.client.ui.TikiUI
 
 
 /**
@@ -28,16 +29,19 @@ import com.mytiki.publish.client.ui.Theme
  */
 
 class TikiClient{
+
     companion object {
         val auth = AuthService()
         val capture = CaptureService()
         val clo = CloService()
         val email = EmailService()
         val license = LicenseService()
+        lateinit var ui: TikiUI
+            private set
+        fun tikiUI(tikiUI: TikiUI){
+            ui = tikiUI
+        }
     }
-
-
-
 
 
     /**

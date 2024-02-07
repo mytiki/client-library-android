@@ -25,7 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mytiki.apps_receipt_rewards.more.MoreContributor
-import com.mytiki.apps_receipt_rewards.utils.components.RewardsChart
+import com.mytiki.publish.client.ui.components.RewardsChart
 
 @Composable
 fun MoreEstimate(data: List<MoreContributor>) {

@@ -12,6 +12,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
 import net.openid.appauth.AuthorizationException
 import net.openid.appauth.AuthorizationResponse
+import net.openid.appauth.ClientSecretBasic
 import java.util.Date
 
 
@@ -24,9 +25,9 @@ class EmailActivity : AppCompatActivity() {
         if (extras != null) {
             val provider = extras.getString("provider")?.let { EmailProviderEnum.fromString(it) } ?: throw Exception("provider not identified")
             val clientID = extras.getString("clientID") ?: throw Exception("clientID not identified")
+            val clientSecret = extras.getString("clientSecret") ?: throw Exception("clientSecret not identified")
             val redirectURI = extras.getString("redirectURI") ?: throw Exception("redirectURI not identified")
             val (authIntent, authService) = TikiClient.email.authRequest(this@EmailActivity, provider, clientID, redirectURI)
-
 
             val startForResult = registerForActivityResult(
                 ActivityResultContracts.StartActivityForResult()
@@ -34,20 +35,21 @@ class EmailActivity : AppCompatActivity() {
                 if (result.resultCode == Activity.RESULT_OK) {
                     val authorizationResponse = AuthorizationResponse.fromIntent(result.data!!) ?: throw Exception("error on AuthorizationResponse")
                     authService.performTokenRequest(
-                        authorizationResponse.createTokenExchangeRequest()
+                        authorizationResponse.createTokenExchangeRequest(),
+                        ClientSecretBasic(clientSecret)
                     ) { authResponse, _->
                         if (authResponse != null) {
-                            val authToken = AuthToken(
-                                authResponse.accessToken!!,
-                                authResponse.refreshToken!!,
-                                Date(authResponse.accessTokenExpirationTime!!),
-                                provider
-                            )
                             MainScope().async {
-                               val emailResponse = TikiClient.email.getEmailResponse(authToken).await()
+                               val emailResponse = TikiClient.email.getEmailResponse(provider, authResponse.accessToken!!).await()
+                                val authToken = AuthToken(
+                                    emailResponse.email,
+                                    authResponse.accessToken!!,
+                                    authResponse.refreshToken!!,
+                                    Date(authResponse.accessTokenExpirationTime!!),
+                                    provider
+                                )
                                TikiClient.email.emailRepository.save(
                                    this@EmailActivity,
-                                   emailResponse.email,
                                    authToken
                                )
                            }

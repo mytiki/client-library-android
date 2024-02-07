@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.mytiki.publish.client.R
 import com.mytiki.publish.client.ui.account.Account
+import com.mytiki.publish.client.ui.account.AccountStatus
 
 
 @Composable
@@ -60,13 +61,15 @@ fun AccountCard(account: Account, addIcons: Boolean = true, onClick: () -> Unit)
                         .shadow(elevation = 4.dp)
 
                 )
-                if (addIcons) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_alert),
-                        contentDescription = "Account needs to be reconnected",
-                        modifier = Modifier.size(32.dp),
-                        tint = Color.Unspecified
-                    )
+                if (account.status == AccountStatus.UNVERIFIED) {
+                    if (addIcons) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_alert),
+                            contentDescription = "Account needs to be reconnected",
+                            modifier = Modifier.size(32.dp),
+                            tint = Color.Unspecified
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.width(20.dp))

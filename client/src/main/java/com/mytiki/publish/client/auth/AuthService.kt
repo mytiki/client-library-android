@@ -63,6 +63,7 @@ class AuthService {
                 if (apiResponse.code in 200..299) {
                     val json = JSONObject(apiResponse.body?.string()!!)
                     val refreshAuthToken = AuthToken(
+                        email,
                         json.getString("access_token"),
                         authToken.refresh,
                         Date(authToken.expiration.time + json.getLong("expires_in")),

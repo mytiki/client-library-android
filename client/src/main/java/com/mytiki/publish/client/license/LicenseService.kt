@@ -19,6 +19,16 @@ class LicenseService {
     )
         private set
 
+    var tikiPublishingID: String? = null
+        private set
+
+    var userId: String? = null
+        private set
+
+    var redirectUri: String? = null
+        private set
+
+
     /**
      * Creates a new license for the user.
      * @return The created LicenseRecord.
@@ -104,6 +114,16 @@ class LicenseService {
         company: Company
     ){
         this.company = company
+    }
+
+    fun tikiPublishingID(id: String){
+        tikiPublishingID = id
+    }
+    fun userId(id: String){
+        userId = id
+    }
+    fun redirectUri(uri: String){
+        redirectUri = uri
     }
 
 

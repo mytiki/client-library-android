@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.example_app.theme.TikiClientTheme
+import com.mytiki.publish.client.ui.TikiUI
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,7 +62,21 @@ class MainActivity : AppCompatActivity() {
                             textAlign = TextAlign.Justify
                         )
 
-                        Spacer(modifier = Modifier.height(30.dp))
+                        Spacer(modifier = Modifier.height(60.dp))
+                        MainButton(text = "Launch UI") {
+                            TikiUI.Builder()
+                                .company()
+                                .googleKeys(
+                                    "1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e.apps.googleusercontent.com",
+                                    ""
+                                )
+                                .userId("User Test 1")
+                                .redirectUri("com.googleusercontent.apps.1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e:/oauth2redirect")
+                                .build()
+                            TikiClient.ui.show(this@MainActivity)
+                        }
+
+                        Spacer(modifier = Modifier.height(60.dp))
                         MainButton(text = "Login") {
                             TikiClient.email.login(
                                 this@MainActivity,

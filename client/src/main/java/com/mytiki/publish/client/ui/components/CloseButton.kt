@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.mytiki.apps_receipt_rewards.R
+import com.mytiki.publish.client.R
 
 @Composable
 fun CloseButton(closeFunction: () -> Unit) {

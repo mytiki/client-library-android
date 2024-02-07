@@ -47,7 +47,7 @@ class Account private constructor(
                         TikiClient.auth.refresh(
                             context,
                             username,
-                            if (provider == EmailProviderEnum.GOOGLE) TikiUI.googleClientID!! else TikiUI.outlookClientID!!
+                            if (provider == EmailProviderEnum.GOOGLE) TikiClient.email.googleKeys!!.clientId else TikiClient.email.outlookKeys!!.clientId
                         ).await()
                         AccountStatus.VERIFIED
 

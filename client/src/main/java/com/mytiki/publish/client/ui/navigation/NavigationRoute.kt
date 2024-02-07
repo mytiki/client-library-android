@@ -11,7 +11,7 @@ enum class NavigationRoute {
     TERMS,
     HOME,
     MORE,
-    OFFER_PROVIDER,
+    MERCHANT,
     EMAIL,
     NONE
 }

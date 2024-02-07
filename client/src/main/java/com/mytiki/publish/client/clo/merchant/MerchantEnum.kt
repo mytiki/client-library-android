@@ -75,9 +75,8 @@ enum class MerchantEnum: ProvidersInterface {
         fun fromString(name: String) = EmailProviderEnum.entries.first{name == it.toString()}
     }
 
-    override fun toString(): String {
-        return this.name
-    }
+    override fun toString() = this.name
+
 
     override fun resId(): Int {
         when (this) {

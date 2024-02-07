@@ -3,7 +3,7 @@
  * MIT license. See LICENSE file in the root directory.
  */
 
-package com.mytiki.apps_receipt_rewards.utils.components
+package com.mytiki.publish.client.ui.components
 
 import android.app.Activity
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import com.mytiki.apps_receipt_rewards.TestTag
+import com.mytiki.apps_receipt_rewards.utils.components.CloseButton
+import com.mytiki.publish.client.ui.TestTag
 
 @Composable
 fun BottomSheetHeader(title: String, subTitle: String) {

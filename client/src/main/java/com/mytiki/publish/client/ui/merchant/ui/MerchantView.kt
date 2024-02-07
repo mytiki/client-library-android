@@ -24,14 +24,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.mytiki.apps_receipt_rewards.license.ui.OfferCard
+import com.mytiki.publish.client.ProvidersInterface
 import com.mytiki.publish.client.ui.account.Account
 import com.mytiki.publish.client.ui.account.ui.AccountCard
 import com.mytiki.publish.client.ui.account.ui.AccountDisplay
-import com.mytiki.apps_receipt_rewards.license.ui.OfferCard
-import com.mytiki.apps_receipt_rewards.utils.components.Header
-import com.mytiki.apps_receipt_rewards.utils.components.LoginForm
-import com.mytiki.apps_receipt_rewards.utils.components.MainButton
-import com.mytiki.publish.client.ProvidersInterface
+import com.mytiki.publish.client.ui.components.Header
+import com.mytiki.publish.client.ui.components.MainButton
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
 
@@ -85,28 +84,6 @@ fun MerchantView(
                     239.dp,
                     "3% cashback on all purchases",
                 )
-            }
-            item {
-                Spacer(modifier = Modifier.height(24.dp))
-                Text(
-                    text = "Account",
-                    modifier = Modifier.padding(horizontal = 21.dp),
-                    style = MaterialTheme.typography.headlineLarge
-                )
-            }
-            if (accounts.isNullOrEmpty()) {
-                item {
-                    LoginForm(activity, username, password, provider) {
-                        updateAccounts(context, provider)
-                        Rewards.capture.scrape(context, provider)
-                    }
-                }
-            } else {
-                items(accounts!!) {
-                    Spacer(modifier = Modifier.height(32.dp))
-                    AccountCard(it, false) { Rewards.account.logout(context, it.username, it.provider) }
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
             }
             item {
                 Spacer(modifier = Modifier.height(32.dp))

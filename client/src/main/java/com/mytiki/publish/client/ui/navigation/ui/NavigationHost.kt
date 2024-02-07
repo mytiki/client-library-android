@@ -6,7 +6,8 @@
 package com.mytiki.publish.client.ui.navigation.ui
 
 import android.app.Activity
-import androidx.activity.viewModels
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
@@ -23,11 +24,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.mytiki.apps_receipt_rewards.email.ui.EmailView
+import com.mytiki.publish.client.ui.email.ui.EmailView
 import com.mytiki.publish.client.ui.home.ui.HomeView
 import com.mytiki.apps_receipt_rewards.license.ui.LicenseTerms
 import com.mytiki.publish.client.ui.license.ui.LicenseView
@@ -35,15 +38,19 @@ import com.mytiki.apps_receipt_rewards.more.ui.MoreView
 import com.mytiki.apps_receipt_rewards.navigation.NavigationRoute
 import com.mytiki.publish.client.ProvidersInterface
 import com.mytiki.publish.client.TikiClient
+import com.mytiki.publish.client.clo.merchant.MerchantEnum
 import com.mytiki.publish.client.email.EmailProviderEnum
+import com.mytiki.publish.client.ui.email.EmailViewModel
+import com.mytiki.publish.client.ui.home.HomeViewModel
 import com.mytiki.publish.client.ui.license.LicenseViewModel
 import com.mytiki.publish.client.ui.merchant.ui.MerchantView
 
-private val accountProvider = mutableStateOf<ProvidersInterface?>(null)
-
+@RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun NavigationHost(activity: AppCompatActivity, navController: NavHostController = rememberNavController()) {
-    var finish by mutableStateOf(false)
+    var finish by remember {
+        mutableStateOf(false)
+    }
     val context = LocalContext.current
     navController.addOnDestinationChangedListener { _, _, _ ->
         if (finish) (context as Activity).finish()
@@ -85,13 +92,10 @@ fun NavigationHost(activity: AppCompatActivity, navController: NavHostController
                         targetOffsetY = { it }
                     )
                 }) {entry ->
-                val viewModel = entry.sharedViewModel<LicenseViewModel>(navController)
+                val licenseViewModel = entry.sharedViewModel<LicenseViewModel>(navController)
                 LicenseView(
-                    licenseViewModel = viewModel,
-                    onGetEstimate = { navController.navigate(NavigationRoute.TERMS.name) },
-                    onDismiss = {
-                        (activity).finish()
-                    }
+                    licenseViewModel = licenseViewModel,
+                    onGetEstimate = { navController.navigate(NavigationRoute.TERMS.name) }
                 )
             }
             composable(NavigationRoute.TERMS.name,
@@ -120,9 +124,9 @@ fun NavigationHost(activity: AppCompatActivity, navController: NavHostController
                     )
                 })
             {entry ->
-                val viewModel = entry.sharedViewModel<LicenseViewModel>(navController)
+                val licenseViewModel = entry.sharedViewModel<LicenseViewModel>(navController)
                 LicenseTerms(
-                    licenseViewModel = viewModel,
+                    licenseViewModel = licenseViewModel,
                     onBackButton = { navController.popBackStack() },
                     onAccept = {
                         navController.navigate(NavigationRoute.HOME.name)
@@ -155,8 +159,10 @@ fun NavigationHost(activity: AppCompatActivity, navController: NavHostController
                     animationSpec = tween(700),
                     targetOffsetY = { it }
                 )
-            }) {
+            }) {entry ->
+            val homeViewModel = viewModel<HomeViewModel>()
             HomeView(
+                homeViewModel = homeViewModel,
                 onProvider = { prov -> onProvider(prov, navController) },
                 onMore = { navController.navigate(NavigationRoute.MORE.name) },
                 onDismiss = {
@@ -200,7 +206,8 @@ fun NavigationHost(activity: AppCompatActivity, navController: NavHostController
                 onBackButton = { navController.popBackStack() }
             )
         }
-        composable(NavigationRoute.OFFER_PROVIDER.name,
+        composable("${NavigationRoute.MERCHANT.name}/{merchant}",
+            arguments = listOf(navArgument("merchant") { type = NavType.StringType }),
             enterTransition = {
                 slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Left,
@@ -224,14 +231,17 @@ fun NavigationHost(activity: AppCompatActivity, navController: NavHostController
                     AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec = tween(700)
                 )
-            }) {
+            }) {backStackEntry ->
+            val merchant = backStackEntry.arguments?.getString("merchant")
+                ?.let { MerchantEnum.fromString(it) } ?: throw Exception("pass a merchant through the route")
             MerchantView(
                 activity,
-                provider = accountProvider.value!!,
+                provider = merchant,
                 onBackButton = { navController.popBackStack() }
             )
         }
-        composable(NavigationRoute.EMAIL.name,
+        composable("${NavigationRoute.EMAIL.name}/{emailProvider}",
+            arguments = listOf(navArgument("emailProvider") { type = NavType.StringType }),
             enterTransition = {
                 slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Left,
@@ -255,10 +265,15 @@ fun NavigationHost(activity: AppCompatActivity, navController: NavHostController
                     AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec = tween(700)
                 )
-            }) {
+            }) {backStackEntry ->
+            val emailProvider = backStackEntry.arguments?.getString("userId")
+                ?.let { EmailProviderEnum.fromString(it) } ?: throw Exception("pass a emailProvider through the route")
+            val emailViewModel = viewModel<EmailViewModel>()
+            emailViewModel.updateAccounts(context, emailProvider)
             EmailView(
                 activity,
-                provider = accountProvider.value!!,
+                emailViewModel = emailViewModel,
+                emailProvider = emailProvider,
                 onBackButton = { navController.popBackStack() }
             )
         }
@@ -277,10 +292,9 @@ inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(
 }
 
 fun onProvider(provider: ProvidersInterface, navController: NavController) {
-    accountProvider.value = provider
     if (provider is EmailProviderEnum){
-        navController.navigate(NavigationRoute.EMAIL.name)
+        navController.navigate("${NavigationRoute.EMAIL.name}/$provider")
     } else {
-        navController.navigate(NavigationRoute.OFFER_PROVIDER.name)
+        navController.navigate("${NavigationRoute.MERCHANT.name}/$provider")
     }
 }

@@ -67,9 +67,8 @@ fun MoreAccounts(
                     AccountTile(
                         provider = accountProvider,
                         accountStatus = AccountStatus.UNLINKED,
-                        padding = PaddingValues(horizontal = 4.dp, vertical = 12.dp),
-                        onClick = { onClick(accountProvider) }
-                    )
+                        padding = PaddingValues(horizontal = 4.dp, vertical = 12.dp)
+                    ) { onClick(accountProvider) }
                 }
             }
         }

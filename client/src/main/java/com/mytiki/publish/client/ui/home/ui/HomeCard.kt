@@ -20,13 +20,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.mytiki.apps_receipt_rewards.Rewards
-import com.mytiki.apps_receipt_rewards.utils.components.DisplayCard
-import com.mytiki.apps_receipt_rewards.utils.components.RewardsChart
+import com.mytiki.publish.client.ui.components.DisplayCard
+import com.mytiki.publish.client.ui.components.RewardsChart
+import com.mytiki.publish.client.ui.home.HomeViewModel
 
 @Composable
-fun HomeCard(onMore: () -> Unit) {
-    val earnings = Rewards.license.earnings()
+fun HomeCard(
+    homeViewModel: HomeViewModel,
+    onMore: () -> Unit
+) {
+    val earnings = homeViewModel.earnings()
     DisplayCard(height = 183.dp, horizontalPadding = 24.dp) {
         Row(
             modifier = Modifier

@@ -7,12 +7,9 @@ package com.mytiki.publish.client.ui
 
 import android.content.Context
 import android.content.Intent
-import androidx.browser.customtabs.CustomTabsIntent.ColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import com.mytiki.publish.client.TikiClient
-import com.mytiki.publish.client.TikiClient.Companion.license
 import com.mytiki.publish.client.capture.CaptureService
 import com.mytiki.publish.client.capture.Company
 import com.mytiki.publish.client.email.EmailKeys
@@ -49,21 +46,15 @@ import com.mytiki.publish.client.license.LicenseService
  * TikiUI.start(context, customTheme)
  * ```
  */
-class TikiUI private constructor(
-    var tikiPublishingID: String? = null,
-    var userId: String? = null,
-) {
-
+class TikiUI private constructor(){
     companion object {
         val theme = ThemeService()
-        inline fun build(block: Builder.() -> Unit) = Builder().apply(block).build()
     }
-
-    private constructor(builder: Builder): this(
-        tikiPublishingID = builder.tikiPublishingID,
-        userId = builder.userId,
-    ){
-        license.company(builder.company!!)
+    private constructor(builder: Builder): this() {
+        TikiClient.license.company(builder.company)
+        TikiClient.license.tikiPublishingID(builder.tikiPublishingID)
+        TikiClient.license.userId(builder.userId)
+        TikiClient.license.redirectUri(builder.redirectUri)
         TikiClient.email.googleKeys(builder.googleKeys.clientId, builder.googleKeys.clientSecret)
         TikiClient.email.outlookKeys(builder.outlookKeys.clientId, builder.outlookKeys.clientSecret)
         theme.setTheme(builder.theme)
@@ -77,6 +68,8 @@ class TikiUI private constructor(
         lateinit var tikiPublishingID: String
             private set
         lateinit var userId: String
+            private set
+        lateinit var redirectUri: String
             private set
         lateinit var company: Company
             private set
@@ -101,6 +94,11 @@ class TikiUI private constructor(
             userId = id
             return this
         }
+        fun redirectUri(uri: String): Builder {
+            redirectUri = uri
+            return this
+        }
+
         fun company(
             name: String = "Company Inc.",
             jurisdiction: String = "Tennessee, USA",
@@ -127,13 +125,13 @@ class TikiUI private constructor(
                 fontFamily
             )
         }
-        fun build(): TikiUI {
-            if (tikiPublishingID.isNullOrEmpty()) throw Exception("set the tikiPublishingID")
+        fun build() {
+//            if (tikiPublishingID.isNullOrEmpty()) throw Exception("set the tikiPublishingID")
             if (googleKeys != null) throw Exception("set the googleKeys")
             if (userId.isNullOrEmpty()) throw Exception("set the userId")
+            if (redirectUri.isNullOrEmpty()) throw Exception("set the redirectUri")
             if (company != null) throw Exception("set the company")
-
-            return TikiUI(this)
+            TikiClient.tikiUI(TikiUI(this))
         }
     }
 
