@@ -32,6 +32,8 @@ fun LicenseTerms(
     onBackButton: () -> Unit,
     onAccept: () -> Unit
 ) {
+    val isLicensed = licenseViewModel.isLicensed.collectAsStateWithLifecycle().value
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -53,7 +55,7 @@ fun LicenseTerms(
                 Column {
                     Divider(color = MaterialTheme.colorScheme.primary, thickness = 1.dp)
                     Spacer(modifier = Modifier.height(42.dp))
-                    if (licenseViewModel.isLicensed.collectAsStateWithLifecycle().value) {
+                    if (!isLicensed) {
                         MainButton(
                             text = "I agree", isfFilled = true
                         ) {

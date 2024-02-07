@@ -1,6 +1,7 @@
 package com.mytiki.publish.client.clo
 
 import com.mytiki.apps_receipt_rewards.more.MoreContributor
+import com.mytiki.publish.client.clo.merchant.MerchantEnum
 
 class CloService {
 
@@ -17,7 +18,7 @@ class CloService {
      * Retrieves card-linked offers for the user.
      * @return List of card-linked offers.
      */
-    fun offers(): List<Offer>{
+    fun offers(merchant: MerchantEnum): List<Offer>{
         return listOf()
     }
 

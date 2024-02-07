@@ -5,21 +5,24 @@
 
 package com.mytiki.publish.client.ui
 
+import android.os.Build
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import com.mytiki.publish.client.databinding.RewardsActivityBinding
+import com.mytiki.publish.client.databinding.UiActivityBinding
 import com.mytiki.publish.client.ui.navigation.ui.NavigationHost
 import com.mytiki.publish.client.ui.theme.UITheme
 
 class UIActivity : AppCompatActivity() {
 
-    private var _binding: RewardsActivityBinding? = null
+    private var _binding: UiActivityBinding? = null
     private val binding get() = _binding!!
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = RewardsActivityBinding.inflate(layoutInflater)
+        _binding = UiActivityBinding.inflate(layoutInflater)
         binding.composeView.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {

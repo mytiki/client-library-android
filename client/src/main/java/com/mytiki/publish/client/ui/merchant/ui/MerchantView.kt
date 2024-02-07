@@ -5,6 +5,11 @@
 
 package com.mytiki.publish.client.ui.merchant.ui
 
+import android.content.Context
+import android.content.ContextWrapper
+import android.os.Build
+import androidx.activity.ComponentActivity
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -24,37 +30,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.mytiki.apps_receipt_rewards.license.ui.OfferCard
-import com.mytiki.publish.client.ProvidersInterface
+import com.mytiki.publish.client.TikiClient
+import com.mytiki.publish.client.clo.merchant.MerchantEnum
 import com.mytiki.publish.client.ui.account.Account
-import com.mytiki.publish.client.ui.account.ui.AccountCard
 import com.mytiki.publish.client.ui.account.ui.AccountDisplay
 import com.mytiki.publish.client.ui.components.Header
 import com.mytiki.publish.client.ui.components.MainButton
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.async
+import com.mytiki.publish.client.ui.merchant.MerchantViewModel
 
-var accounts by mutableStateOf<List<Account>?>(null)
-//fun updateAccounts(context: Context, provider: ProvidersInterface){
-//    MainScope().async {
-//        accounts = TikiClient.account.accounts(context, provider)
-//    }
-//}
-
+@RequiresApi(Build.VERSION_CODES.M)
 @Composable
 fun MerchantView(
+    merchantViewModel: MerchantViewModel,
     activity: AppCompatActivity,
-    provider: ProvidersInterface,
+    merchant: MerchantEnum,
     onBackButton: () -> Unit
 ) {
-    val context = LocalContext.current
-    val username = remember {
-        mutableStateOf("")
-    }
-    val password = remember {
-        mutableStateOf("")
-    }
-
     Surface(
         modifier = Modifier
             .fillMaxSize(),
@@ -72,7 +63,7 @@ fun MerchantView(
                         .padding(horizontal = 15.dp)
                 ) {
                     Spacer(modifier = Modifier.height(64.dp))
-                    Header(text = provider.displayName()) {
+                    Header(text = merchant.displayName()) {
                         onBackButton()
                     }
                 }
@@ -80,7 +71,7 @@ fun MerchantView(
             item {
                 Spacer(modifier = Modifier.height(28.dp))
                 AccountDisplay(
-                    provider,
+                    merchant,
                     239.dp,
                     "3% cashback on all purchases",
                 )
@@ -92,9 +83,7 @@ fun MerchantView(
                     text = "Scan receipt",
                     isfFilled = false
                 ) {
-                    MainScope().async {
-                        Rewards.capture.scan(activity).await()
-                    }
+                    TikiClient.capture.camera(activity)
                 }
                 Spacer(modifier = Modifier.height(30.dp))
                 Text(
@@ -106,8 +95,10 @@ fun MerchantView(
                 )
                 Spacer(modifier = Modifier.height(32.dp))
             }
-            items(Rewards.capture.offers(provider)) {
-                OfferCard(it) { }
+            items(merchantViewModel.offers(merchant)) {
+                OfferCard(it, merchant) {
+                    merchantViewModel.webView(it.clickUrl, activity)
+                }
                 Spacer(modifier = Modifier.height(40.dp))
             }
         }

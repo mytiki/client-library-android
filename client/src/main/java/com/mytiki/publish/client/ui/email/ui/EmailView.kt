@@ -50,7 +50,7 @@ fun EmailView(
 ) {
     val context = LocalContext.current
 
-    val accounts = emailViewModel.accounts.collectAsStateWithLifecycle()
+    val accounts = emailViewModel.accounts
 
     Surface(
         modifier = Modifier
@@ -113,42 +113,9 @@ fun EmailView(
                     ) {
                         EmailGoogleBtn {
                            emailViewModel.login(context, emailProvider)
-
-//                            val alertDialog = AlertDialog.Builder(activity)
-//                                .setTitle(null)
-//                                .setMessage("Functionalities not implemented yet")
-//                                .setPositiveButton("OK", null)
-//                                .create()
-//                            alertDialog.show()
                         }
                     }
                 }
-                Spacer(modifier = Modifier.height(38.dp))
-                Row(
-                    modifier = Modifier
-                        .padding(horizontal = 21.dp)
-                        .fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .height(1.dp)
-                            .weight(1f)
-                            .background(MaterialTheme.colorScheme.outlineVariant)
-                    )
-                    Text(
-                        text = "or",
-                        modifier = Modifier.padding(horizontal = 15.dp),
-                        style = MaterialTheme.typography.displaySmall,
-                        textAlign = TextAlign.Center
-                    )
-                    Box(
-                        modifier = Modifier
-                            .height(1.dp)
-                            .weight(1f)
-                            .background(MaterialTheme.colorScheme.outlineVariant)
-                    )
-                }
-                Spacer(modifier = Modifier.height(32.dp))
             }
         }
     }

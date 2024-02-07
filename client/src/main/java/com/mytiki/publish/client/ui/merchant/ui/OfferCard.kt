@@ -3,7 +3,7 @@
  * MIT license. See LICENSE file in the root directory.
  */
 
-package com.mytiki.apps_receipt_rewards.license.ui
+package com.mytiki.publish.client.ui.merchant.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -31,9 +31,11 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.mytiki.publish.client.R
+import com.mytiki.publish.client.clo.Offer
+import com.mytiki.publish.client.clo.merchant.MerchantEnum
 
 @Composable
-fun OfferCard(retailerOffer: RetailerOffer, onClick: () -> Unit) {
+fun OfferCard(offer: Offer, merchant: MerchantEnum, onClick: () -> Unit) {
     val configuration = LocalConfiguration.current
     Row(
         modifier = Modifier
@@ -53,9 +55,9 @@ fun OfferCard(retailerOffer: RetailerOffer, onClick: () -> Unit) {
                 ) {
                     Image(
                         painter = painterResource(
-                            id = retailerOffer.accountProvider.resId()
+                            id = merchant.resId()
                         ),
-                        contentDescription = "${retailerOffer.accountProvider.displayName()} logo",
+                        contentDescription = "${merchant.displayName()} logo",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .size(56.dp)
@@ -66,7 +68,7 @@ fun OfferCard(retailerOffer: RetailerOffer, onClick: () -> Unit) {
             Spacer(modifier = Modifier.width(20.dp))
             Text(
                 modifier = Modifier.widthIn(max = (configuration.screenWidthDp - 196).dp),
-                text = retailerOffer.discount,
+                text = offer.description,
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.outlineVariant,
                 softWrap = true

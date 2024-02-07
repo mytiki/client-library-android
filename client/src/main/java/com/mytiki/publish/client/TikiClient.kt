@@ -114,8 +114,8 @@ class TikiClient{
     }
 
     /**
-     * Displays the widget for pre-built UIs with a custom theme.
-     * @param theme The custom theme for the widget.
+     * Displays the widget for pre-built UIs with a custom themeObj.
+     * @param theme The custom themeObj for the widget.
      */
     fun widget(theme: Theme?) {
     }

@@ -3,17 +3,15 @@ package com.mytiki.publish.client.ui.email
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.ui.account.Account
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 class EmailViewModel(): ViewModel() {
-    private val _accounts = MutableStateFlow(listOf<Account>())
-    val accounts = _accounts.asStateFlow()
+    private val _accounts = mutableStateOf(listOf<Account>())
+    val accounts = _accounts
 
 
 

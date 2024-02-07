@@ -9,7 +9,6 @@ class AuthToken (val username: String, val auth: String, val refresh: String, va
     companion object{
         fun fromString(data: String?, key: String): AuthToken{
             val json = JSONObject(data)
-            Log.d("**************", json.toString())
             return AuthToken(
                 key,
                 json.getString("auth"),

@@ -29,7 +29,7 @@ class EmailService() {
      * Authenticates with OAuth and adds an email account for scraping receipts.
      * @param provider The email provider (GOOGLE or OUTLOOK).
      */
-    fun login(context: Context, provider: EmailProviderEnum, emailKeys: EmailKeys, redirectURI: String, ){
+    fun login(context: Context, provider: EmailProviderEnum, emailKeys: EmailKeys, redirectURI: String){
         val intent = Intent(context, EmailActivity::class.java)
 
         intent.putExtra("provider", provider.toString())

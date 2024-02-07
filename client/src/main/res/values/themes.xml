@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Base application themeObj. -->
     <style name="Base.Theme.TIKIClientLibrary" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
+        <!-- Customize your light themeObj here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 

@@ -24,7 +24,7 @@ class Account private constructor(
     val username: String,
     val provider: EmailProviderEnum,
 ) {
-    lateinit var status: AccountStatus
+    var status: AccountStatus = AccountStatus.UNVERIFIED
         private set
 
     constructor(context: Context, username: String, provider: EmailProviderEnum) : this(
@@ -32,32 +32,32 @@ class Account private constructor(
         provider,
     ){
         MainScope().async {
-            status = getStatus(context, username, provider)
+            getStatus(context, username, provider)
         }
     }
 
-    companion object {
-        private suspend fun getStatus(context: Context, username: String, provider: EmailProviderEnum): AccountStatus {
-            val token = TikiClient.email.emailRepository.get(context, username)
-            return if (token != null) {
-                if (token.expiration.after(Date())) {
+
+    private suspend fun getStatus(context: Context, username: String, provider: EmailProviderEnum) {
+        val token = TikiClient.email.emailRepository.get(context, username)
+        status = if (token != null) {
+            if (token.expiration.after(Date())) {
+                AccountStatus.VERIFIED
+            } else {
+                try {
+                    TikiClient.auth.refresh(
+                        context,
+                        username,
+                        if (provider == EmailProviderEnum.GOOGLE) TikiClient.email.googleKeys!!.clientId else TikiClient.email.outlookKeys!!.clientId
+                    ).await()
                     AccountStatus.VERIFIED
-                } else {
-                    try {
-                        TikiClient.auth.refresh(
-                            context,
-                            username,
-                            if (provider == EmailProviderEnum.GOOGLE) TikiClient.email.googleKeys!!.clientId else TikiClient.email.outlookKeys!!.clientId
-                        ).await()
-                        AccountStatus.VERIFIED
 
-                    } catch (error: Exception){
-                        AccountStatus.UNVERIFIED
-                    }
+                } catch (error: Exception){
+                    AccountStatus.UNVERIFIED
                 }
-            } else AccountStatus.UNVERIFIED
-        }
+            }
+        } else AccountStatus.UNVERIFIED
     }
+
 
     /**
      * Checks if two [Account] objects are equal based on their username and provider.

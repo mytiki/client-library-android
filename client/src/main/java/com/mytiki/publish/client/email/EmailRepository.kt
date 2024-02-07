@@ -50,7 +50,7 @@ class EmailRepository() {
     
     fun remove(context: Context, email: String){
         check(context)
-        editor!!.remove(email)
+        editor!!.remove(email).commit()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

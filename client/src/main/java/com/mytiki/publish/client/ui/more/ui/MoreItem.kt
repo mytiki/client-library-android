@@ -3,7 +3,7 @@
  * MIT license. See LICENSE file in the root directory.
  */
 
-package com.mytiki.apps_receipt_rewards.more.ui
+package com.mytiki.publish.client.ui.more.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row

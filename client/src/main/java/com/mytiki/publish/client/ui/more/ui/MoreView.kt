@@ -3,9 +3,10 @@
  * MIT license. See LICENSE file in the root directory.
  */
 
-package com.mytiki.apps_receipt_rewards.more.ui
+package com.mytiki.publish.client.ui.more.ui
 
-import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,35 +18,26 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.mytiki.publish.client.ui.components.Header
-import com.mytiki.publish.client.ProvidersInterface
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.async
+import com.mytiki.publish.client.email.EmailProviderEnum
+import com.mytiki.publish.client.ui.more.MoreViewModel
 
-var providers by mutableStateOf<List<ProvidersInterface>?>(null)
-fun updateProviders(context: Context, provider: ProvidersInterface){
-    MainScope().async {
-        providers = Rewards.account.providers(context)
-    }
-}
+@RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun MoreView(
-    onProvider: (ProvidersInterface) -> Unit,
+    moreViewModel: MoreViewModel,
+    onProvider: (EmailProviderEnum) -> Unit,
     onTerms: () -> Unit,
     onDecline: () -> Unit,
     onBackButton: () -> Unit
 ) {
     val context = LocalContext.current
-    var accList by mutableStateOf<List<ProvidersInterface>?>(null)
-    MainScope().async {
-        accList = Rewards.account.accounts(context).map { it.provider }.distinctBy{it.toString()}
-    }
+
+    val emailProvider = moreViewModel.emailProvider(context)
+    val largestContributors = moreViewModel.largestContributors()
 
     Surface(
         modifier = Modifier
@@ -67,16 +59,16 @@ fun MoreView(
 
             Spacer(modifier = Modifier.height(34.dp))
 
-            MoreEstimate(Rewards.capture.largestContributors())
+            MoreEstimate(largestContributors)
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            if (!accList.isNullOrEmpty()) {
-                MoreAccounts(accList!!, onProvider)
+            if (emailProvider.isNotEmpty()) {
+                MoreAccounts(emailProvider, onProvider)
                 Spacer(modifier = Modifier.height(30.dp))
             }
 
-            MoreDetails(onTerms, onDecline)
+            MoreDetails(moreViewModel, onTerms, onDecline)
 
             Spacer(modifier = Modifier.height(56.dp))
         }

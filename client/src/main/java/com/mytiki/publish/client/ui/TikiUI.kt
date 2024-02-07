@@ -31,10 +31,10 @@ import com.mytiki.publish.client.license.LicenseService
  * To get started with the rewards system, use the following example:
  *
  * ```kotlin
- * // Start rewards system with default theme
+ * // Start rewards system with default themeObj
  * TikiUI.start(context)
  *
- * // Start rewards system with a custom theme
+ * // Start rewards system with a custom themeObj
  * val customTheme = Theme(
  *      primaryTextColor = Color.Black,
  *      secondaryTextColor = Color.Gray,
@@ -51,51 +51,52 @@ class TikiUI private constructor(){
         val theme = ThemeService()
     }
     private constructor(builder: Builder): this() {
-        TikiClient.license.company(builder.company)
+        TikiClient.license.company(builder.companyConfig)
         TikiClient.license.tikiPublishingID(builder.tikiPublishingID)
-        TikiClient.license.userId(builder.userId)
-        TikiClient.license.redirectUri(builder.redirectUri)
-        TikiClient.email.googleKeys(builder.googleKeys.clientId, builder.googleKeys.clientSecret)
-        TikiClient.email.outlookKeys(builder.outlookKeys.clientId, builder.outlookKeys.clientSecret)
-        theme.setTheme(builder.theme)
+        TikiClient.license.userId(builder.ID)
+        TikiClient.license.redirectUri(builder.Uri)
+        TikiClient.email.googleKeys(builder.googleEmailKeys.clientId, builder.googleEmailKeys.clientSecret)
+
+        builder.outlookEmailKeys?.let { TikiClient.email.outlookKeys(it.clientId, builder.outlookEmailKeys!!.clientSecret) }
+        if (builder.themeObj != null) theme.setTheme(builder.themeObj!!) else theme.setTheme(Theme())
     }
 
     class Builder{
-        lateinit var googleKeys: EmailKeys
+        lateinit var googleEmailKeys: EmailKeys
             private set
-        lateinit var outlookKeys: EmailKeys
+        var outlookEmailKeys: EmailKeys? = null
             private set
         lateinit var tikiPublishingID: String
             private set
-        lateinit var userId: String
+        lateinit var ID: String
             private set
-        lateinit var redirectUri: String
+        lateinit var Uri: String
             private set
-        lateinit var company: Company
+        lateinit var companyConfig: Company
             private set
-        lateinit var theme: Theme
+        var themeObj: Theme? = null
             private set
 
 
         fun googleKeys( clientId: String, clientSecrete: String): Builder {
-            googleKeys = EmailKeys(clientId, clientSecrete)
+            googleEmailKeys = EmailKeys(clientId, clientSecrete)
             return this
         }
 
         fun outlookKeys( clientId: String, clientSecrete: String): Builder {
-            outlookKeys = EmailKeys(clientId, clientSecrete)
+            outlookEmailKeys = EmailKeys(clientId, clientSecrete)
             return this
         }
-        fun tikiPublishingID(id: String): Builder {
+        fun publishingID(id: String): Builder {
             tikiPublishingID = id
             return this
         }
-        fun userId(id: String): Builder {
-            userId = id
+        fun userID(id: String): Builder {
+            ID = id
             return this
         }
         fun redirectUri(uri: String): Builder {
-            redirectUri = uri
+            Uri = uri
             return this
         }
 
@@ -105,7 +106,7 @@ class TikiUI private constructor(){
             privacy: String = "https://your-co.com/privacy",
             terms: String = "https://your-co.com/terms",
         ) : Builder {
-            company = Company(name, jurisdiction, privacy, terms)
+            companyConfig = Company(name, jurisdiction, privacy, terms)
             return this
         }
         fun theme(
@@ -116,7 +117,7 @@ class TikiUI private constructor(){
             accentColor: Color,
             fontFamily: FontFamily
         ){
-            theme = Theme(
+            themeObj = Theme(
                 primaryTextColor,
                 secondaryTextColor,
                 primaryBackgroundColor,
@@ -126,11 +127,11 @@ class TikiUI private constructor(){
             )
         }
         fun build() {
-//            if (tikiPublishingID.isNullOrEmpty()) throw Exception("set the tikiPublishingID")
-            if (googleKeys != null) throw Exception("set the googleKeys")
-            if (userId.isNullOrEmpty()) throw Exception("set the userId")
-            if (redirectUri.isNullOrEmpty()) throw Exception("set the redirectUri")
-            if (company != null) throw Exception("set the company")
+            if (!this::tikiPublishingID.isInitialized) throw Exception("set the publishingID")
+            if (!this::googleEmailKeys.isInitialized) throw Exception("set the googleKeys")
+            if (!this::ID.isInitialized || ID.isEmpty()) throw Exception("set the userID")
+            if (!this::Uri.isInitialized || Uri.isEmpty()) throw Exception("set the redirectUri")
+            if (!this::companyConfig.isInitialized) throw Exception("set the company")
             TikiClient.tikiUI(TikiUI(this))
         }
     }
@@ -141,7 +142,7 @@ class TikiUI private constructor(){
      * @param context The application context.
      * @param userId The unique identifier of the user.
      *
-     * @throws Exception if company information or license keys are not configured.
+     * @throws Exception if companyConfig information or license keys are not configured.
      */
     fun show(
         context: Context,

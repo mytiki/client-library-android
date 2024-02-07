@@ -34,7 +34,7 @@ import com.mytiki.publish.client.ui.email.ui.EmailView
 import com.mytiki.publish.client.ui.home.ui.HomeView
 import com.mytiki.apps_receipt_rewards.license.ui.LicenseTerms
 import com.mytiki.publish.client.ui.license.ui.LicenseView
-import com.mytiki.apps_receipt_rewards.more.ui.MoreView
+import com.mytiki.publish.client.ui.more.ui.MoreView
 import com.mytiki.apps_receipt_rewards.navigation.NavigationRoute
 import com.mytiki.publish.client.ProvidersInterface
 import com.mytiki.publish.client.TikiClient
@@ -43,7 +43,9 @@ import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.ui.email.EmailViewModel
 import com.mytiki.publish.client.ui.home.HomeViewModel
 import com.mytiki.publish.client.ui.license.LicenseViewModel
+import com.mytiki.publish.client.ui.merchant.MerchantViewModel
 import com.mytiki.publish.client.ui.merchant.ui.MerchantView
+import com.mytiki.publish.client.ui.more.MoreViewModel
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
@@ -159,16 +161,12 @@ fun NavigationHost(activity: AppCompatActivity, navController: NavHostController
                     animationSpec = tween(700),
                     targetOffsetY = { it }
                 )
-            }) {entry ->
+            }) {
             val homeViewModel = viewModel<HomeViewModel>()
             HomeView(
                 homeViewModel = homeViewModel,
                 onProvider = { prov -> onProvider(prov, navController) },
                 onMore = { navController.navigate(NavigationRoute.MORE.name) },
-                onDismiss = {
-                    finish = true
-                    navController.popBackStack(NavigationRoute.HOME.name, true)
-                }
             )
         }
         composable(NavigationRoute.MORE.name,
@@ -196,7 +194,10 @@ fun NavigationHost(activity: AppCompatActivity, navController: NavHostController
                     animationSpec = tween(700)
                 )
             }) {
+            val moreViewModel = viewModel<MoreViewModel>()
+
             MoreView(
+                moreViewModel = moreViewModel,
                 onProvider = { prov -> onProvider(prov, navController) },
                 onTerms = { navController.navigate(NavigationRoute.TERMS.name) },
                 onDecline = {
@@ -234,9 +235,11 @@ fun NavigationHost(activity: AppCompatActivity, navController: NavHostController
             }) {backStackEntry ->
             val merchant = backStackEntry.arguments?.getString("merchant")
                 ?.let { MerchantEnum.fromString(it) } ?: throw Exception("pass a merchant through the route")
+            val merchantViewModel = viewModel<MerchantViewModel>()
             MerchantView(
+                merchantViewModel,
                 activity,
-                provider = merchant,
+                merchant = merchant,
                 onBackButton = { navController.popBackStack() }
             )
         }
@@ -266,7 +269,7 @@ fun NavigationHost(activity: AppCompatActivity, navController: NavHostController
                     animationSpec = tween(700)
                 )
             }) {backStackEntry ->
-            val emailProvider = backStackEntry.arguments?.getString("userId")
+            val emailProvider = backStackEntry.arguments?.getString("emailProvider")
                 ?.let { EmailProviderEnum.fromString(it) } ?: throw Exception("pass a emailProvider through the route")
             val emailViewModel = viewModel<EmailViewModel>()
             emailViewModel.updateAccounts(context, emailProvider)
@@ -292,9 +295,10 @@ inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(
 }
 
 fun onProvider(provider: ProvidersInterface, navController: NavController) {
-    if (provider is EmailProviderEnum){
-        navController.navigate("${NavigationRoute.EMAIL.name}/$provider")
+    val route = if (provider is EmailProviderEnum){
+        "${NavigationRoute.EMAIL.name}/$provider"
     } else {
-        navController.navigate("${NavigationRoute.MERCHANT.name}/$provider")
+        "${NavigationRoute.MERCHANT.name}/$provider"
     }
+    navController.navigate(route)
 }

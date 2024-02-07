@@ -72,7 +72,7 @@ enum class MerchantEnum: ProvidersInterface {
     WEGMANS;
 
     companion object {
-        fun fromString(name: String) = EmailProviderEnum.entries.first{name == it.toString()}
+        fun fromString(name: String) = MerchantEnum.entries.first{name == it.toString()}
     }
 
     override fun toString() = this.name

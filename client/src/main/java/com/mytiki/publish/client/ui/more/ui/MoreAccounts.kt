@@ -3,7 +3,7 @@
  * MIT license. See LICENSE file in the root directory.
  */
 
-package com.mytiki.apps_receipt_rewards.more.ui
+package com.mytiki.publish.client.ui.more.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -23,14 +23,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.ui.account.AccountStatus
 import com.mytiki.publish.client.ui.account.ui.AccountTile
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MoreAccounts(
-    accountsList: List<AccountProvider>,
-    onClick: (AccountProvider) -> Unit
+    accountsList: Set<EmailProviderEnum>,
+    onClick: (EmailProviderEnum) -> Unit
 ) {
     Text(
         "Accounts",
@@ -66,7 +67,7 @@ fun MoreAccounts(
                 accountsList.forEach { accountProvider ->
                     AccountTile(
                         provider = accountProvider,
-                        accountStatus = AccountStatus.UNLINKED,
+                        accountStatus = AccountStatus.VERIFIED,
                         padding = PaddingValues(horizontal = 4.dp, vertical = 12.dp)
                     ) { onClick(accountProvider) }
                 }

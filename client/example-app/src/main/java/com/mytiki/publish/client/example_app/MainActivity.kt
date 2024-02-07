@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.mytiki.publish.client.TikiClient
+import com.mytiki.publish.client.email.EmailKeys
 import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.example_app.theme.TikiClientTheme
 import com.mytiki.publish.client.ui.TikiUI
@@ -66,11 +67,12 @@ class MainActivity : AppCompatActivity() {
                         MainButton(text = "Launch UI") {
                             TikiUI.Builder()
                                 .company()
+                                .publishingID("tiki test")
                                 .googleKeys(
                                     "1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e.apps.googleusercontent.com",
                                     ""
                                 )
-                                .userId("User Test 1")
+                                .userID("User Test 1")
                                 .redirectUri("com.googleusercontent.apps.1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e:/oauth2redirect")
                                 .build()
                             TikiClient.ui.show(this@MainActivity)
@@ -81,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                             TikiClient.email.login(
                                 this@MainActivity,
                                 EmailProviderEnum.GOOGLE,
-                                "1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e.apps.googleusercontent.com",
+                                EmailKeys("1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e.apps.googleusercontent.com", ""),
                                 "com.googleusercontent.apps.1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e:/oauth2redirect"
                             )
                         }
@@ -100,6 +102,14 @@ class MainActivity : AppCompatActivity() {
                                 "1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e.apps.googleusercontent.com"
                             )
                             loginOutput = token.toString()
+                        }
+
+                        Spacer(modifier = Modifier.height(30.dp))
+                        MainButton(text = "Remove Token") {
+                            TikiClient.email.emailRepository.remove(
+                                this@MainActivity,
+                                "gabrielschuler3@gmail.com",
+                            )
                         }
 
                         Spacer(modifier = Modifier.height(30.dp))
