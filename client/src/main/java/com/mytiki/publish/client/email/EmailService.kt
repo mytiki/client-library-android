@@ -25,11 +25,15 @@ class EmailService() {
     var googleKeys: EmailKeys? = null
     var outlookKeys: EmailKeys? = null
 
+    var loginCallback: () -> Unit = {}
+        private set
+
     /**
      * Authenticates with OAuth and adds an email account for scraping receipts.
      * @param provider The email provider (GOOGLE or OUTLOOK).
      */
-    fun login(context: Context, provider: EmailProviderEnum, emailKeys: EmailKeys, redirectURI: String){
+    fun login(context: Context, provider: EmailProviderEnum, emailKeys: EmailKeys, redirectURI: String, loginCallback: () -> Unit){
+        this.loginCallback = loginCallback
         val intent = Intent(context, EmailActivity::class.java)
 
         intent.putExtra("provider", provider.toString())

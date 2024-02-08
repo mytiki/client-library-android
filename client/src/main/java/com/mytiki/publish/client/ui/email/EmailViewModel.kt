@@ -19,7 +19,9 @@ class EmailViewModel(): ViewModel() {
     fun updateAccounts(context: Context, emailProvider: EmailProviderEnum){
         val list = mutableListOf<Account>()
         TikiClient.email.accounts(context, emailProvider).forEach{
-            list.add(Account(context, it, emailProvider))
+            val account = Account(context, it, emailProvider)
+            account.updateStatus(context)
+            list.add(account)
         }
         _accounts.value = list
     }
@@ -27,11 +29,15 @@ class EmailViewModel(): ViewModel() {
     @RequiresApi(Build.VERSION_CODES.N)
     fun login(context: Context, emailProvider: EmailProviderEnum){
         TikiClient.license.redirectUri?.let {
-            TikiClient.email.login(context, emailProvider, TikiClient.email.googleKeys!!,
+            TikiClient.email.login(
+                context,
+                emailProvider,
+                TikiClient.email.googleKeys!!,
                 it
-            )
+            ){
+                updateAccounts(context, emailProvider)
+            }
         } ?: throw Exception("set the redirect uri")
-        updateAccounts(context, emailProvider)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

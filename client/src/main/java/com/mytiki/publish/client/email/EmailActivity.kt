@@ -13,6 +13,7 @@ import kotlinx.coroutines.async
 import net.openid.appauth.AuthorizationException
 import net.openid.appauth.AuthorizationResponse
 import net.openid.appauth.ClientSecretBasic
+import okhttp3.internal.wait
 import java.util.Date
 
 
@@ -48,10 +49,13 @@ class EmailActivity : AppCompatActivity() {
                                     Date(authResponse.accessTokenExpirationTime!!),
                                     provider
                                 )
-                               TikiClient.email.emailRepository.save(
+                               val resp = TikiClient.email.emailRepository.save(
                                    this@EmailActivity,
                                    authToken
                                )
+                                if (resp){
+                                    TikiClient.email.loginCallback()
+                                }
                            }
                             this@EmailActivity.finish()
                         } else throw Exception("unable to get access token")

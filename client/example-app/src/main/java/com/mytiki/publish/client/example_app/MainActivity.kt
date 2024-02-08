@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
                                 EmailProviderEnum.GOOGLE,
                                 EmailKeys("1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e.apps.googleusercontent.com", ""),
                                 "com.googleusercontent.apps.1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e:/oauth2redirect"
-                            )
+                            ){}
                         }
 
                         Spacer(modifier = Modifier.height(30.dp))

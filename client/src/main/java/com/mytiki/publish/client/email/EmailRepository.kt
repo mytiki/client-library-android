@@ -32,10 +32,10 @@ class EmailRepository() {
         }
     }
 
-    fun save(context: Context, token: AuthToken){
+    fun save(context: Context, token: AuthToken): Boolean {
         check(context)
         val tokenJson = token.toString()
-        editor!!.putString(token.username, tokenJson).commit()
+        return editor!!.putString(token.username, tokenJson).commit()
     }
 
     fun get(context: Context, email: String): AuthToken? {
