@@ -30,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.mytiki.publish.client.ProvidersInterface
 import com.mytiki.publish.client.R
 import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.ui.account.AccountStatus
@@ -37,12 +38,12 @@ import com.mytiki.publish.client.ui.account.AccountStatus
 
 @Composable
 fun AccountTile(
-    provider: EmailProviderEnum,
+    provider: ProvidersInterface,
     accountStatus: AccountStatus,
     size: Dp = 80.dp,
     padding: PaddingValues = PaddingValues(horizontal = 8.dp),
     iconSize: Dp = 32.dp,
-    onClick: (EmailProviderEnum) -> Unit,
+    onClick: (ProvidersInterface) -> Unit,
 ) {
     Column(
         modifier = Modifier

@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import com.mytiki.apps_receipt_rewards.TestTag
+import com.mytiki.publish.client.ui.TestTag
 
 @Composable
 fun BottomSheet(

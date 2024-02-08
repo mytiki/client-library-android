@@ -28,11 +28,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mytiki.apps_receipt_rewards.utils.components.DisplayCard
-import com.mytiki.publish.client.email.EmailProviderEnum
+import com.mytiki.publish.client.ui.components.DisplayCard
+import com.mytiki.publish.client.ProvidersInterface
 
 @Composable
-fun AccountDisplay(accountProvider: EmailProviderEnum, height: Dp, body: String) {
+fun AccountDisplay(accountProvider: ProvidersInterface, height: Dp, body: String) {
     DisplayCard(height = height, horizontalPadding = 24.dp) {
         Column(
             modifier = Modifier

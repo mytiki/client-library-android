@@ -1,10 +1,18 @@
 package com.mytiki.publish.client.capture
 
+import android.Manifest
 import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
-
-
+import androidx.activity.ComponentActivity
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import com.mytiki.publish.client.TikiClient
 
 class CaptureService {
 
@@ -12,9 +20,20 @@ class CaptureService {
      * Captures an image of a receipt for processing.
      * @return The captured receipt image.
      */
-    fun camera(activity: Activity): Bitmap? {
-        return null
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun camera(activity: ComponentActivity) {
+        if (activity.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+            val requestPermissionCode = 98734763
+            activity.requestPermissions(
+                listOf(Manifest.permission.CAMERA).toTypedArray(),
+                requestPermissionCode
+            )
+        } else {
+            activity.startActivity(Intent(activity, CaptureActivity::class.java))
+        }
     }
+
+
 
     /**
      * Downloads potential receipt data from known receipt email senders and publishes it.

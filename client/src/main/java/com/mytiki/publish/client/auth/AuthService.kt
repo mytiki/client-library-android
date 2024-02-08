@@ -63,12 +63,13 @@ class AuthService {
                 if (apiResponse.code in 200..299) {
                     val json = JSONObject(apiResponse.body?.string()!!)
                     val refreshAuthToken = AuthToken(
+                        email,
                         json.getString("access_token"),
                         authToken.refresh,
                         Date(authToken.expiration.time + json.getLong("expires_in")),
                         authToken.provider
                     )
-                    TikiClient.email.emailRepository.save(context, email, refreshAuthToken)
+                    TikiClient.email.emailRepository.save(context, refreshAuthToken)
                     refreshResponse.complete(refreshAuthToken)
                 } else throw Exception("error on generate refresh token")
             }

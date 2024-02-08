@@ -3,7 +3,7 @@
  * MIT license. See LICENSE file in the root directory.
  */
 
-package com.mytiki.apps_receipt_rewards.more.ui
+package com.mytiki.publish.client.ui.more.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -30,11 +30,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.mytiki.apps_receipt_rewards.R
-import com.mytiki.apps_receipt_rewards.Rewards
+import com.mytiki.publish.client.R
+import com.mytiki.publish.client.ui.more.MoreViewModel
 
 @Composable
 fun MoreDetails(
+    moreViewModel: MoreViewModel,
     onTerms: () -> Unit,
     onDecline: () -> Unit,
 ) {
@@ -208,7 +209,7 @@ fun MoreDetails(
                         .fillMaxWidth()
                         .padding(horizontal = 12.dp)
                         .clickable {
-                            Rewards.license.decline()
+                            moreViewModel.declineLicense()
                             onDecline()
                         },
                     horizontalArrangement = Arrangement.SpaceBetween

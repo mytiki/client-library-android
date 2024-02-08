@@ -8,7 +8,8 @@ package com.mytiki.publish.client.ui.account
 import android.content.Context
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.email.EmailProviderEnum
-import com.mytiki.publish.client.ui.Rewards
+import com.mytiki.publish.client.ui.TikiUI
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
 import java.util.Date
@@ -20,51 +21,43 @@ import java.util.Date
  * @property provider The [AccountProvider] of the account.
  * @property status The [AccountStatus] of the account.
  */
-class Account private constructor(
+class Account(
     val username: String,
     val provider: EmailProviderEnum,
+    val status: AccountStatus
 ) {
-    lateinit var status: AccountStatus
-        private set
-
-    constructor(context: Context, username: String, provider: EmailProviderEnum) : this(
-        username,
-        provider,
-    ){
-        MainScope().async {
-            status = getStatus(context, username, provider)
-        }
-    }
 
     companion object {
-        private suspend fun getStatus(context: Context, username: String, provider: EmailProviderEnum): AccountStatus {
+        fun getStatus(
+            context: Context,
+            username: String,
+            provider: EmailProviderEnum,
+        ): CompletableDeferred<AccountStatus> {
+            val status = CompletableDeferred<AccountStatus>()
             val token = TikiClient.email.emailRepository.get(context, username)
-            return if (token != null) {
-                if (token.expiration.after(Date())) {
-                    AccountStatus.VERIFIED
-                } else {
-                    try {
-                        TikiClient.auth.refresh(
-                            context,
-                            username,
-                            if (provider == EmailProviderEnum.GOOGLE) Rewards.googleClientID!! else Rewards.outlookClientID!!
-                        ).await()
-                        AccountStatus.VERIFIED
+            MainScope().async {
+                if (token != null) {
+                    if (token.expiration.after(Date())) {
+                        status.complete(AccountStatus.VERIFIED)
+                    } else {
+                        try {
+                            TikiClient.auth.refresh(
+                                context,
+                                username,
+                                if (provider == EmailProviderEnum.GOOGLE) TikiClient.email.googleKeys!!.clientId else TikiClient.email.outlookKeys!!.clientId
+                            ).await()
+                            status.complete(AccountStatus.VERIFIED)
 
-                    } catch (error: Exception){
-                        AccountStatus.UNVERIFIED
+                        } catch (error: Exception) {
+                            status.complete(AccountStatus.UNVERIFIED)
+                        }
                     }
-                }
-            } else AccountStatus.UNVERIFIED
+                } else status.complete(AccountStatus.UNVERIFIED)
+            }
+            return status
         }
     }
 
-    /**
-     * Checks if two [Account] objects are equal based on their username and provider.
-     *
-     * @param other The other [Account] to compare.
-     * @return `true` if the accounts are equal, `false` otherwise.
-     */
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -72,14 +65,12 @@ class Account private constructor(
         other as Account
 
         if (username != other.username) return false
-        if (provider != other.provider) return false
-        return status == other.status
+        return provider == other.provider
     }
 
     override fun hashCode(): Int {
         var result = username.hashCode()
         result = 31 * result + provider.hashCode()
-        result = 31 * result + status.hashCode()
         return result
     }
 }

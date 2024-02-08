@@ -3,7 +3,7 @@
  * MIT license. See LICENSE file in the root directory.
  */
 
-package com.mytiki.apps_receipt_rewards.utils.theme
+package com.mytiki.publish.client.ui.theme
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 
 
 @Composable
-fun RewardsTheme(
+fun UITheme(
     colorScheme: ColorScheme,
     content: @Composable () -> Unit
 ) {

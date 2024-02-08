@@ -3,7 +3,7 @@
  * MIT license. See LICENSE file in the root directory.
  */
 
-package com.mytiki.apps_receipt_rewards.utils.components
+package com.mytiki.publish.client.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -27,7 +27,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mytiki.apps_receipt_rewards.Rewards
+import com.mytiki.publish.client.ui.TikiUI
 
 @Composable
 fun Input(tile: String, text: String, isShow: Boolean, onChange: (String) -> Unit) {
@@ -35,11 +35,11 @@ fun Input(tile: String, text: String, isShow: Boolean, onChange: (String) -> Uni
         Text(
             text = tile,
             style = TextStyle(
-                fontFamily = Rewards.theme.fontFamily,
+                fontFamily = TikiUI.theme.fontFamily,
                 fontWeight = FontWeight.Medium,
                 fontSize = 16.sp,
                 lineHeight = 18.sp,
-                color = Rewards.theme.colorScheme.outlineVariant
+                color = TikiUI.theme.colorScheme.outlineVariant
             )
         )
         Spacer(modifier = Modifier.height(8.dp))

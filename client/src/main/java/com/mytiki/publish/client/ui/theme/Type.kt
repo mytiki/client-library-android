@@ -3,13 +3,13 @@
  * MIT license. See LICENSE file in the root directory.
  */
 
-package com.mytiki.apps_receipt_rewards.utils.theme
+package com.mytiki.publish.client.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.mytiki.apps_receipt_rewards.Rewards
+import com.mytiki.publish.client.ui.TikiUI
 
 // Set of Material typography styles to start with
 
@@ -17,90 +17,90 @@ import com.mytiki.apps_receipt_rewards.Rewards
 
 val Typography = Typography(
     displayLarge = TextStyle(
-        fontFamily = Rewards.theme.fontFamily,
+        fontFamily = TikiUI.theme.fontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 42.sp,
-        color = Rewards.theme.colorScheme.primary
+        color = TikiUI.theme.colorScheme.primary
     ),
     displayMedium = TextStyle(
-        fontFamily = Rewards.theme.fontFamily,
+        fontFamily = TikiUI.theme.fontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 18.sp,
     ),
     displaySmall = TextStyle(
-        fontFamily = Rewards.theme.fontFamily,
+        fontFamily = TikiUI.theme.fontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 14.sp,
-        color = Rewards.theme.colorScheme.primary
+        color = TikiUI.theme.colorScheme.primary
     ),
 
     headlineLarge = TextStyle(
-        fontFamily = Rewards.theme.fontFamily,
+        fontFamily = TikiUI.theme.fontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 28.sp,
-        color = Rewards.theme.colorScheme.outline
+        color = TikiUI.theme.colorScheme.outline
     ),
     headlineMedium = TextStyle(
-        fontFamily = Rewards.theme.fontFamily,
+        fontFamily = TikiUI.theme.fontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
-        color = Rewards.theme.colorScheme.outline
+        color = TikiUI.theme.colorScheme.outline
     ),
     headlineSmall = TextStyle(
-        fontFamily = Rewards.theme.fontFamily,
+        fontFamily = TikiUI.theme.fontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 22.sp,
-        color = Rewards.theme.colorScheme.outline
+        color = TikiUI.theme.colorScheme.outline
     ),
     titleLarge = TextStyle(
-        fontFamily = Rewards.theme.fontFamily,
+        fontFamily = TikiUI.theme.fontFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 20.sp,
-        color = Rewards.theme.colorScheme.outline
+        color = TikiUI.theme.colorScheme.outline
     ),
     titleMedium = TextStyle(
-        fontFamily = Rewards.theme.fontFamily,
+        fontFamily = TikiUI.theme.fontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
-        color = Rewards.theme.colorScheme.outlineVariant
+        color = TikiUI.theme.colorScheme.outlineVariant
     ),
     titleSmall = TextStyle(
-        fontFamily = Rewards.theme.fontFamily,
+        fontFamily = TikiUI.theme.fontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
-        color = Rewards.theme.colorScheme.outline
+        color = TikiUI.theme.colorScheme.outline
     ),
     bodyLarge = TextStyle(
-        fontFamily = Rewards.theme.fontFamily,
+        fontFamily = TikiUI.theme.fontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 20.sp,
-        color = Rewards.theme.colorScheme.outline
+        color = TikiUI.theme.colorScheme.outline
     ),
 
     bodyMedium = TextStyle(
-        fontFamily = Rewards.theme.fontFamily,
+        fontFamily = TikiUI.theme.fontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
-        color = Rewards.theme.colorScheme.outline
+        color = TikiUI.theme.colorScheme.outline
     ),
 
     labelLarge = TextStyle(
-        fontFamily = Rewards.theme.fontFamily,
+        fontFamily = TikiUI.theme.fontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
-        color = Rewards.theme.colorScheme.outlineVariant
+        color = TikiUI.theme.colorScheme.outlineVariant
     ),
     labelMedium = TextStyle(
-        fontFamily = Rewards.theme.fontFamily,
+        fontFamily = TikiUI.theme.fontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
-        color = Rewards.theme.colorScheme.outlineVariant
+        color = TikiUI.theme.colorScheme.outlineVariant
     ),
     labelSmall = TextStyle(
-        fontFamily = Rewards.theme.fontFamily,
+        fontFamily = TikiUI.theme.fontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 12.sp,
-        color = Rewards.theme.colorScheme.outlineVariant
+        color = TikiUI.theme.colorScheme.outlineVariant
     ),
 
     )

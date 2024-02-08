@@ -5,12 +5,12 @@ import com.mytiki.publish.client.email.EmailProviderEnum
 import org.json.JSONObject
 import java.util.Date
 
-class AuthToken (val auth: String, val refresh: String, val expiration: Date, val provider: EmailProviderEnum){
+class AuthToken (val username: String, val auth: String, val refresh: String, val expiration: Date, val provider: EmailProviderEnum){
     companion object{
-        fun fromString(data: String): AuthToken{
+        fun fromString(data: String?, key: String): AuthToken{
             val json = JSONObject(data)
-            Log.d("**************", json.toString())
             return AuthToken(
+                key,
                 json.getString("auth"),
                 json.getString("refresh"),
                 Date(json.getLong("expiration")),
@@ -33,8 +33,10 @@ class AuthToken (val auth: String, val refresh: String, val expiration: Date, va
 
         other as AuthToken
 
+        if (username != other.username) return false
         if (auth != other.auth) return false
         if (refresh != other.refresh) return false
-        return expiration == other.expiration
+        if (expiration != other.expiration) return false
+        return provider == other.provider
     }
 }
