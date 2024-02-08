@@ -1,6 +1,7 @@
 package com.mytiki.publish.client.license
 
 import android.content.Context
+import android.util.Log
 import com.mytiki.publish.client.capture.Company
 import com.mytiki.tiki_sdk_android.TikiSdk
 import com.mytiki.tiki_sdk_android.trail.LicenseRecord
@@ -103,6 +104,7 @@ class LicenseService {
      * @return `true` if the app is licensed, `false` otherwise.
      */
     fun isLicensed(): Boolean {
+        Log.d("**********", "state: $$isLicensed")
         return isLicensed
     }
 
@@ -110,14 +112,18 @@ class LicenseService {
      * Accepts the data license agreement.
      */
     fun accept() {
+        val before = isLicensed!!
         isLicensed = true
+        Log.d("**********", "before: $before ------ after: $$isLicensed")
     }
 
     /**
      * Declines the data license agreement.
      */
     fun decline() {
+        val before = isLicensed!!
         isLicensed = false
+        Log.d("**********", "before: $before ------ after: $$isLicensed")
     }
 
     /**

@@ -18,13 +18,13 @@ import androidx.compose.ui.unit.dp
 import com.mytiki.publish.client.R
 
 @Composable
-fun EmailGoogleBtn(onClick: () -> Unit) {
+fun EmailOutlookBtn(onClick: () -> Unit) {
     Box(
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.google_sign_in),
-            contentDescription = "google sign In button",
+            painter = painterResource(id = R.drawable.outlook_sign_is),
+            contentDescription = "outlook sign In button",
             contentScale = ContentScale.FillWidth,
             modifier = Modifier
                 .requiredWidth(280.dp)

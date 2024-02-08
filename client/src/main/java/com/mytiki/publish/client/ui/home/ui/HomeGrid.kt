@@ -49,7 +49,6 @@ fun HomeGrid(providers: Set<ProvidersInterface>, onAccountProvider: (ProvidersIn
                 providers.forEach { provider ->
                     AccountTile(
                         provider = provider,
-                        accountStatus = AccountStatus.VERIFIED,
                         padding = PaddingValues(horizontal = 10.dp)
                     ) { onAccountProvider(provider) }
                 }

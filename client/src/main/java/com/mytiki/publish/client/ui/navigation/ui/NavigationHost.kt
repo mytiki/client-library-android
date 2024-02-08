@@ -96,9 +96,9 @@ fun NavigationHost(activity: AppCompatActivity, navController: NavHostController
                 }) {entry ->
                 val licenseViewModel = entry.sharedViewModel<LicenseViewModel>(navController)
                 LicenseView(
-                    licenseViewModel = licenseViewModel,
-                    onGetEstimate = { navController.navigate(NavigationRoute.TERMS.name) }
-                )
+                    activity,
+                    licenseViewModel = licenseViewModel
+                ) { navController.navigate(NavigationRoute.TERMS.name) }
             }
             composable(NavigationRoute.TERMS.name,
                 enterTransition = {
@@ -164,10 +164,10 @@ fun NavigationHost(activity: AppCompatActivity, navController: NavHostController
             }) {
             val homeViewModel = viewModel<HomeViewModel>()
             HomeView(
+                activity,
                 homeViewModel = homeViewModel,
                 onProvider = { prov -> onProvider(prov, navController) },
-                onMore = { navController.navigate(NavigationRoute.MORE.name) },
-            )
+            ) { navController.navigate(NavigationRoute.MORE.name) }
         }
         composable(NavigationRoute.MORE.name,
             enterTransition = {

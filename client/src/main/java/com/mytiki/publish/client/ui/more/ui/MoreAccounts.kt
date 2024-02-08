@@ -67,7 +67,6 @@ fun MoreAccounts(
                 accountsList.forEach { accountProvider ->
                     AccountTile(
                         provider = accountProvider,
-                        accountStatus = AccountStatus.VERIFIED,
                         padding = PaddingValues(horizontal = 4.dp, vertical = 12.dp)
                     ) { onClick(accountProvider) }
                 }
