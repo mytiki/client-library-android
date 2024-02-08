@@ -50,11 +50,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AccountCard(account: Account, addIcons: Boolean = true, onClick: () -> Unit) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     val configuration: Configuration = context.resources.configuration
-    val status by remember {
-        mutableStateOf<AccountStatus?>(null)
-    }
     
 
     Row(
@@ -80,7 +76,7 @@ fun AccountCard(account: Account, addIcons: Boolean = true, onClick: () -> Unit)
                         .shadow(elevation = 4.dp)
 
                 )
-                if (status == AccountStatus.UNVERIFIED) {
+                if (account.status == AccountStatus.UNVERIFIED) {
                     if (addIcons) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_alert),

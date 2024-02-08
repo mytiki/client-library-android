@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.ui.account.Account
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.async
 
 class EmailViewModel(): ViewModel() {
     private val _accounts = mutableStateOf(listOf<Account>())
@@ -18,12 +20,14 @@ class EmailViewModel(): ViewModel() {
     @RequiresApi(Build.VERSION_CODES.N)
     fun updateAccounts(context: Context, emailProvider: EmailProviderEnum){
         val list = mutableListOf<Account>()
-        TikiClient.email.accounts(context, emailProvider).forEach{
-            val account = Account(context, it, emailProvider)
-            account.updateStatus(context)
-            list.add(account)
+        TikiClient.email.accounts(context, emailProvider).forEach{username ->
+            MainScope().async {
+                val status = Account.getStatus(context, username, emailProvider).await()
+                val account = Account(username, emailProvider, status)
+                list.add(account)
+                _accounts.value = list
+            }
         }
-        _accounts.value = list
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

@@ -30,6 +30,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.mytiki.publish.client.R
 import com.mytiki.publish.client.clo.Offer
 import com.mytiki.publish.client.clo.merchant.MerchantEnum
@@ -53,16 +54,27 @@ fun OfferCard(offer: Offer, merchant: MerchantEnum, onClick: () -> Unit) {
                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                     modifier = Modifier.padding(end = 4.dp),
                 ) {
-                    Image(
-                        painter = painterResource(
-                            id = merchant.resId()
-                        ),
-                        contentDescription = "${merchant.displayName()} logo",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(56.dp)
-                            .clip(MaterialTheme.shapes.extraSmall)
-                    )
+                    if (offer.bannerUrl.isEmpty()) {
+                        Image(
+                            painter = painterResource(
+                                id = merchant.resId()
+                            ),
+                            contentDescription = "${merchant.displayName()} logo",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .size(56.dp)
+                                .clip(MaterialTheme.shapes.extraSmall)
+                        )
+                    } else {
+                        AsyncImage(
+                            model = offer.bannerUrl,
+                            contentDescription = "${offer.description} image",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .size(56.dp)
+                                .clip(MaterialTheme.shapes.extraSmall)
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.width(20.dp))

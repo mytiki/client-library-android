@@ -24,31 +24,38 @@ import java.util.Date
 class Account(
     val username: String,
     val provider: EmailProviderEnum,
+    val status: AccountStatus
 ) {
 
-    fun status(context: Context): CompletableDeferred<AccountStatus> {
-        val status = CompletableDeferred<AccountStatus>()
-        val token = TikiClient.email.emailRepository.get(context, username)
-        MainScope().async {
-            if (token != null) {
-                if (token.expiration.after(Date())) {
-                    status.complete(AccountStatus.VERIFIED)
-                } else {
-                    try {
-                        TikiClient.auth.refresh(
-                            context,
-                            username,
-                            if (provider == EmailProviderEnum.GOOGLE) TikiClient.email.googleKeys!!.clientId else TikiClient.email.outlookKeys!!.clientId
-                        ).await()
+    companion object {
+        fun getStatus(
+            context: Context,
+            username: String,
+            provider: EmailProviderEnum,
+        ): CompletableDeferred<AccountStatus> {
+            val status = CompletableDeferred<AccountStatus>()
+            val token = TikiClient.email.emailRepository.get(context, username)
+            MainScope().async {
+                if (token != null) {
+                    if (token.expiration.after(Date())) {
                         status.complete(AccountStatus.VERIFIED)
+                    } else {
+                        try {
+                            TikiClient.auth.refresh(
+                                context,
+                                username,
+                                if (provider == EmailProviderEnum.GOOGLE) TikiClient.email.googleKeys!!.clientId else TikiClient.email.outlookKeys!!.clientId
+                            ).await()
+                            status.complete(AccountStatus.VERIFIED)
 
-                    } catch (error: Exception) {
-                        status.complete(AccountStatus.UNVERIFIED)
+                        } catch (error: Exception) {
+                            status.complete(AccountStatus.UNVERIFIED)
+                        }
                     }
-                }
-            } else status.complete(AccountStatus.UNVERIFIED)
+                } else status.complete(AccountStatus.UNVERIFIED)
+            }
+            return status
         }
-        return status
     }
 
     override fun equals(other: Any?): Boolean {

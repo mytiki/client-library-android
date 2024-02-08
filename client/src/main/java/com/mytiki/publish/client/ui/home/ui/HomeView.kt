@@ -28,7 +28,6 @@ fun HomeView(
     onProvider: (ProvidersInterface) -> Unit,
     onMore: () -> Unit,
 ) {
-    val context = LocalContext.current
     val providers = homeViewModel.providers()
 
     BottomSheet {
@@ -43,17 +42,18 @@ fun HomeView(
             Spacer(modifier = Modifier.height(48.dp))
             HomeCard(homeViewModel, onMore)
             Spacer(modifier = Modifier.height(48.dp))
-            Text(
-                modifier = Modifier.padding(horizontal = 24.dp),
-                text = "Increase Earnings",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.outline
-            )
-            Spacer(modifier = Modifier.height(24.dp))
+
 
 //            if (isExpanded.value) {
                 HomeGrid(providers, onProvider)
 //            } else {
+//            Text(
+//                modifier = Modifier.padding(horizontal = 24.dp),
+//                text = "Increase Earnings",
+//                style = MaterialTheme.typography.titleMedium,
+//                color = MaterialTheme.colorScheme.outline
+//            )
+//            Spacer(modifier = Modifier.height(24.dp))
 //                HomeCarousel(providers, onProvider)
 //            }
 
