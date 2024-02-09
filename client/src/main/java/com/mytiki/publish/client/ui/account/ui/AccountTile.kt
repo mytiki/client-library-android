@@ -39,7 +39,6 @@ import com.mytiki.publish.client.ui.account.AccountStatus
 @Composable
 fun AccountTile(
     provider: ProvidersInterface,
-    accountStatus: AccountStatus,
     size: Dp = 80.dp,
     padding: PaddingValues = PaddingValues(horizontal = 8.dp),
     iconSize: Dp = 32.dp,
@@ -76,16 +75,13 @@ fun AccountTile(
                         .clip(MaterialTheme.shapes.extraSmall)
 
                 )
-                when (accountStatus) {
-                    AccountStatus.UNVERIFIED -> {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_alert),
-                            contentDescription = "Account needs to be reconnected",
-                            modifier = Modifier.size(iconSize),
-                            tint = Color.Unspecified
-                        )
-                    }
-                    else -> {}
+                if (provider is EmailProviderEnum){
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_add),
+                        contentDescription = "Account needs to be reconnected",
+                        modifier = Modifier.size(iconSize),
+                        tint = Color.Unspecified
+                    )
                 }
             }
         }

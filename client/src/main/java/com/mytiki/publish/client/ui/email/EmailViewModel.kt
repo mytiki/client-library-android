@@ -25,7 +25,7 @@ class EmailViewModel(): ViewModel() {
                 val status = Account.getStatus(context, username, emailProvider).await()
                 val account = Account(username, emailProvider, status)
                 list.add(account)
-                _accounts.value = list
+                _accounts.value= list
             }
         }
     }
@@ -45,8 +45,10 @@ class EmailViewModel(): ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun logout(context: Context, username: String, emailProvider: EmailProviderEnum){
-        TikiClient.email.logout(context, username)
-        updateAccounts(context, emailProvider)
+    fun logout(context: Context, account: Account){
+        TikiClient.email.logout(context, account.username)
+        val list = _accounts.value.toMutableList()
+        list.remove(account)
+        _accounts.value = list
     }
 }

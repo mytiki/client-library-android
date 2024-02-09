@@ -5,14 +5,11 @@
 
 package com.mytiki.publish.client.ui.email.ui
 
-import android.app.AlertDialog
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,16 +21,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mytiki.apps_receipt_rewards.email.ui.EmailGoogleBtn
-import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.ui.account.ui.AccountCard
 import com.mytiki.publish.client.ui.account.ui.AccountDisplay
@@ -94,7 +85,7 @@ fun EmailView(
                 }
                 items(items = accounts.value.toList()) {
                     Spacer(modifier = Modifier.height(32.dp))
-                    AccountCard(it, false) { emailViewModel.logout(context, it.username, it.provider) }
+                    AccountCard(it, false) { emailViewModel.logout(context, it) }
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
@@ -112,6 +103,16 @@ fun EmailView(
                         contentAlignment = Alignment.Center
                     ) {
                         EmailGoogleBtn {
+                           emailViewModel.login(context, emailProvider)
+                        }
+                    }
+                }
+                if (emailProvider == EmailProviderEnum.OUTLOOK) {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        EmailOutlookBtn {
                            emailViewModel.login(context, emailProvider)
                         }
                     }

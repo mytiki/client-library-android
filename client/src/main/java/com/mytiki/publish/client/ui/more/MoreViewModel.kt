@@ -2,6 +2,7 @@ package com.mytiki.publish.client.ui.more
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import com.mytiki.publish.client.ProvidersInterface

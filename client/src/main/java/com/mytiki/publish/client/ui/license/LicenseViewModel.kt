@@ -1,5 +1,6 @@
 package com.mytiki.publish.client.ui.license
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -9,23 +10,24 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class LicenseViewModel(): ViewModel() {
 
-    private val _isLicensed = MutableStateFlow(false)
-    val isLicensed = _isLicensed.asStateFlow()
+    private val _isLicensed = mutableStateOf(false)
+    val isLicensed = _isLicensed
 
-    init {
+    fun updateIsLicensed(){
         _isLicensed.value = TikiClient.license.isLicensed()
+        Log.d("*************", "viewModelState: ${isLicensed.value}")
     }
 
     fun acceptLicense() {
         TikiClient.license.accept()
-        _isLicensed.value = TikiClient.license.isLicensed()
+        updateIsLicensed()
     }
     fun declineLicense() {
         TikiClient.license.decline()
-        _isLicensed.value = TikiClient.license.isLicensed()
+        updateIsLicensed()
     }
 
     fun estimate() = TikiClient.license.estimate()
-    
+
     fun terms() = TikiClient.license.terms()
 }

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -32,7 +33,6 @@ fun LicenseTerms(
     onBackButton: () -> Unit,
     onAccept: () -> Unit
 ) {
-    val isLicensed = licenseViewModel.isLicensed.collectAsStateWithLifecycle().value
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -53,9 +53,9 @@ fun LicenseTerms(
             },
             bottomBar = {
                 Column {
-                    Divider(color = MaterialTheme.colorScheme.primary, thickness = 1.dp)
+                    HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.primary)
                     Spacer(modifier = Modifier.height(42.dp))
-                    if (!isLicensed) {
+                    if (!licenseViewModel.isLicensed.value) {
                         MainButton(
                             text = "I agree", isfFilled = true
                         ) {
