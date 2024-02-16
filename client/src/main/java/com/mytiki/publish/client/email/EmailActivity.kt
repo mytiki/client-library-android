@@ -2,7 +2,6 @@ package com.mytiki.publish.client.email
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -10,10 +9,8 @@ import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.auth.AuthToken
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
-import net.openid.appauth.AuthorizationException
 import net.openid.appauth.AuthorizationResponse
 import net.openid.appauth.ClientSecretBasic
-import okhttp3.internal.wait
 import java.util.Date
 
 
@@ -49,7 +46,7 @@ class EmailActivity : AppCompatActivity() {
                                     Date(authResponse.accessTokenExpirationTime!!),
                                     provider
                                 )
-                               val resp = TikiClient.email.emailRepository.save(
+                               val resp = TikiClient.auth.authRepository.save(
                                    this@EmailActivity,
                                    authToken
                                )

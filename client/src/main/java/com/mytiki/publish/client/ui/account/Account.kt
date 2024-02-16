@@ -8,7 +8,6 @@ package com.mytiki.publish.client.ui.account
 import android.content.Context
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.email.EmailProviderEnum
-import com.mytiki.publish.client.ui.TikiUI
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
@@ -34,7 +33,7 @@ class Account(
             provider: EmailProviderEnum,
         ): CompletableDeferred<AccountStatus> {
             val status = CompletableDeferred<AccountStatus>()
-            val token = TikiClient.email.emailRepository.get(context, username)
+            val token = TikiClient.auth.authRepository.get(context, username)
             MainScope().async {
                 if (token != null) {
                     if (token.expiration.after(Date())) {

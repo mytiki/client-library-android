@@ -2,6 +2,7 @@ package com.mytiki.publish.client.auth
 
 import android.content.Context
 import com.mytiki.publish.client.TikiClient
+import com.mytiki.publish.client.email.EmailProviderEnum
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,6 +15,8 @@ import org.json.JSONObject
 import java.util.Date
 
 class AuthService {
+
+    val authRepository = AuthRepository()
 
     /**
      * Authenticates with TIKI and saves the auth and refresh tokens.
@@ -30,8 +33,8 @@ class AuthService {
      * Retrieves the authentication token, refreshing if necessary.
      * @return The authentication token.
      */
-    fun token(): String{
-        return ""
+    fun token(context: Context, email: String, provider: EmailProviderEnum): String? {
+       return authRepository.get(context, email)?.auth
     }
 
     /**
@@ -45,7 +48,7 @@ class AuthService {
      */
     fun refresh(context: Context, email: String, clientID: String): CompletableDeferred<AuthToken>{
         val refreshResponse = CompletableDeferred<AuthToken>()
-        val authToken = TikiClient.email.emailRepository.get(context, email)
+        val authToken = authRepository.get(context, email)
         if (authToken != null){
             CoroutineScope(Dispatchers.IO).launch {
                 val client = OkHttpClient.Builder()
@@ -69,7 +72,7 @@ class AuthService {
                         Date(authToken.expiration.time + json.getLong("expires_in")),
                         authToken.provider
                     )
-                    TikiClient.email.emailRepository.save(context, refreshAuthToken)
+                    authRepository.save(context, refreshAuthToken)
                     refreshResponse.complete(refreshAuthToken)
                 } else throw Exception("error on generate refresh token")
             }

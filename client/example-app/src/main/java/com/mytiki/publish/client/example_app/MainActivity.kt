@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
 
                         Spacer(modifier = Modifier.height(30.dp))
                         MainButton(text = "Get Token") {
-                            val tokenList = TikiClient.email.emailRepository.get(this@MainActivity, "gabrielschuler3@gmail.com")
+                            val tokenList = TikiClient.auth.authRepository.get(this@MainActivity, "gabrielschuler3@gmail.com")
                             loginOutput = tokenList.toString()
                         }
 
@@ -106,10 +106,15 @@ class MainActivity : AppCompatActivity() {
 
                         Spacer(modifier = Modifier.height(30.dp))
                         MainButton(text = "Remove Token") {
-                            TikiClient.email.emailRepository.remove(
+                            TikiClient.auth.authRepository.remove(
                                 this@MainActivity,
                                 "gabrielschuler3@gmail.com",
                             )
+                        }
+
+                        Spacer(modifier = Modifier.height(30.dp))
+                        MainButton(text = "Messages") {
+                            TikiClient().scrape(this@MainActivity, EmailProviderEnum.GOOGLE, "gabrielschuler3@gmail.com")
                         }
 
                         Spacer(modifier = Modifier.height(30.dp))

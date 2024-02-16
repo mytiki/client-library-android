@@ -1,16 +1,24 @@
 package com.mytiki.publish.client
 
+import android.content.Context
+import android.os.Build
+import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.annotation.RequiresApi
 import com.mytiki.publish.client.auth.AuthService
 import com.mytiki.publish.client.capture.CaptureService
 import com.mytiki.publish.client.clo.CloService
 import com.mytiki.publish.client.clo.Offer
 import com.mytiki.publish.client.clo.Reward
 import com.mytiki.publish.client.clo.Transaction
+import com.mytiki.publish.client.email.EmailKeys
 import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.email.EmailService
 import com.mytiki.publish.client.license.LicenseService
 import com.mytiki.publish.client.ui.Theme
 import com.mytiki.publish.client.ui.TikiUI
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.async
 
 
 /**
@@ -48,36 +56,48 @@ class TikiClient{
      * Initiates the process of scanning a physical receipt and returns the receipt ID.
      * @return The scanned receipt data or an empty string if the scan is unsuccessful.
      */
-    fun scan(): String {
+    fun scan(activity: ComponentActivity): String {
         return ""
     }
 
     /**
-     * Initiates the process of scraping receipts from emails.
-     * @param emailProvider The email provider (GOOGLE or OUTLOOK).
+     * Initiates the process of login to email.
+     * @param provider The email provider (GOOGLE or OUTLOOK).
      */
-    fun login(emailProvider: EmailProviderEnum) {
+    fun login(context: Context, provider: EmailProviderEnum, emailKeys: EmailKeys, redirectURI: String, loginCallback: () -> Unit) {
+        email.login(context, provider, emailKeys, redirectURI, loginCallback)
     }
 
     /**
      * Removes a previously added email account.
      * @param email The email account to be removed.
      */
-    fun logout(email: String) {
+    fun logout(context: Context, email: String) {
+        TikiClient.email.logout(context, email)
     }
 
     /**
-     * Retrieves the list of connected email accounts.
-     * @return List of connected email accounts.
+     * Retrieves the list of connected email accountsPerProvider.
+     * @return List of connected email accountsPerProvider.
      */
-    fun accounts(): List<String> {
-        return listOf()
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun accounts(context: Context): List<String> {
+        val emailList = mutableListOf<String>()
+        EmailProviderEnum.entries.forEach { provider ->
+            val list = email.accountsPerProvider(context, provider)
+            if(list.isNotEmpty()) emailList.addAll(list)
+        }
+        return emailList
     }
 
     /**
      * Initiates the process of scraping receipts from emails.
      */
-    fun scrape() {
+    fun scrape(context: Context,  provider: EmailProviderEnum, email: String) {
+        MainScope().async {
+            val auth = TikiClient.auth.token(context, email, provider)
+            val messages = auth?.let { TikiClient.email.messages(context, it, provider, email) }
+        }
     }
 
     /**
