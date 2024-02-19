@@ -24,7 +24,7 @@ class AuthRepository() {
         if (sharedPreferences == null){
             sharedPreferences = EncryptedSharedPreferences.create(
                 context,
-                "email_repository",
+                "auth_repository",
                 masterKey!!,
                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
@@ -67,4 +67,8 @@ class AuthRepository() {
         }
         return accounts
     }
+
+
+
+
 }

@@ -14,9 +14,9 @@ import kotlinx.coroutines.async
 import java.util.Date
 
 /**
- * [Account] data class represents an account with a username, provider, and status.
+ * [Account] data class represents an account with a email, provider, and status.
  *
- * @property username The username associated with the account.
+ * @property username The email associated with the account.
  * @property provider The [AccountProvider] of the account.
  * @property status The [AccountStatus] of the account.
  */

@@ -31,7 +31,7 @@ class CaptureService {
     /**
      * Uploads receipt images or email data for receipt data extraction.
      * @param data The binary image or email data.
-     * @return The ID of the uploaded data to check publishing status.
+     * @return The ID of the uploaded data to checkIndexes publishing status.
      */
     fun publish(data: Bitmap): String{
         Log.d("*******************", "Worked!!!!")

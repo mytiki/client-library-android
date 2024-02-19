@@ -25,7 +25,7 @@ class AuthRepositoryTest {
 //            "test@gmail.com",
 //            "a", "b", Date()
 //        )
-//        authRepository.save(instrumentationContext, key, token)
+//        authRepository.saveIndexes(instrumentationContext, key, token)
 //        val returnedToken = authRepository.get(instrumentationContext, key)
 //        assertEquals("a", returnedToken!!.auth)
 //    }
@@ -39,10 +39,10 @@ class AuthRepositoryTest {
 //        val token2 = AuthToken("c", "d", Date())
 //
 //        // Save multiple tokens
-//        authRepository.save(instrumentationContext, key1, token1)
-//        authRepository.save(instrumentationContext, key2, token2)
+//        authRepository.saveIndexes(instrumentationContext, key1, token1)
+//        authRepository.saveIndexes(instrumentationContext, key2, token2)
 //
-//        // Retrieve and check if they match
+//        // Retrieve and checkIndexes if they match
 //        val returnedToken1 = authRepository.get(instrumentationContext, key1)
 //        assertEquals("a", returnedToken1!!.auth)
 //        val returnedToken2 = authRepository.get(instrumentationContext, key2)
@@ -56,7 +56,7 @@ class AuthRepositoryTest {
 //        val token = AuthToken("a", "b", Date())
 //
 //        // Save one token
-//        authRepository.save(instrumentationContext, key, token)
+//        authRepository.saveIndexes(instrumentationContext, key, token)
 //
 //        // Remove the token
 //        authRepository.remove(instrumentationContext, key)
@@ -75,8 +75,8 @@ class AuthRepositoryTest {
 //        val token2 = AuthToken("c", "d", Date())
 //
 //        // Save multiple tokens
-//        authRepository.save(instrumentationContext, key1, token1)
-//        authRepository.save(instrumentationContext, key2, token2)
+//        authRepository.saveIndexes(instrumentationContext, key1, token1)
+//        authRepository.saveIndexes(instrumentationContext, key2, token2)
 //
 //        // Remove one token
 //        authRepository.remove(instrumentationContext, key1)
@@ -99,8 +99,8 @@ class AuthRepositoryTest {
 //        val token2 = AuthToken("c", "d", Date())
 //
 //        // Save multiple tokens
-//        authRepository.save(instrumentationContext, key1, token1)
-//        authRepository.save(instrumentationContext, key2, token2)
+//        authRepository.saveIndexes(instrumentationContext, key1, token1)
+//        authRepository.saveIndexes(instrumentationContext, key2, token2)
 //
 //        // Remove one token
 //        val accountsPerProvider = authRepository.accountsPerProvider(instrumentationContext)
