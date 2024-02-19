@@ -20,7 +20,7 @@ class EmailViewModel(): ViewModel() {
     @RequiresApi(Build.VERSION_CODES.N)
     fun updateAccounts(context: Context, emailProvider: EmailProviderEnum){
         val list = mutableListOf<Account>()
-        TikiClient.email.accounts(context, emailProvider).forEach{username ->
+        TikiClient.email.accountsPerProvider(context, emailProvider).forEach{ username ->
             MainScope().async {
                 val status = Account.getStatus(context, username, emailProvider).await()
                 val account = Account(username, emailProvider, status)

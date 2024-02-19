@@ -28,6 +28,9 @@ class CaptureService {
                 listOf(Manifest.permission.CAMERA).toTypedArray(),
                 requestPermissionCode
             )
+            if (activity.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_DENIED) {
+                activity.startActivity(Intent(activity, CaptureActivity::class.java))
+            }
         } else {
             activity.startActivity(Intent(activity, CaptureActivity::class.java))
         }

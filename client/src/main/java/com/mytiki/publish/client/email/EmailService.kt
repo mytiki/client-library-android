@@ -5,8 +5,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.mutableStateOf
 import com.mytiki.publish.client.TikiClient
-import com.mytiki.publish.client.auth.AuthToken
+import com.mytiki.publish.client.auth.AuthRepository
+import com.mytiki.publish.client.email.messageResponse.Message
+import com.mytiki.publish.client.email.messageResponse.MessageResponse
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,10 +21,10 @@ import net.openid.appauth.ResponseTypeValues
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
+import org.json.JSONArray
 import org.json.JSONObject
 
 class EmailService() {
-    val emailRepository = EmailRepository()
     var googleKeys: EmailKeys? = null
     var outlookKeys: EmailKeys? = null
 
@@ -55,7 +58,7 @@ class EmailService() {
             ResponseTypeValues.CODE,
             Uri.parse(redirectURI)
         )
-        authRequest.setScope("openid email profile")
+        authRequest.setScope(provider.scopes)
         val authService = AuthorizationService(context)
         return Pair(authService.getAuthorizationRequestIntent(authRequest.build()), authService)
     }
@@ -83,20 +86,55 @@ class EmailService() {
     }
 
     /**
-     * Retrieves the list of connected email accounts.
-     * @return List of connected email accounts.
+     * Retrieves the list of connected email accountsPerProvider.
+     * @return List of connected email accountsPerProvider.
      */
     @RequiresApi(Build.VERSION_CODES.N)
-    fun accounts(context: Context, emailProvider: EmailProviderEnum): List<String> {
-        return emailRepository.accounts(context, emailProvider)
+    fun accountsPerProvider(context: Context, emailProvider: EmailProviderEnum): List<String> {
+        return TikiClient.auth.authRepository.accounts(context, emailProvider)
     }
+
+    fun messages(context: Context, auth: String, provider: EmailProviderEnum, email: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val isWorking = mutableStateOf(true)
+            val endpoint = mutableStateOf(provider.messagesListEndpoint(email))
+            while (isWorking.value) {
+                val client = OkHttpClient.Builder()
+                    .addInterceptor(HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    })
+                    .build()
+                val request = Request.Builder()
+                    .url(endpoint.value)
+                    .addHeader("Authorization", "Bearer $auth")
+                    .get()
+                    .build()
+                val apiResponse = client.newCall(request).execute()
+
+                if (apiResponse.code in 200..299) {
+                    val resp = MessageResponse.fromJson(JSONObject(apiResponse.body?.string()!!))
+                    if (!resp.messages.isNullOrEmpty()) {
+                        EmailRepository.save(context, email, resp.messages)
+                        if (!resp.nextPageToken.isNullOrEmpty()) {
+                            endpoint.value =
+                                provider.messagesListEndpoint(email) + "&pageToken=${resp.nextPageToken}"
+                        } else {
+                            isWorking.value = false
+                        }
+                    }
+                } else throw Exception("error on getting messages")
+            }
+        }
+    }
+
+
 
     /**
      * Removes a previously added email account.
      * @param email The email account to be removed.
      */
     fun logout(context: Context, email: String){
-        emailRepository.remove(context, email)
+        TikiClient.auth.authRepository.remove(context, email)
     }
     fun googleKeys( clientId: String, clientSecrete: String) {
         googleKeys = EmailKeys(clientId, clientSecrete)
