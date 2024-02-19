@@ -101,10 +101,15 @@ class EmailService() {
 
     fun messages(context: Context, auth: String, provider: EmailProviderEnum, email: String, nextPageToken: String? = null) {
         CoroutineScope(Dispatchers.IO).launch {
+            val indexData = emailRepository.getData(context, email)
+
             val isFirst = mutableStateOf(nextPageToken.isNullOrEmpty())
             val isWorking = mutableStateOf(true)
             val endpoint = mutableStateOf(
-                if (nextPageToken.isNullOrEmpty()) provider.messagesListEndpoint(email)
+                if (nextPageToken.isNullOrEmpty()) {
+                    if (indexData == null) provider.messagesListEndpoint(email)
+                    else provider.messagesListEndpoint(email) +"&q=after:${indexData.date.year}/${indexData.date.month}/${indexData.date.day}"
+                }
                 else provider.messagesListEndpoint(email) + "&pageToken=$nextPageToken"
             )
             while (isWorking.value){
