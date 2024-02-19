@@ -1,8 +1,11 @@
 package com.mytiki.publish.client.capture
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,8 +30,25 @@ class CaptureActivity : AppCompatActivity() {
         }
 
         // Open camera
-        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        resultLauncher.launch(cameraIntent)
-    }
+        val camera = {
+            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            resultLauncher.launch(cameraIntent)
+        }
 
+        // Check Permission
+        val requestPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            if (isGranted) {
+                camera()
+            }
+        }
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+                requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+            } else camera()
+        } else camera()
+
+    }
 }

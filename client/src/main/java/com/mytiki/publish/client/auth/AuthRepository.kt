@@ -54,7 +54,6 @@ class AuthRepository() {
         editor!!.remove(email).commit()
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     fun accounts(context: Context, emailProviderEnum: EmailProviderEnum): List<String> {
         check(context)
         val allEntries: MutableMap<String, *>? = sharedPreferences!!.all

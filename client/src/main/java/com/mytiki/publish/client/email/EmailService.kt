@@ -89,7 +89,6 @@ class EmailService() {
      * Retrieves the list of connected email accountsPerProvider.
      * @return List of connected email accountsPerProvider.
      */
-    @RequiresApi(Build.VERSION_CODES.N)
     fun accountsPerProvider(context: Context, emailProvider: EmailProviderEnum): List<String> {
         return TikiClient.auth.authRepository.accounts(context, emailProvider)
     }
