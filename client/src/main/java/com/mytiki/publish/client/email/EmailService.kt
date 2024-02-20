@@ -3,12 +3,8 @@ package com.mytiki.publish.client.email
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
 import com.mytiki.publish.client.TikiClient
-import com.mytiki.publish.client.auth.AuthRepository
-import com.mytiki.publish.client.email.messageResponse.Message
 import com.mytiki.publish.client.email.messageResponse.MessageResponse
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -21,12 +17,13 @@ import net.openid.appauth.ResponseTypeValues
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
-import org.json.JSONArray
 import org.json.JSONObject
+import java.util.Date
 
 class EmailService() {
     var googleKeys: EmailKeys? = null
     var outlookKeys: EmailKeys? = null
+    val emailRepository = EmailRepository()
 
     var loginCallback: () -> Unit = {}
         private set
@@ -89,16 +86,33 @@ class EmailService() {
      * Retrieves the list of connected email accountsPerProvider.
      * @return List of connected email accountsPerProvider.
      */
-    @RequiresApi(Build.VERSION_CODES.N)
     fun accountsPerProvider(context: Context, emailProvider: EmailProviderEnum): List<String> {
         return TikiClient.auth.authRepository.accounts(context, emailProvider)
     }
 
-    fun messages(context: Context, auth: String, provider: EmailProviderEnum, email: String) {
+    fun accounts(context: Context): List<String> {
+        val emailList = mutableListOf<String>()
+        EmailProviderEnum.entries.forEach { provider ->
+            val list = TikiClient.email.accountsPerProvider(context, provider)
+            if(list.isNotEmpty()) emailList.addAll(list)
+        }
+        return emailList
+    }
+
+    fun messages(context: Context, auth: String, provider: EmailProviderEnum, email: String, nextPageToken: String? = null) {
         CoroutineScope(Dispatchers.IO).launch {
+            val indexData = emailRepository.getData(context, email)
+
+            val isFirst = mutableStateOf(nextPageToken.isNullOrEmpty())
             val isWorking = mutableStateOf(true)
-            val endpoint = mutableStateOf(provider.messagesListEndpoint(email))
-            while (isWorking.value) {
+            val endpoint = mutableStateOf(
+                if (nextPageToken.isNullOrEmpty()) {
+                    if (indexData == null) provider.messagesListEndpoint(email)
+                    else provider.messagesListEndpoint(email) +"&q=after:${indexData.date.year}/${indexData.date.month}/${indexData.date.day}"
+                }
+                else provider.messagesListEndpoint(email) + "&pageToken=$nextPageToken"
+            )
+            while (isWorking.value){
                 val client = OkHttpClient.Builder()
                     .addInterceptor(HttpLoggingInterceptor().apply {
                         level = HttpLoggingInterceptor.Level.BODY
@@ -110,23 +124,44 @@ class EmailService() {
                     .get()
                     .build()
                 val apiResponse = client.newCall(request).execute()
-
                 if (apiResponse.code in 200..299) {
                     val resp = MessageResponse.fromJson(JSONObject(apiResponse.body?.string()!!))
                     if (!resp.messages.isNullOrEmpty()) {
-                        EmailRepository.save(context, email, resp.messages)
+                        EmailRepository.saveIndexes(context, email, resp.messages)
+                        if (isFirst.value) {
+                            emailRepository.saveData(
+                                context,
+                                IndexData(email, Date(), resp.nextPageToken)
+                            )
+                        } else {
+                            emailRepository.updateNextPageToken(context, email, resp.nextPageToken)
+                        }
                         if (!resp.nextPageToken.isNullOrEmpty()) {
                             endpoint.value =
                                 provider.messagesListEndpoint(email) + "&pageToken=${resp.nextPageToken}"
                         } else {
                             isWorking.value = false
                         }
+                        isFirst.value = false
                     }
                 } else throw Exception("error on getting messages")
             }
         }
     }
 
+
+    fun checkIndexes(context: Context){
+        val accounts = accounts(context)
+        accounts.forEach{
+            val indexData = emailRepository.getData(context, it)
+            if (!indexData?.nextPageToken.isNullOrEmpty()){
+                val token = TikiClient.auth.authRepository.get(context, it)
+                if (token != null){
+                    messages(context, token.auth, token.provider, token.username, indexData?.nextPageToken)
+                }
+            }
+        }
+    }
 
 
     /**
@@ -136,6 +171,7 @@ class EmailService() {
     fun logout(context: Context, email: String){
         TikiClient.auth.authRepository.remove(context, email)
     }
+
     fun googleKeys( clientId: String, clientSecrete: String) {
         googleKeys = EmailKeys(clientId, clientSecrete)
 

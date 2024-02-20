@@ -80,7 +80,6 @@ class TikiClient{
      * Retrieves the list of connected email accountsPerProvider.
      * @return List of connected email accountsPerProvider.
      */
-    @RequiresApi(Build.VERSION_CODES.N)
     fun accounts(context: Context): List<String> {
         val emailList = mutableListOf<String>()
         EmailProviderEnum.entries.forEach { provider ->

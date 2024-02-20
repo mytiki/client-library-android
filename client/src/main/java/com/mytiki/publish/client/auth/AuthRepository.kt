@@ -24,7 +24,7 @@ class AuthRepository() {
         if (sharedPreferences == null){
             sharedPreferences = EncryptedSharedPreferences.create(
                 context,
-                "email_repository",
+                "auth_repository",
                 masterKey!!,
                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
@@ -54,7 +54,6 @@ class AuthRepository() {
         editor!!.remove(email).commit()
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     fun accounts(context: Context, emailProviderEnum: EmailProviderEnum): List<String> {
         check(context)
         val allEntries: MutableMap<String, *>? = sharedPreferences!!.all
@@ -68,4 +67,8 @@ class AuthRepository() {
         }
         return accounts
     }
+
+
+
+
 }
