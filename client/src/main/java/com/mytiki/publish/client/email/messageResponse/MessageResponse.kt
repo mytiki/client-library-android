@@ -18,9 +18,6 @@ class MessageResponse(
                     Message.fromJson(array.getJSONObject(i))
                 )
             }
-
-
-
             return MessageResponse(
                 messages,
                 try {json.getString("nextPageToken")}catch (error: Exception){null},
@@ -38,8 +35,10 @@ class MessageResponse(
                 }
             }
         }
-
         return JSONObject()
             .put("messages", array)
+            .put("nextPageToken", nextPageToken)
+            .put("resultSizeEstimate", resultSizeEstimate)
+
     }
 }

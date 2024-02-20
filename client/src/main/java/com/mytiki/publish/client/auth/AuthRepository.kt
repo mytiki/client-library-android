@@ -2,8 +2,6 @@ package com.mytiki.publish.client.auth
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.mytiki.publish.client.email.EmailProviderEnum
@@ -36,7 +34,7 @@ class AuthRepository() {
     fun save(context: Context, token: AuthToken): Boolean {
         check(context)
         val tokenJson = token.toString()
-        return editor!!.putString(token.username, tokenJson).commit()
+        return editor!!.putString(token.email, tokenJson).commit()
     }
 
     fun get(context: Context, email: String): AuthToken? {

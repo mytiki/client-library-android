@@ -8,6 +8,7 @@ import android.os.Build
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.core.content.PermissionChecker
+import com.mytiki.publish.client.email.messageResponse.Message
 
 
 class CaptureService {
@@ -33,9 +34,21 @@ class CaptureService {
      * @param data The binary image or email data.
      * @return The ID of the uploaded data to checkIndexes publishing status.
      */
-    fun publish(data: Bitmap): String{
+    fun publish(data: Bitmap): Boolean {
         Log.d("*******************", "Worked!!!!")
-        return ""
+        return true
+    }
+
+    /**
+     * Uploads receipt images or email data for receipt data extraction.
+     * @param data The binary image or email data.
+     * @return The ID of the uploaded data to checkIndexes publishing status.
+     */
+    fun publish(data: List<Message>): Boolean{
+        data.forEach {
+            Log.d("*******************", it.toJson().toString())
+        }
+        return true
     }
 
     /**

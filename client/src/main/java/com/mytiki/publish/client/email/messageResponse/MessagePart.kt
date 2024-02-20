@@ -64,7 +64,7 @@ class MessagePart(
             .put("mimeType", mimeType)
             .put("filename", filename)
             .put("headers", arrayHeaders)
-            .put("body", body)
+            .put("body", body?.toJson())
             .put("parts", arrayPart)
     }
 }
