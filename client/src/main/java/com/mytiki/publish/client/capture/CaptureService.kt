@@ -8,6 +8,9 @@ import android.os.Build
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.core.content.PermissionChecker
+import com.mytiki.publish.client.email.messageResponse.Message
+import io.flutter.embedding.android.FlutterView.FlutterEngineAttachmentListener
+import java.io.File
 
 
 class CaptureService {
@@ -33,10 +36,23 @@ class CaptureService {
      * @param data The binary image or email data.
      * @return The ID of the uploaded data to checkIndexes publishing status.
      */
-    fun publish(data: Bitmap): String{
+    fun publish(data: Bitmap): Boolean {
         Log.d("*******************", "Worked!!!!")
-        return ""
+        return true
     }
+    fun publish(message: Message): Boolean{
+        Log.d("**** Message ******", message.toJson().toString())
+        return true
+    }
+
+
+    fun publish(message: Message, attachments: List<Any>?): Boolean{
+        Log.d("**** Message/ATT ****", message.toJson().toString())
+        return true
+    }
+
+
+
 
     /**
      * Checks the publishing status of the data.

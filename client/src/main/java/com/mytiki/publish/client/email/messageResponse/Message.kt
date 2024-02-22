@@ -38,6 +38,24 @@ class Message(
     }
 
     fun toJson(): JSONObject{
-        return JSONObject().put("id", id)
+        val labelIdsArray = JSONArray()
+        if (!labelIds.isNullOrEmpty()) {
+            labelIds.forEach {
+                if (it != null) {
+                    labelIdsArray.put(it)
+                }
+            }
+        }
+
+        return JSONObject()
+            .put("id", id)
+            .put("threadId", threadId)
+            .put("labelIds", labelIdsArray)
+            .put("snippet", snippet)
+            .put("historyId", historyId)
+            .put("internalDate", internalDate)
+            .put("payload", payload?.toJson())
+            .put("sizeEstimate", sizeEstimate)
+            .put("raw", raw)
     }
 }

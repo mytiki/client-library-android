@@ -1,10 +1,7 @@
 package com.mytiki.publish.client
 
 import android.content.Context
-import android.os.Build
-import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.annotation.RequiresApi
 import com.mytiki.publish.client.auth.AuthService
 import com.mytiki.publish.client.capture.CaptureService
 import com.mytiki.publish.client.clo.CloService
@@ -64,8 +61,13 @@ class TikiClient{
      * Initiates the process of login to email.
      * @param provider The email provider (GOOGLE or OUTLOOK).
      */
-    fun login(context: Context, provider: EmailProviderEnum, emailKeys: EmailKeys, redirectURI: String, loginCallback: () -> Unit) {
-        email.login(context, provider, emailKeys, redirectURI, loginCallback)
+    fun login(context: Context, provider: EmailProviderEnum, emailKeys: EmailKeys, redirectURI: String, loginCallback: ((String) -> Unit)? = null) {
+        email.login(context, provider, emailKeys, redirectURI){ email ->
+            TikiClient.email.messagesIndex(context, email)
+            if (loginCallback != null) {
+                loginCallback(email)
+            }
+        }
     }
 
     /**
@@ -92,11 +94,8 @@ class TikiClient{
     /**
      * Initiates the process of scraping receipts from emails.
      */
-    fun scrape(context: Context,  provider: EmailProviderEnum, email: String) {
-        MainScope().async {
-            val auth = TikiClient.auth.token(context, email, provider)
-            val messages = auth?.let { TikiClient.email.messages(context, it, provider, email) }
-        }
+    fun scrape(context: Context, email: String, clientID: String) {
+        TikiClient.email.scrape(context, email, clientID)
     }
 
     /**

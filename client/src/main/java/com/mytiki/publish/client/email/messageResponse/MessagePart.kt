@@ -8,7 +8,7 @@ class MessagePart(
     val mimeType: String?,
     val filename: String?,
     val headers: Array<MessageHeader?>?,
-    val body: MessagePartBody?,
+    var body: MessagePartBody?,
     val parts: Array<MessagePart?>?
 ){
     companion object{
@@ -64,7 +64,7 @@ class MessagePart(
             .put("mimeType", mimeType)
             .put("filename", filename)
             .put("headers", arrayHeaders)
-            .put("body", body)
+            .put("body", body?.toJson())
             .put("parts", arrayPart)
     }
 }

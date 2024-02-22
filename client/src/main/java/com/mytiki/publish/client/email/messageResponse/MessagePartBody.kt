@@ -3,7 +3,7 @@ package com.mytiki.publish.client.email.messageResponse
 import org.json.JSONObject
 
 class MessagePartBody(
-    val attachmentId: String?,
+    val attachmentId: String? ,
     val size: Int?,
     val data: String?
 ){
