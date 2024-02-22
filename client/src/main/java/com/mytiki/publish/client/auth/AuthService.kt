@@ -1,21 +1,24 @@
 package com.mytiki.publish.client.auth
 
+import android.R.id.input
 import android.content.Context
-import com.mytiki.publish.client.email.EmailProviderEnum
-import com.mytiki.publish.client.email.EmailResponse
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.internal.EMPTY_REQUEST
 import okhttp3.logging.HttpLoggingInterceptor
+import org.bouncycastle.jcajce.provider.digest.SHA3
 import org.json.JSONObject
-import java.security.PublicKey
-import java.util.Date
+import java.security.*
+import java.util.*
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 
 class AuthService {
@@ -37,7 +40,7 @@ class AuthService {
      * Retrieves the authentication token, refreshing if necessary.
      * @return The authentication token.
      */
-    fun token(context: Context, email: String, providerID: String, publicKey: String): CompletableDeferred<String> {
+    fun token(providerID: String, publicKey: String): CompletableDeferred<String> {
         val token = CompletableDeferred<String>()
         CoroutineScope(Dispatchers.IO).launch {
             val client = OkHttpClient.Builder()
@@ -65,6 +68,53 @@ class AuthService {
             } else token.completeExceptionally(Exception("error on user info request"))
         }
        return token
+    }
+
+
+    fun getKey(): KeyPair? {
+        try {
+
+            val keyStore = KeyStore.getInstance("AndroidKeyStore")
+            keyStore.load(null)
+            val entry: KeyStore.Entry? = keyStore.getEntry("TikiKeyPair", null)
+
+            if (entry != null) {
+                val privateKey = (entry as KeyStore.PrivateKeyEntry).privateKey
+                val publicKey = keyStore.getCertificate("TikiKeyPair").publicKey
+                return KeyPair(publicKey, privateKey)
+            } else {
+                val keyPairGenerator = KeyPairGenerator.getInstance(
+                    KeyProperties.KEY_ALGORITHM_RSA, "AndroidKeyStore"
+                )
+
+                val builder = KeyGenParameterSpec.Builder(
+                    "TikiKeyPair",
+                    KeyProperties.PURPOSE_SIGN or KeyProperties.PURPOSE_VERIFY
+                ).setDigests(KeyProperties.DIGEST_SHA256)
+                    .setSignaturePaddings(KeyProperties.SIGNATURE_PADDING_RSA_PKCS1)
+
+                keyPairGenerator.initialize(builder.build())
+                return keyPairGenerator.generateKeyPair()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
+    }
+
+    @OptIn(ExperimentalEncodingApi::class)
+    fun address(keyPair: KeyPair): String? {
+        try {
+            val publicKeyBytes = keyPair.public.encoded
+
+            val digest = SHA3.Digest256()
+            val addressBytes = digest.digest(publicKeyBytes)
+
+            return Base64.UrlSafe.encode(addressBytes)
+        } catch (e: NoSuchAlgorithmException) {
+            e.printStackTrace()
+            return null
+        }
     }
 
     /**
