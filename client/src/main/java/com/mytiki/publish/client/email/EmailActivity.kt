@@ -51,7 +51,7 @@ class EmailActivity : AppCompatActivity() {
                                    authToken
                                )
                                 if (resp){
-                                    TikiClient.email.loginCallback()
+                                    TikiClient.email.loginCallback(authToken.email)
                                 }
                            }
                             this@EmailActivity.finish()

@@ -80,12 +80,20 @@ class MainActivity : AppCompatActivity() {
 
                         Spacer(modifier = Modifier.height(60.dp))
                         MainButton(text = "Login") {
-                            TikiClient.email.login(
+                            TikiClient().login(
                                 this@MainActivity,
                                 EmailProviderEnum.GOOGLE,
                                 EmailKeys("1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e.apps.googleusercontent.com", ""),
                                 "com.googleusercontent.apps.1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e:/oauth2redirect"
-                            ){}
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(30.dp))
+                        MainButton(text = "Logout") {
+                            TikiClient().logout(
+                                this@MainActivity,
+                                "gabrielschuler3@gmail.com",
+                            )
                         }
 
                         Spacer(modifier = Modifier.height(30.dp))
@@ -105,16 +113,20 @@ class MainActivity : AppCompatActivity() {
                         }
 
                         Spacer(modifier = Modifier.height(30.dp))
-                        MainButton(text = "Remove Token") {
-                            TikiClient.auth.authRepository.remove(
+                        MainButton(text = "Messages") {
+                            TikiClient().scrape(
                                 this@MainActivity,
                                 "gabrielschuler3@gmail.com",
+                                "1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e.apps.googleusercontent.com"
                             )
                         }
-
                         Spacer(modifier = Modifier.height(30.dp))
-                        MainButton(text = "Messages") {
-                            TikiClient().scrape(this@MainActivity, EmailProviderEnum.GOOGLE, "gabrielschuler3@gmail.com")
+                        MainButton(text = "Messages in 15") {
+                            TikiClient.email.scrapeInChunks(
+                                this@MainActivity,
+                                "gabrielschuler3@gmail.com",
+                                15
+                            )
                         }
 
                         Spacer(modifier = Modifier.height(30.dp))

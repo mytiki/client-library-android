@@ -12,14 +12,14 @@ class MessageResponse(
 
         fun fromJson(json: JSONObject): MessageResponse{
             val array = try{json.getJSONArray("messages") }catch (error: Exception){null}
-            val messages = array?.let { arrayOfNulls<Message>(it.length()) }
+            val jsonMessages = array?.let { arrayOfNulls<Message>(it.length()) }
             if (array != null) {
-                for (i in 0 until array.length()) messages?.set(i,
+                for (i in 0 until array.length()) jsonMessages?.set(i,
                     Message.fromJson(array.getJSONObject(i))
                 )
             }
             return MessageResponse(
-                messages,
+                jsonMessages,
                 try {json.getString("nextPageToken")}catch (error: Exception){null},
                 try {json.getInt("resultSizeEstimate")}catch (error: Exception){null}
             )

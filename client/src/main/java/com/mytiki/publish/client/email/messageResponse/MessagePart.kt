@@ -8,7 +8,7 @@ class MessagePart(
     val mimeType: String?,
     val filename: String?,
     val headers: Array<MessageHeader?>?,
-    val body: MessagePartBody?,
+    var body: MessagePartBody?,
     val parts: Array<MessagePart?>?
 ){
     companion object{

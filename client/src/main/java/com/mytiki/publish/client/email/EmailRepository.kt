@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.mytiki.publish.client.email.messageResponse.Message
+import kotlinx.coroutines.CompletableDeferred
 import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.File
@@ -118,17 +119,18 @@ class EmailRepository{
         val reader = BufferedReader(FileReader(inputFile))
         val writer = BufferedWriter(FileWriter(tempFile))
 
-        var currentLine: String
-        while (reader.readLine().also { currentLine = it } != null) {
-            val trimmedLine = currentLine.trimStart().trimEnd()
-            if (trimmedLine in id) continue
-            writer.write(currentLine + System.getProperty("line.separator"))
+        reader.useLines {
+            it.forEach { currentLine ->
+                if (currentLine in id) return@forEach
+                writer.write(currentLine + System.getProperty("line.separator"))
+            }
         }
+
         writer.close()
         reader.close()
 
-        val del = !inputFile.delete()
-        val rename = !tempFile.renameTo(inputFile)
+        val del = inputFile.delete()
+        val rename = tempFile.renameTo(inputFile)
 
         return del && rename
     }

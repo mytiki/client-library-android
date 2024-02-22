@@ -18,7 +18,7 @@ enum class EmailProviderEnum(
         "https://www.googleapis.com/oauth2/v4/token",
         "https://openidconnect.googleapis.com/v1/userinfo",
         "openid email profile https://www.googleapis.com/auth/gmail.readonly",
-        "https://gmail.googleapis.com/gmail/v1/users/me/messagesIndex?maxResults=500"
+        "https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=500"
     ),
 
     OUTLOOK("https://login.microsoftonline.com/common/oauth2/v2.0/authorize" ,
@@ -45,9 +45,16 @@ enum class EmailProviderEnum(
             else -> ""
         }
     }
-    fun messageEndpoint(id: String): String{
+    fun messageEndpoint(messageID: String): String{
         return when(this.name) {
-            EmailProviderEnum.GOOGLE.toString() -> "https://gmail.googleapis.com/gmail/v1/users/me/messages/${id}?format=full"
+            EmailProviderEnum.GOOGLE.toString() -> "https://gmail.googleapis.com/gmail/v1/users/me/messages/${messageID}?format=full"
+            EmailProviderEnum.OUTLOOK.toString() -> ""
+            else -> ""
+        }
+    }
+    fun attachmentEndpoint(messageID: String, attachmentID: String): String{
+        return when(this.name) {
+            EmailProviderEnum.GOOGLE.toString() -> "https://gmail.googleapis.com/gmail/v1/users/me/messages/$messageID/attachments/$attachmentID"
             EmailProviderEnum.OUTLOOK.toString() -> ""
             else -> ""
         }
