@@ -302,7 +302,8 @@ class EmailService() {
                     pdfOutputStream.close()
                     attachmentList.add(filePDF)
                     decodeByMimiType.complete(Unit)
-                } else if (!message.payload.body?.attachmentId.isNullOrEmpty()) {
+                }
+                if (!message.payload.body?.attachmentId.isNullOrEmpty()) {
                     val attachment = getAttachments(
                         context,
                         email,

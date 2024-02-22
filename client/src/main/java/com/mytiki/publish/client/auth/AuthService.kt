@@ -1,18 +1,22 @@
 package com.mytiki.publish.client.auth
 
 import android.content.Context
-import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.email.EmailProviderEnum
+import com.mytiki.publish.client.email.EmailResponse
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.internal.EMPTY_REQUEST
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
+import java.security.PublicKey
 import java.util.Date
+
 
 class AuthService {
 
@@ -33,8 +37,34 @@ class AuthService {
      * Retrieves the authentication token, refreshing if necessary.
      * @return The authentication token.
      */
-    fun token(context: Context, email: String, provider: EmailProviderEnum): String? {
-       return authRepository.get(context, email)?.auth
+    fun token(context: Context, email: String, providerID: String, publicKey: String): CompletableDeferred<String> {
+        val token = CompletableDeferred<String>()
+        CoroutineScope(Dispatchers.IO).launch {
+            val client = OkHttpClient.Builder()
+                .addInterceptor(HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                })
+                .build()
+            val body = FormBody.Builder()
+                .add("grant_type", "client_credentials")
+                .add("client_id", "provider:$providerID")
+                .add("client_secret", publicKey)
+                .add("scope", "account:provider trail publish")
+                .add("expires", "600")
+                .build();
+
+            val request = Request.Builder()
+                .url("https://account.mytiki.com/api/latest/auth/token")
+                .addHeader("accept", "application/json")
+                .post(body)
+                .build()
+
+            val apiResponse = client.newCall(request).execute()
+            if (apiResponse.code in 200..299) {
+                token.complete(TikiTokenResponse.fromJson(JSONObject(apiResponse.body?.string()!!)).access_token)
+            } else token.completeExceptionally(Exception("error on user info request"))
+        }
+       return token
     }
 
     /**
