@@ -1,6 +1,5 @@
 package com.mytiki.publish.client.auth
 
-import android.R.id.input
 import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
@@ -8,11 +7,16 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.FormBody
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.internal.EMPTY_REQUEST
 import okhttp3.logging.HttpLoggingInterceptor
+import okio.ByteString.Companion.encode
+import org.bouncycastle.crypto.digests.SHA256Digest
+import org.bouncycastle.crypto.params.AsymmetricKeyParameter
+import org.bouncycastle.crypto.signers.RSADigestSigner
+import org.bouncycastle.jcajce.provider.asymmetric.util.KeyUtil
 import org.bouncycastle.jcajce.provider.digest.SHA3
 import org.json.JSONObject
 import java.security.*
@@ -48,6 +52,7 @@ class AuthService {
                     level = HttpLoggingInterceptor.Level.BODY
                 })
                 .build()
+
             val body = FormBody.Builder()
                 .add("grant_type", "client_credentials")
                 .add("client_id", "provider:$providerID")
@@ -65,7 +70,7 @@ class AuthService {
             val apiResponse = client.newCall(request).execute()
             if (apiResponse.code in 200..299) {
                 token.complete(TikiTokenResponse.fromJson(JSONObject(apiResponse.body?.string()!!)).access_token)
-            } else token.completeExceptionally(Exception("error on user info request"))
+            } else token.completeExceptionally(Exception("error on getting token"))
         }
        return token
     }
@@ -73,7 +78,6 @@ class AuthService {
 
     fun getKey(): KeyPair? {
         try {
-
             val keyStore = KeyStore.getInstance("AndroidKeyStore")
             keyStore.load(null)
             val entry: KeyStore.Entry? = keyStore.getEntry("TikiKeyPair", null)
@@ -102,7 +106,6 @@ class AuthService {
         }
     }
 
-    @OptIn(ExperimentalEncodingApi::class)
     fun address(keyPair: KeyPair): String? {
         try {
             val publicKeyBytes = keyPair.public.encoded
@@ -110,12 +113,79 @@ class AuthService {
             val digest = SHA3.Digest256()
             val addressBytes = digest.digest(publicKeyBytes)
 
-            return Base64.UrlSafe.encode(addressBytes)
+            return base64Encode(addressBytes)
         } catch (e: NoSuchAlgorithmException) {
             e.printStackTrace()
             return null
         }
     }
+
+    fun signMessage(message: String, privateKey: PrivateKey): String{
+
+        val signature = Signature
+            .getInstance("SHA256withRSA")
+            .apply {
+                initSign(privateKey)
+                update(message.toByteArray())
+            }
+        return base64Encode(signature.sign())
+    }
+
+    fun registerAddress(providerId: String, tikiPublicKey: String, userId: String): CompletableDeferred<RegisterAddressResponse> {
+        val registerAddress = CompletableDeferred<RegisterAddressResponse>()
+        try {
+            CoroutineScope(Dispatchers.IO).launch {
+                val accessToken = token(providerId, tikiPublicKey).await()
+                val keyPair = getKey()
+                val address = keyPair?.let { address(it) }
+                val signature = address?.let { signMessage("$userId.$it", keyPair.private) }
+                val pubKey = keyPair?.let { base64Encode(it.public.encoded) }
+                val addressBase64 = address?.let { base64Encode(it) }
+
+                if (!addressBase64.isNullOrEmpty() && !pubKey.isNullOrEmpty() && !signature.isNullOrEmpty()) {
+                    val client = OkHttpClient.Builder()
+                        .addInterceptor(HttpLoggingInterceptor().apply {
+                            level = HttpLoggingInterceptor.Level.BODY
+                        })
+                        .build()
+
+                    val jsonBody = JSONObject()
+                        .put("id", userId)
+                        .put("address", addressBase64)
+                        .put("pubKey", pubKey)
+                        .put("signature", signature)
+                        .toString()
+                        .toRequestBody("application/json".toMediaTypeOrNull())
+
+                    val request = Request.Builder()
+                        .url("https://account.mytiki.com/api/latest/provider/$providerId/user")
+                        .addHeader("accept", "application/json")
+                        .addHeader("authorization", "Bearer $accessToken")
+                        .post(jsonBody)
+                        .build()
+
+                    val apiResponse = client.newCall(request).execute()
+                    if (apiResponse.code in 200..299) {
+                        val resp = RegisterAddressResponse.fromJson(JSONObject(apiResponse.body?.string()!!))
+                        registerAddress.complete(resp)
+                    } else registerAddress.completeExceptionally(Exception("error on registerAddress"))
+                } else registerAddress.completeExceptionally(Exception("error on registerAddress"))
+            }
+        } catch (e: Exception) {
+            registerAddress.completeExceptionally(Exception("error on registerAddress"))
+        }
+        return registerAddress
+    }
+
+    @OptIn(ExperimentalEncodingApi::class)
+    private fun base64Encode(str: String): String {
+        return Base64.UrlSafe.encode(str.toByteArray())
+    }
+    @OptIn(ExperimentalEncodingApi::class)
+    private fun base64Encode(byteArray: ByteArray): String {
+        return Base64.UrlSafe.encode(byteArray)
+    }
+
 
     /**
      * Revokes the authentication token.
