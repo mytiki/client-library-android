@@ -12,14 +12,20 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.internal.EMPTY_REQUEST
 import okhttp3.logging.HttpLoggingInterceptor
-import okio.ByteString.Companion.encode
-import org.bouncycastle.crypto.digests.SHA256Digest
-import org.bouncycastle.crypto.params.AsymmetricKeyParameter
-import org.bouncycastle.crypto.signers.RSADigestSigner
-import org.bouncycastle.jcajce.provider.asymmetric.util.KeyUtil
+import org.bouncycastle.cert.jcajce.JcaCertStore
+import org.bouncycastle.cms.CMSProcessableByteArray
+import org.bouncycastle.cms.CMSSignedDataGenerator
+import org.bouncycastle.cms.CMSTypedData
+import org.bouncycastle.cms.jcajce.JcaSignerInfoGeneratorBuilder
 import org.bouncycastle.jcajce.provider.digest.SHA3
+import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder
+import org.bouncycastle.operator.jcajce.JcaDigestCalculatorProviderBuilder
+import org.bouncycastle.util.Store
 import org.json.JSONObject
+import java.io.ByteArrayInputStream
 import java.security.*
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
 import java.util.*
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
@@ -96,6 +102,7 @@ class AuthService {
                     KeyProperties.PURPOSE_SIGN or KeyProperties.PURPOSE_VERIFY
                 ).setDigests(KeyProperties.DIGEST_SHA256)
                     .setSignaturePaddings(KeyProperties.SIGNATURE_PADDING_RSA_PKCS1)
+                    .setKeySize(2048)
 
                 keyPairGenerator.initialize(builder.build())
                 return keyPairGenerator.generateKeyPair()
@@ -106,6 +113,7 @@ class AuthService {
         }
     }
 
+    @OptIn(ExperimentalEncodingApi::class)
     fun address(keyPair: KeyPair): String? {
         try {
             val publicKeyBytes = keyPair.public.encoded
@@ -113,24 +121,25 @@ class AuthService {
             val digest = SHA3.Digest256()
             val addressBytes = digest.digest(publicKeyBytes)
 
-            return base64Encode(addressBytes)
+            return Base64.UrlSafe.encode(addressBytes).replace("=","")
         } catch (e: NoSuchAlgorithmException) {
             e.printStackTrace()
             return null
         }
     }
 
-    fun signMessage(message: String, privateKey: PrivateKey): String{
-
+    @OptIn(ExperimentalEncodingApi::class)
+    fun signMessage(message: String, privateKey: PrivateKey): ByteArray? {
         val signature = Signature
             .getInstance("SHA256withRSA")
             .apply {
                 initSign(privateKey)
                 update(message.toByteArray())
             }
-        return base64Encode(signature.sign())
+        return signature.sign()
     }
 
+    @OptIn(ExperimentalEncodingApi::class)
     fun registerAddress(providerId: String, tikiPublicKey: String, userId: String): CompletableDeferred<RegisterAddressResponse> {
         val registerAddress = CompletableDeferred<RegisterAddressResponse>()
         try {
@@ -138,11 +147,14 @@ class AuthService {
                 val accessToken = token(providerId, tikiPublicKey).await()
                 val keyPair = getKey()
                 val address = keyPair?.let { address(it) }
-                val signature = address?.let { signMessage("$userId.$it", keyPair.private) }
-                val pubKey = keyPair?.let { base64Encode(it.public.encoded) }
-                val addressBase64 = address?.let { base64Encode(it) }
+                val signature = address?.let { signMessage("$userId.$it", keyPair.private)?.let { it1 ->
+                    Base64.Default.encode(
+                        it1
+                    )
+                } }
+                val pubKey = keyPair?.let { Base64.Default.encode(it.public.encoded) }
 
-                if (!addressBase64.isNullOrEmpty() && !pubKey.isNullOrEmpty() && !signature.isNullOrEmpty()) {
+                if (!address.isNullOrEmpty() && !pubKey.isNullOrEmpty() && !signature.isNullOrEmpty()) {
                     val client = OkHttpClient.Builder()
                         .addInterceptor(HttpLoggingInterceptor().apply {
                             level = HttpLoggingInterceptor.Level.BODY
@@ -151,7 +163,7 @@ class AuthService {
 
                     val jsonBody = JSONObject()
                         .put("id", userId)
-                        .put("address", addressBase64)
+                        .put("address", address)
                         .put("pubKey", pubKey)
                         .put("signature", signature)
                         .toString()
@@ -176,16 +188,6 @@ class AuthService {
         }
         return registerAddress
     }
-
-    @OptIn(ExperimentalEncodingApi::class)
-    private fun base64Encode(str: String): String {
-        return Base64.UrlSafe.encode(str.toByteArray())
-    }
-    @OptIn(ExperimentalEncodingApi::class)
-    private fun base64Encode(byteArray: ByteArray): String {
-        return Base64.UrlSafe.encode(byteArray)
-    }
-
 
     /**
      * Revokes the authentication token.
