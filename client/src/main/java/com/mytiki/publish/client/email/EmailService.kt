@@ -191,7 +191,6 @@ class EmailService() {
         return scrape
     }
 
-    @OptIn(ExperimentalEncodingApi::class)
     fun scrapeInChunks(context: Context, email: String, numberOfItems: Int): CompletableDeferred<Boolean>{
         val token = TikiClient.auth.authRepository.get(context, email)
             ?: throw Exception("this email is not logged")
@@ -302,7 +301,8 @@ class EmailService() {
                     pdfOutputStream.close()
                     attachmentList.add(filePDF)
                     decodeByMimiType.complete(Unit)
-                } else if (!message.payload.body?.attachmentId.isNullOrEmpty()) {
+                }
+                if (!message.payload.body?.attachmentId.isNullOrEmpty()) {
                     val attachment = getAttachments(
                         context,
                         email,

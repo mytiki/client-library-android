@@ -9,7 +9,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 23
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -105,6 +105,10 @@ dependencies {
 
 //    Coil
     implementation("io.coil-kt:coil-compose:2.2.2")
+
+//    Bouncy Castle
+    implementation("org.bouncycastle:bcpkix-jdk15to18:1.68")
+    implementation("org.bouncycastle:bcprov-jdk15to18:1.68")
 
 //  Test
     androidTestImplementation(composeBom)
