@@ -128,8 +128,7 @@ class MainActivity : AppCompatActivity() {
                             CoroutineScope(Dispatchers.IO).launch {
                                 val resp =  TikiClient.auth.registerAddress(
                                     "fd861faf-aab9-4fa8-9c31-8160d98c74f0",
-                                    "MIIBCgKCAQEA09WSEv5TMj4k/dYNdq74t2BPrFcq+jTVyfFy142Abik+ucscJ0mPunUVGBFrXK+vNnxVsklNRA5p6hsMNNYPL+WyhXG4VdXMiAaQVSR5fUZ8voTrGrPSAk5v9Cshagk7CcSKLDtyHYtPAziRvbDtKC7yB7evcdiCzN+7kDUw0L3me89pz1o4rb7dllP6PtcZE9koHxje6EUB31pT+nXz/fqzIf5dCkfM19H1pqW6QZmvjRuQjKJijEXmBwUtrJXEw2fcWICktGhGyzAOado+oXaNzSVvIgNN7FVtd8JqjWu+K0xrW7V+h/Y8tF217yJtlE41T7WPABoikRQ+PYYoqQIDAQAB",
-                                    "gabrielschuler3@gmail.com"
+                                    "test@gmail.com"
                                 ).await()
 
                                 loginOutput = resp.address

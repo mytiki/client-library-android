@@ -2,29 +2,22 @@ package com.mytiki.publish.client.email
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.email.messageResponse.Message
+import com.mytiki.publish.client.email.messageResponse.MessagePart
 import com.mytiki.publish.client.email.messageResponse.MessagePartBody
 import com.mytiki.publish.client.email.messageResponse.MessageResponse
-import io.flutter.Log
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.launch
+import com.mytiki.publish.client.utils.apiService.ApiService
+import kotlinx.coroutines.*
 import net.openid.appauth.AuthorizationRequest
 import net.openid.appauth.AuthorizationService
 import net.openid.appauth.AuthorizationServiceConfiguration
 import net.openid.appauth.ResponseTypeValues
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.ResponseBody
 import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
@@ -75,22 +68,13 @@ class EmailService() {
 
     fun getEmailResponse(provider: EmailProviderEnum, auth: String): CompletableDeferred<EmailResponse> {
         val emailResponse = CompletableDeferred<EmailResponse>()
-        CoroutineScope(Dispatchers.IO).launch {
-            val client = OkHttpClient.Builder()
-                .addInterceptor(HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                })
-                .build()
-            val request = Request.Builder()
-                .url(provider.userInfoEndpoint)
-                .addHeader("Authorization", "Bearer $auth")
-                .get()
-                .build()
-            val apiResponse = client.newCall(request).execute()
-
-            if (apiResponse.code in 200..299) {
-                emailResponse.complete(EmailResponse.fromJson(JSONObject(apiResponse.body?.string()!!)))
-            } else throw Exception("error on user info request")
+        MainScope().async {
+            val response = ApiService.get(
+                mapOf("Authorization" to "Bearer $auth"),
+                provider.userInfoEndpoint,
+                Exception("error on user info request")
+            ).await()
+            emailResponse.complete(EmailResponse.fromJson(JSONObject(response?.string()!!)))
         }
         return emailResponse
     }
@@ -129,38 +113,30 @@ class EmailService() {
                 else provider.messagesIndexListEndpoint + "&pageToken=$nextPageToken"
             )
             while (isWorking.value){
-                val client = OkHttpClient.Builder()
-                    .addInterceptor(HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    })
-                    .build()
-                val request = Request.Builder()
-                    .url(endpoint.value)
-                    .addHeader("Authorization", "Bearer $auth")
-                    .get()
-                    .build()
-                val apiResponse = client.newCall(request).execute()
-                if (apiResponse.code in 200..299) {
-                    val resp = MessageResponse.fromJson(JSONObject(apiResponse.body?.string()!!))
-                    if (!resp.messages.isNullOrEmpty()) {
-                        emailRepository.saveIndexes(context, email, resp.messages)
-                        if (isFirst.value) {
-                            emailRepository.saveData(
-                                context,
-                                IndexData(email, Date(), resp.nextPageToken)
-                            )
-                        } else {
-                            emailRepository.updateNextPageToken(context, email, resp.nextPageToken)
-                        }
-                        if (!resp.nextPageToken.isNullOrEmpty()) {
-                            endpoint.value =
-                                provider.messagesIndexListEndpoint + "&pageToken=${resp.nextPageToken}"
-                        } else {
-                            isWorking.value = false
-                        }
-                        isFirst.value = false
+                val response = ApiService.get(
+                    mapOf("Authorization" to "Bearer $auth"),
+                    endpoint.value,
+                    Exception("error on getting messagesIndex")
+                ).await()
+                val messageResponse = MessageResponse.fromJson(JSONObject(response?.string()!!))
+                if (!messageResponse.messages.isNullOrEmpty()) {
+                    emailRepository.saveIndexes(context, email, messageResponse.messages)
+                    if (isFirst.value) {
+                        emailRepository.saveData(
+                            context,
+                            IndexData(email, Date(), messageResponse.nextPageToken)
+                        )
+                    } else {
+                        emailRepository.updateNextPageToken(context, email, messageResponse.nextPageToken)
                     }
-                } else throw Exception("error on getting messagesIndex")
+                    if (!messageResponse.nextPageToken.isNullOrEmpty()) {
+                        endpoint.value =
+                            provider.messagesIndexListEndpoint + "&pageToken=${messageResponse.nextPageToken}"
+                    } else {
+                        isWorking.value = false
+                    }
+                    isFirst.value = false
+                }
             }
         }
     }
@@ -192,48 +168,37 @@ class EmailService() {
     }
 
     fun scrapeInChunks(context: Context, email: String, numberOfItems: Int): CompletableDeferred<Boolean>{
-        val token = TikiClient.auth.authRepository.get(context, email)
-            ?: throw Exception("this email is not logged")
+        val token = TikiClient.auth.authRepository.get(context, email)?: throw Exception("this email is not logged")
         val provider = token.provider
         val auth = token.auth
-
         val scrapeInChunks = CompletableDeferred<Boolean>()
         val indexes = emailRepository.readIndexes(context, email, numberOfItems)
-        val messageRequestArray = mutableListOf<Deferred<Response>>()
+        val messageRequestArray = mutableListOf<Deferred<ResponseBody?>>()
         val attachmentRequestArray = mutableListOf<Deferred<Unit>>()
 
         CoroutineScope(Dispatchers.IO).launch {
             indexes.forEachIndexed { index, messageID ->
-                val client = OkHttpClient.Builder()
-                    .addInterceptor(HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    })
-                    .build()
-                val request = Request.Builder()
-                    .url(provider.messageEndpoint(messageID))
-                    .addHeader("Authorization", "Bearer $auth")
-                    .get()
-                    .build()
-                val apiRequest = async { client.newCall(request).execute() }
+                val apiRequest = async {
+                    ApiService.get(
+                        mapOf("Authorization" to "Bearer $auth"),
+                        provider.messageEndpoint(messageID),
+                        Exception("error on getting messagesIndex")
+                    ).await()
+                }
                 messageRequestArray.add(apiRequest)
-                Log.d("**************", "COMEÇOU $index")
             }
-
             val messageResponseList = awaitAll(*messageRequestArray.toTypedArray())
             messageResponseList.forEach { apiResponse ->
-                if (apiResponse.code in 200..299) {
-                    val attachmentDeferred = async {
-                        val message = (Message.fromJson(JSONObject(apiResponse.body?.string()!!)))
-                        val attachmentList = mutableListOf<Any>()
-                        decodeByMimiType(context, email, message, attachmentList).await()
-                        val published = TikiClient.capture.publish(message, attachmentList)
-                        if (!published) scrapeInChunks.completeExceptionally(Exception("error updating index list"))
-                    }
-                    attachmentRequestArray.add(attachmentDeferred)
-                } else { scrapeInChunks.completeExceptionally(Exception("error on getting messagesIndex")) }
+                val attachmentDeferred = async {
+                    val message = (Message.fromJson(JSONObject(apiResponse?.string()!!)))
+                    val attachmentList = mutableListOf<Any>()
+                    decodeByMimiType(context, email, message, attachmentList).await()
+                    val published = TikiClient.capture.publish(message, attachmentList)
+                    if (!published) scrapeInChunks.completeExceptionally(Exception("error updating index list"))
+                }
+                attachmentRequestArray.add(attachmentDeferred)
             }
             awaitAll(*attachmentRequestArray.toTypedArray())
-
             val removed = emailRepository.removeIndex(context, email, *indexes)
             if (!removed) scrapeInChunks.completeExceptionally(Exception("error updating index list"))
             scrapeInChunks.complete(numberOfItems >= messageRequestArray.size)
@@ -241,129 +206,169 @@ class EmailService() {
         return scrapeInChunks
     }
 
-    @OptIn(ExperimentalEncodingApi::class)
-    fun decodeByMimiType(context: Context, email: String, message: Message, attachmentList: MutableList<Any>): CompletableDeferred<Unit>{
+    private fun decodeByMimiType(context: Context, email: String, message: Message, attachmentList: MutableList<Any>): CompletableDeferred<Unit>{
         val decodeByMimiType = CompletableDeferred<Unit>()
         CoroutineScope(Dispatchers.IO).launch {
             if (!message.payload?.mimeType.isNullOrEmpty()) {
-                val mimiType = message.payload?.mimeType!!.substringBefore("/")
-                if (mimiType.substringBefore("/") == "multipart") {
-                    message.payload.parts?.forEach { messagePart ->
-                        if (!messagePart?.body?.data.isNullOrEmpty()) {
-                            val attachment = Base64.UrlSafe.decode(messagePart?.body?.data!!)
 
-                            if (messagePart.mimeType!!.substringBefore("/") == "image") {
-                                attachmentList.add(
-                                    BitmapFactory.decodeByteArray(
-                                        attachment,
-                                        0,
-                                        attachment.size
-                                    )
-                                )
-                                decodeByMimiType.complete(Unit)
+                val text = message.payload?.let { getAllText(it).await() }
+                if (!text.isNullOrEmpty()) attachmentList.add(text)
 
-                            } else if (messagePart.mimeType.substringBefore("/") == "text") {
-                                attachmentList.add(String(attachment))
-                                decodeByMimiType.complete(Unit)
-                            } else if (messagePart.mimeType == "application/pdf") {
-                                val filePDF =
-                                    File(context.filesDir, messagePart.body?.attachmentId + ".pdf")
-                                val pdfOutputStream = FileOutputStream(filePDF, false)
-                                pdfOutputStream.write(attachment)
-                                pdfOutputStream.flush()
-                                pdfOutputStream.close()
-                                attachmentList.add(filePDF)
-                                decodeByMimiType.complete(Unit)
-                            }
-                        }
-                    }
-                } else if (mimiType.substringBefore("/") == "image") {
-                    val attachment = Base64.UrlSafe.decode(message.payload.body?.data!!)
-                    attachmentList.add(
-                        BitmapFactory.decodeByteArray(
-                            attachment,
-                            0,
-                            attachment.size
-                        )
-                    )
-                    decodeByMimiType.complete(Unit)
-                } else if (mimiType.substringBefore("/") == "text") {
-                    val attachment = Base64.UrlSafe.decode(message.payload.body?.data!!)
-                    attachmentList.add(String(attachment))
-                    decodeByMimiType.complete(Unit)
-                } else if (message.payload.mimeType == "application/pdf") {
-                    val attachment = Base64.UrlSafe.decode(message.payload.body?.data!!)
-                    val filePDF =
-                        File(context.filesDir, message.payload.body?.attachmentId + ".pdf")
-                    val pdfOutputStream = FileOutputStream(filePDF, false)
-                    pdfOutputStream.write(attachment)
-                    pdfOutputStream.flush()
-                    pdfOutputStream.close()
-                    attachmentList.add(filePDF)
-                    decodeByMimiType.complete(Unit)
-                }
-                if (!message.payload.body?.attachmentId.isNullOrEmpty()) {
+                val image = message.payload?.let { getAllImage(it).await() }
+                if (image != null) attachmentList.add(image)
+
+                val pdf = message.payload?.let { getAllPdf(context, it).await() }
+                if (pdf != null) attachmentList.add(pdf)
+
+                val multiPart = message.payload?.let { getAllMultipart(context, message, email).await() }
+                if (multiPart != null) attachmentList.addAll(multiPart)
+
+                if (!message.payload?.body?.attachmentId.isNullOrEmpty()) {
                     val attachment = getAttachments(
                         context,
                         email,
                         message.id,
-                        message.payload.body?.attachmentId!!
+                        message.payload?.body?.attachmentId!!
                     ).await()
-                    if (message.payload.mimeType.substringBefore("/") == "image") {
-                        attachmentList.add(
-                            BitmapFactory.decodeByteArray(
-                                attachment,
-                                0,
-                                attachment.size
-                            )
-                        )
-                        decodeByMimiType.complete(Unit)
-                    } else if (message.payload.mimeType.substringBefore("/") == "text") {
-                        attachmentList.add(String(attachment))
-                        decodeByMimiType.complete(Unit)
-                    } else if (message.payload.mimeType == "application/pdf") {
-                        val filePDF =
-                            File(context.filesDir, message.payload.body?.attachmentId + ".pdf")
-                        val pdfOutputStream = FileOutputStream(filePDF, false)
-                        pdfOutputStream.write(attachment)
-                        pdfOutputStream.flush()
-                        pdfOutputStream.close()
-                        attachmentList.add(filePDF)
-                        decodeByMimiType.complete(Unit)
-                    }
+                    val byAttachmentId = message.payload?.let { getAllByAttachmentId(context, it, attachment).await() }
+                    if (byAttachmentId != null) attachmentList.addAll(byAttachmentId)
                 }
             }
         }
         return decodeByMimiType
     }
 
-    @OptIn(ExperimentalEncodingApi::class)
-    fun getAttachments(context: Context, email: String, messageID: String, attachmentID: String): CompletableDeferred<ByteArray>{
-        val getAttachments = CompletableDeferred<ByteArray>()
+    private fun getAllByAttachmentId(context: Context, messagePart: MessagePart, attachment: ByteArray): CompletableDeferred<List<Any>?>{
+        val getAllByAttachmentId =  CompletableDeferred<List<Any>?>()
+        CoroutineScope(Dispatchers.IO).launch {
+            if (messagePart.mimeType?.substringBefore("/") == "multipart") {
+                val array = mutableListOf<Any>()
+                messagePart.parts?.forEach { part ->
+                    if (part != null) {
+                        val text = getAllText(part, attachment).await()
+                        if(text != null) array.add(text)
 
-        val token = TikiClient.auth.authRepository.get(context, email)
-            ?: throw Exception("this email is not logged")
+                        val image = getAllImage(part, attachment).await()
+                        if(image != null) array.add(image)
+
+                        val pdf = getAllPdf(context, part, attachment).await()
+                        if(pdf != null) array.add(pdf)
+                    }
+                }
+                getAllByAttachmentId.complete(array)
+            }else getAllByAttachmentId.complete(null)
+        }
+        return getAllByAttachmentId
+    }
+
+    private fun getAllMultipart(context: Context, message: Message, email: String,): CompletableDeferred<List<Any>?>{
+        val getAllMultipart = CompletableDeferred<List<Any>?>()
+        val messagePart = message.payload
+        CoroutineScope(Dispatchers.IO).launch {
+            if (messagePart?.mimeType?.substringBefore("/") == "multipart") {
+                val list = mutableListOf<Any>()
+                messagePart.parts?.forEach { part ->
+                    if (part != null) {
+                        val text = getAllText(part).await()
+                        if(text != null) list.add(text)
+
+                        val image = getAllImage(part).await()
+                        if(image != null) list.add(image)
+
+                        val pdf = getAllPdf(context, part).await()
+                        if(pdf != null) list.add(pdf)
+
+                        if (!part.body?.attachmentId.isNullOrEmpty()) {
+                            val attachment = getAttachments(
+                                context,
+                                email,
+                                message.id,
+                                part.body?.attachmentId!!
+                            ).await()
+                            val byAttachmentId = getAllByAttachmentId(context, part, attachment).await()
+                            if (byAttachmentId != null) list.addAll(byAttachmentId)
+                        }
+                    }
+                }
+                getAllMultipart.complete(list)
+            }else getAllMultipart.complete(null)
+        }
+        return getAllMultipart
+    }
+    @OptIn(ExperimentalEncodingApi::class)
+    private fun getAllImage(
+        messagePart: MessagePart,
+        attachment: ByteArray? = null
+    ): CompletableDeferred<Bitmap?>{
+        val getAllImage = CompletableDeferred<Bitmap?>()
+        CoroutineScope(Dispatchers.IO).launch {
+            if (messagePart.mimeType?.substringBefore("/") == "image") {
+                val att = attachment ?: Base64.UrlSafe.decode(messagePart.body?.data!!)
+                val resp = BitmapFactory.decodeByteArray(
+                    attachment,
+                    0,
+                    att.size
+                )
+                getAllImage.complete(resp)
+            }else getAllImage.complete(null)
+        }
+        return getAllImage
+    }
+
+    @OptIn(ExperimentalEncodingApi::class)
+    private fun getAllText(
+        messagePart: MessagePart,
+        attachment: ByteArray? = null
+    ): CompletableDeferred<String?>{
+        val getAllText =  CompletableDeferred<String?>()
+        CoroutineScope(Dispatchers.IO).launch {
+            if (messagePart.mimeType?.substringBefore("/") == "text") {
+                val att = attachment?: Base64.UrlSafe.decode(messagePart.body?.data!!)
+                getAllText.complete(String(att))
+            }else getAllText.complete(null)
+        }
+        return getAllText
+    }
+
+    @OptIn(ExperimentalEncodingApi::class)
+    private fun getAllPdf(
+        context: Context,
+        messagePart: MessagePart,
+        attachment: ByteArray? = null
+    ): CompletableDeferred<File?>{
+        val getAllPdf =  CompletableDeferred<File?>()
+        CoroutineScope(Dispatchers.IO).launch {
+            if (messagePart.mimeType == "application/pdf") {
+                val att = attachment ?: Base64.UrlSafe.decode(messagePart.body?.data!!)
+                val filePDF =
+                    File(context.filesDir, messagePart.body?.attachmentId + ".pdf")
+                val pdfOutputStream = FileOutputStream(filePDF, false)
+                pdfOutputStream.write(att)
+                pdfOutputStream.flush()
+                pdfOutputStream.close()
+                getAllPdf.complete(filePDF)
+            }else getAllPdf.complete(null)
+        }
+        return getAllPdf
+    }
+
+
+    @OptIn(ExperimentalEncodingApi::class)
+    private fun getAttachments(context: Context, email: String, messageID: String, attachmentID: String): CompletableDeferred<ByteArray>{
+        val getAttachments = CompletableDeferred<ByteArray>()
+        val token = TikiClient.auth.authRepository.get(context, email)?: throw Exception("this email is not logged")
         val provider = token.provider
         val auth = token.auth
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val client = OkHttpClient.Builder()
-                .addInterceptor(HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                })
-                .build()
-            val request = Request.Builder()
-                .url(provider.attachmentEndpoint(messageID, attachmentID))
-                .addHeader("Authorization", "Bearer $auth")
-                .get()
-                .build()
-            val response = client.newCall(request).execute()
-            if (response.code in 200..299) {
-                val attachmentResponse = MessagePartBody.fromJson(JSONObject(response.body?.string()!!))
-                val attachmentBytes = Base64.UrlSafe.decode(attachmentResponse.data!!)
-                getAttachments.complete(attachmentBytes)
-
-            } else getAttachments.completeExceptionally(Exception("error on getting messagesIndex"))
+        MainScope().async {
+            val response = ApiService.get(
+                mapOf("Authorization" to "Bearer $auth"),
+                provider.attachmentEndpoint(messageID, attachmentID),
+                Exception("error on getting messagesIndex")
+            ).await()
+            val attachmentResponse = MessagePartBody.fromJson(JSONObject(response?.string()!!))
+            val attachmentBytes = Base64.UrlSafe.decode(attachmentResponse.data!!)
+            getAttachments.complete(attachmentBytes)
         }
         return getAttachments
     }

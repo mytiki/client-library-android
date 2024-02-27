@@ -3,10 +3,8 @@ package com.mytiki.publish.client.auth
 import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.mytiki.publish.client.utils.apiService.ApiService
+import kotlinx.coroutines.*
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -53,12 +51,6 @@ class AuthService {
     fun token(providerID: String, publicKey: String): CompletableDeferred<String> {
         val token = CompletableDeferred<String>()
         CoroutineScope(Dispatchers.IO).launch {
-            val client = OkHttpClient.Builder()
-                .addInterceptor(HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                })
-                .build()
-
             val body = FormBody.Builder()
                 .add("grant_type", "client_credentials")
                 .add("client_id", "provider:$providerID")
@@ -67,16 +59,14 @@ class AuthService {
                 .add("expires", "600")
                 .build();
 
-            val request = Request.Builder()
-                .url("https://account.mytiki.com/api/latest/auth/token")
-                .addHeader("accept", "application/json")
-                .post(body)
-                .build()
+            val response = ApiService.post(
+                mapOf("accept" to "application/json"),
+                "https://account.mytiki.com/api/latest/auth/token",
+                body,
+                Exception("error on getting token")
+            ).await()
 
-            val apiResponse = client.newCall(request).execute()
-            if (apiResponse.code in 200..299) {
-                token.complete(TikiTokenResponse.fromJson(JSONObject(apiResponse.body?.string()!!)).access_token)
-            } else token.completeExceptionally(Exception("error on getting token"))
+            token.complete(TikiTokenResponse.fromJson(JSONObject(response?.string()!!)).access_token)
         }
        return token
     }
@@ -128,7 +118,6 @@ class AuthService {
         }
     }
 
-    @OptIn(ExperimentalEncodingApi::class)
     fun signMessage(message: String, privateKey: PrivateKey): ByteArray? {
         val signature = Signature
             .getInstance("SHA256withRSA")
@@ -140,27 +129,18 @@ class AuthService {
     }
 
     @OptIn(ExperimentalEncodingApi::class)
-    fun registerAddress(providerId: String, tikiPublicKey: String, userId: String): CompletableDeferred<RegisterAddressResponse> {
+    fun registerAddress(providerId: String, userId: String): CompletableDeferred<RegisterAddressResponse> {
         val registerAddress = CompletableDeferred<RegisterAddressResponse>()
         try {
-            CoroutineScope(Dispatchers.IO).launch {
-                val accessToken = token(providerId, tikiPublicKey).await()
+            MainScope().async {
                 val keyPair = getKey()
                 val address = keyPair?.let { address(it) }
-                val signature = address?.let { signMessage("$userId.$it", keyPair.private)?.let { it1 ->
-                    Base64.Default.encode(
-                        it1
-                    )
-                } }
+                val signature = address?.let { address ->
+                    signMessage("$userId.$address", keyPair.private)?.let { Base64.Default.encode(it) }
+                }
                 val pubKey = keyPair?.let { Base64.Default.encode(it.public.encoded) }
 
                 if (!address.isNullOrEmpty() && !pubKey.isNullOrEmpty() && !signature.isNullOrEmpty()) {
-                    val client = OkHttpClient.Builder()
-                        .addInterceptor(HttpLoggingInterceptor().apply {
-                            level = HttpLoggingInterceptor.Level.BODY
-                        })
-                        .build()
-
                     val jsonBody = JSONObject()
                         .put("id", userId)
                         .put("address", address)
@@ -169,18 +149,13 @@ class AuthService {
                         .toString()
                         .toRequestBody("application/json".toMediaTypeOrNull())
 
-                    val request = Request.Builder()
-                        .url("https://account.mytiki.com/api/latest/provider/$providerId/user")
-                        .addHeader("accept", "application/json")
-                        .addHeader("authorization", "Bearer $accessToken")
-                        .post(jsonBody)
-                        .build()
-
-                    val apiResponse = client.newCall(request).execute()
-                    if (apiResponse.code in 200..299) {
-                        val resp = RegisterAddressResponse.fromJson(JSONObject(apiResponse.body?.string()!!))
-                        registerAddress.complete(resp)
-                    } else registerAddress.completeExceptionally(Exception("error on registerAddress"))
+                    val response = ApiService.post(
+                        mapOf("accept" to "application/json"),
+                        "https://account.mytiki.com/api/latest/provider/$providerId/user",
+                        jsonBody,
+                        Exception("error on registerAddress")
+                    ).await()
+                    registerAddress.complete(RegisterAddressResponse.fromJson(JSONObject(response?.string()!!)))
                 } else registerAddress.completeExceptionally(Exception("error on registerAddress"))
             }
         } catch (e: Exception) {
@@ -203,32 +178,25 @@ class AuthService {
         val authToken = authRepository.get(context, email)
         if (authToken != null){
             CoroutineScope(Dispatchers.IO).launch {
-                val client = OkHttpClient.Builder()
-                    .addInterceptor(HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    })
-                    .build()
+                val response = ApiService.post(
+                    null,
+                    authToken.provider.refreshTokenEndpoint(authToken.refresh, clientID),
+                    EMPTY_REQUEST,
+                    Exception("error on generate refresh token")
+                ).await()
 
-                val request = Request.Builder()
-                    .url(authToken.provider.refreshTokenEndpoint(authToken.refresh, clientID))
-                    .post(EMPTY_REQUEST)
-                    .build()
-                val apiResponse = client.newCall(request).execute()
-
-                if (apiResponse.code in 200..299) {
-                    val json = JSONObject(apiResponse.body?.string()!!)
-                    val refreshAuthToken = AuthToken(
-                        email,
-                        json.getString("access_token"),
-                        authToken.refresh,
-                        Date(authToken.expiration.time + json.getLong("expires_in")),
-                        authToken.provider
-                    )
-                    authRepository.save(context, refreshAuthToken)
-                    refreshResponse.complete(refreshAuthToken)
-                } else throw Exception("error on generate refresh token")
+                val json = JSONObject(response?.string()!!)
+                val refreshAuthToken = AuthToken(
+                    email,
+                    json.getString("access_token"),
+                    authToken.refresh,
+                    Date(authToken.expiration.time + json.getLong("expires_in")),
+                    authToken.provider
+                )
+                authRepository.save(context, refreshAuthToken)
+                refreshResponse.complete(refreshAuthToken)
             }
             return refreshResponse
-        } else throw Exception("unable to retrieve refresh token")
+        } else throw Exception("User not logged")
     }
 }
