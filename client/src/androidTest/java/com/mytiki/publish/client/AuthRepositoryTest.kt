@@ -1,4 +1,4 @@
-package com.mytiki.publish.client.email
+package com.mytiki.publish.client
 
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry

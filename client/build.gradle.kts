@@ -11,6 +11,7 @@ android {
     defaultConfig {
         minSdk = 23
 
+        manifestPlaceholders["appAuthRedirectScheme"] = "test"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
         vectorDrawables {
@@ -121,7 +122,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     androidTestImplementation("com.android.support.test:rules:1.0.2")
     debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.1")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.2")
     debugImplementation("androidx.test:core:1.5.0")
     debugImplementation("androidx.test:rules:1.5.0")
     debugImplementation("androidx.test:runner:1.5.2")

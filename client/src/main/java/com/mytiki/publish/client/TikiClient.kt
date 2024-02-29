@@ -14,9 +14,6 @@ import com.mytiki.publish.client.email.EmailService
 import com.mytiki.publish.client.license.LicenseService
 import com.mytiki.publish.client.ui.Theme
 import com.mytiki.publish.client.ui.TikiUI
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.async
-
 
 /**
  * Tiki Client Library
@@ -32,25 +29,52 @@ import kotlinx.coroutines.async
  * that calls the underlying libraries to perform common operations. Programmers can use it to
  * simplify the integration process or opt for individual libraries based on their specific needs.
  */
-
-class TikiClient{
+class TikiClient {
 
     companion object {
+        /**
+         * AuthService instance for handling authentication.
+         */
         val auth = AuthService()
+
+        /**
+         * CaptureService instance for handling receipt capture.
+         */
         val capture = CaptureService()
+
+        /**
+         * CloService instance for managing card-linked offers.
+         */
         val clo = CloService()
+
+        /**
+         * EmailService instance for managing email operations.
+         */
         val email = EmailService()
+
+        /**
+         * LicenseService instance for managing licensing.
+         */
         val license = LicenseService()
+
+        /**
+         * TikiUI instance for managing UI.
+         */
         lateinit var ui: TikiUI
             private set
-        fun tikiUI(tikiUI: TikiUI){
+
+        /**
+         * Sets the TikiUI instance.
+         * @param tikiUI The TikiUI instance to be set.
+         */
+        fun tikiUI(tikiUI: TikiUI) {
             ui = tikiUI
         }
     }
 
-
     /**
      * Initiates the process of scanning a physical receipt and returns the receipt ID.
+     * @param activity The ComponentActivity instance.
      * @return The scanned receipt data or an empty string if the scan is unsuccessful.
      */
     fun scan(activity: ComponentActivity): String {
@@ -58,20 +82,29 @@ class TikiClient{
     }
 
     /**
-     * Initiates the process of login to email.
+     * Initiates the process of logging in to an email account.
+     * @param context The Context instance.
      * @param provider The email provider (GOOGLE or OUTLOOK).
+     * @param emailKeys The EmailKeys instance.
+     * @param redirectURI The redirect URI.
+     * @param loginCallback Optional callback function after login.
      */
-    fun login(context: Context, provider: EmailProviderEnum, emailKeys: EmailKeys, redirectURI: String, loginCallback: ((String) -> Unit)? = null) {
-        email.login(context, provider, emailKeys, redirectURI){ email ->
+    fun login(
+        context: Context,
+        provider: EmailProviderEnum,
+        emailKeys: EmailKeys,
+        redirectURI: String,
+        loginCallback: ((String) -> Unit)? = null
+    ) {
+        email.login(context, provider, emailKeys, redirectURI) { email ->
             TikiClient.email.messagesIndex(context, email)
-            if (loginCallback != null) {
-                loginCallback(email)
-            }
+            loginCallback?.invoke(email)
         }
     }
 
     /**
      * Removes a previously added email account.
+     * @param context The Context instance.
      * @param email The email account to be removed.
      */
     fun logout(context: Context, email: String) {
@@ -79,20 +112,24 @@ class TikiClient{
     }
 
     /**
-     * Retrieves the list of connected email accountsPerProvider.
-     * @return List of connected email accountsPerProvider.
+     * Retrieves the list of connected email accounts.
+     * @param context The Context instance.
+     * @return List of connected email accounts.
      */
     fun accounts(context: Context): List<String> {
         val emailList = mutableListOf<String>()
-        EmailProviderEnum.entries.forEach { provider ->
+        EmailProviderEnum.values().forEach { provider ->
             val list = email.accountsPerProvider(context, provider)
-            if(list.isNotEmpty()) emailList.addAll(list)
+            if (list.isNotEmpty()) emailList.addAll(list)
         }
         return emailList
     }
 
     /**
      * Initiates the process of scraping receipts from emails.
+     * @param context The Context instance.
+     * @param email The email account.
+     * @param clientID The client ID.
      */
     fun scrape(context: Context, email: String, clientID: String) {
         TikiClient.email.scrape(context, email, clientID)
@@ -132,8 +169,8 @@ class TikiClient{
     }
 
     /**
-     * Displays the widget for pre-built UIs with a custom themeObj.
-     * @param theme The custom themeObj for the widget.
+     * Displays the widget for pre-built UIs with a custom theme.
+     * @param theme The custom theme for the widget.
      */
     fun widget(theme: Theme?) {
     }

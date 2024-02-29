@@ -28,24 +28,28 @@ import java.util.*
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
-
+/**
+ * Service class for authentication with TIKI.
+ */
 class AuthService {
 
     val authRepository = AuthRepository()
 
     /**
      * Authenticates with TIKI and saves the auth and refresh tokens.
-     *
-     * @param publishingId
-     * @param userId
+     * @param publishingId The publishing ID.
+     * @param userId The user ID.
      * @return The authentication token.
      */
-    fun authenticate(publishingId: String, userId: String): String{
+    fun authenticate(publishingId: String, userId: String): String {
+        // Placeholder method, to be implemented
         return ""
     }
 
     /**
      * Retrieves the authentication token, refreshing if necessary.
+     * @param providerID The provider ID.
+     * @param publicKey The public key.
      * @return The authentication token.
      */
     fun token(providerID: String, publicKey: String): CompletableDeferred<String> {
@@ -57,7 +61,7 @@ class AuthService {
                 .add("client_secret", publicKey)
                 .add("scope", "account:provider trail publish")
                 .add("expires", "600")
-                .build();
+                .build()
 
             val response = ApiService.post(
                 mapOf("accept" to "application/json"),
@@ -68,10 +72,13 @@ class AuthService {
 
             token.complete(TikiTokenResponse.fromJson(JSONObject(response?.string()!!)).access_token)
         }
-       return token
+        return token
     }
 
-
+    /**
+     * Gets the RSA key pair.
+     * @return The RSA key pair.
+     */
     fun getKey(): KeyPair? {
         try {
             val keyStore = KeyStore.getInstance("AndroidKeyStore")
@@ -103,6 +110,11 @@ class AuthService {
         }
     }
 
+    /**
+     * Generates the address.
+     * @param keyPair The RSA key pair.
+     * @return The address.
+     */
     @OptIn(ExperimentalEncodingApi::class)
     fun address(keyPair: KeyPair): String? {
         try {
@@ -111,13 +123,19 @@ class AuthService {
             val digest = SHA3.Digest256()
             val addressBytes = digest.digest(publicKeyBytes)
 
-            return Base64.UrlSafe.encode(addressBytes).replace("=","")
+            return Base64.UrlSafe.encode(addressBytes).replace("=", "")
         } catch (e: NoSuchAlgorithmException) {
             e.printStackTrace()
             return null
         }
     }
 
+    /**
+     * Signs the message.
+     * @param message The message.
+     * @param privateKey The private key.
+     * @return The signature.
+     */
     fun signMessage(message: String, privateKey: PrivateKey): ByteArray? {
         val signature = Signature
             .getInstance("SHA256withRSA")
@@ -128,8 +146,15 @@ class AuthService {
         return signature.sign()
     }
 
+    /**
+     * Registers the address.
+     * @param providerID The provider ID.
+     * @param publicKey The public key.
+     * @param userId The user ID.
+     * @return The registration response.
+     */
     @OptIn(ExperimentalEncodingApi::class)
-    fun registerAddress(providerId: String, userId: String): CompletableDeferred<RegisterAddressResponse> {
+    fun registerAddress(providerID: String, publicKey: String, userId: String): CompletableDeferred<RegisterAddressResponse> {
         val registerAddress = CompletableDeferred<RegisterAddressResponse>()
         try {
             MainScope().async {
@@ -149,9 +174,14 @@ class AuthService {
                         .toString()
                         .toRequestBody("application/json".toMediaTypeOrNull())
 
+                    val token = token(providerID, publicKey).await()
+
                     val response = ApiService.post(
-                        mapOf("accept" to "application/json"),
-                        "https://account.mytiki.com/api/latest/provider/$providerId/user",
+                        mapOf(
+                            "Authorization" to "Bearer $token",
+                            "accept" to "application/json"
+                        ),
+                        "https://account.mytiki.com/api/latest/provider/$providerID/user",
                         jsonBody,
                         Exception("error on registerAddress")
                     ).await()
@@ -167,16 +197,21 @@ class AuthService {
     /**
      * Revokes the authentication token.
      */
-    fun revoke(){}
+    fun revoke() {
+        // Placeholder method, to be implemented
+    }
 
     /**
      * Refreshes the authentication token.
+     * @param context The context.
+     * @param email The email.
+     * @param clientID The client ID.
      * @return The updated authentication token.
      */
-    fun refresh(context: Context, email: String, clientID: String): CompletableDeferred<AuthToken>{
+    fun refresh(context: Context, email: String, clientID: String): CompletableDeferred<AuthToken> {
         val refreshResponse = CompletableDeferred<AuthToken>()
         val authToken = authRepository.get(context, email)
-        if (authToken != null){
+        if (authToken != null) {
             CoroutineScope(Dispatchers.IO).launch {
                 val response = ApiService.post(
                     null,
