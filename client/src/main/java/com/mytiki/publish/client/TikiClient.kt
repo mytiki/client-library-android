@@ -8,12 +8,11 @@ import com.mytiki.publish.client.clo.CloService
 import com.mytiki.publish.client.clo.Offer
 import com.mytiki.publish.client.clo.Reward
 import com.mytiki.publish.client.clo.Transaction
+import com.mytiki.publish.client.config.Config
 import com.mytiki.publish.client.email.EmailKeys
 import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.email.EmailService
 import com.mytiki.publish.client.license.LicenseService
-import com.mytiki.publish.client.ui.Theme
-import com.mytiki.publish.client.ui.TikiUI
 
 /**
  * Tiki Client Library
@@ -29,49 +28,78 @@ import com.mytiki.publish.client.ui.TikiUI
  * that calls the underlying libraries to perform common operations. Programmers can use it to
  * simplify the integration process or opt for individual libraries based on their specific needs.
  */
-class TikiClient {
-
-    companion object {
-        /**
-         * AuthService instance for handling authentication.
-         */
-        val auth = AuthService()
-
-        /**
-         * CaptureService instance for handling receipt capture.
-         */
-        val capture = CaptureService()
-
-        /**
-         * CloService instance for managing card-linked offers.
-         */
-        val clo = CloService()
-
-        /**
-         * EmailService instance for managing email operations.
-         */
-        val email = EmailService()
-
-        /**
-         * LicenseService instance for managing licensing.
-         */
-        val license = LicenseService()
-
-        /**
-         * TikiUI instance for managing UI.
-         */
-        lateinit var ui: TikiUI
-            private set
-
-        /**
-         * Sets the TikiUI instance.
-         * @param tikiUI The TikiUI instance to be set.
-         */
-        fun tikiUI(tikiUI: TikiUI) {
-            ui = tikiUI
+object TikiClient {
+    /**
+     * AuthService instance for handling authentication.
+     */
+    val auth = AuthService()
+        get() {
+            check()
+            return field
         }
+
+    /**
+     * CaptureService instance for handling receipt capture.
+     */
+    val capture = CaptureService()
+        get() {
+            check()
+            return field
+        }
+
+    /**
+     * CloService instance for managing card-linked offers.
+     */
+    val clo = CloService()
+        get() {
+            check()
+            return field
+        }
+
+    /**
+     * EmailService instance for managing email operations.
+     */
+    val email = EmailService()
+        get() {
+            check()
+            return field
+        }
+
+    /**
+     * LicenseService instance for managing licensing.
+     */
+    val license = LicenseService()
+        get() {
+            check()
+            return field
+        }
+
+
+    lateinit var userID: String
+        private set
+    lateinit var config: Config
+        private set
+
+    private fun check(): Boolean {
+        if (this::config.isInitialized) throw Exception(
+            "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration."
+        ) else if (userID.isEmpty() || this::userID.isInitialized) throw Exception(
+            "User ID is not set. Use the TikiClient.initialize method to set the user ID."
+        ) else return true
     }
 
+    fun configure(config: Config){
+        this.config = config
+    }
+    fun initialize(userID: String){
+        if (this::config.isInitialized) throw Exception(
+            "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration."
+        ) else if (userID.isNotEmpty()){
+            this.userID = userID
+        } else throw Exception(
+            "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID."
+        )
+    }
     /**
      * Initiates the process of scanning a physical receipt and returns the receipt ID.
      * @param activity The ComponentActivity instance.
@@ -133,45 +161,5 @@ class TikiClient {
      */
     fun scrape(context: Context, email: String, clientID: String) {
         TikiClient.email.scrape(context, email, clientID)
-    }
-
-    /**
-     * Adds a card for card-linked offers.
-     * @param last4 Last 4 digits of the card.
-     * @param bin Bank Identification Number.
-     * @param issuer Card issuer.
-     * @param network Card network (VISA, MASTERCARD, AMERICAN EXPRESS, or DISCOVERY).
-     */
-    fun card(last4: String, bin: String, issuer: String, network: String) {
-    }
-
-    /**
-     * Retrieves card-linked offers for the user.
-     * @return List of card-linked offers.
-     */
-    fun offers(): List<Offer> {
-        return listOf()
-    }
-
-    /**
-     * Submits a transaction for card-linked offer matching.
-     * @param transaction The transaction information.
-     */
-    fun transaction(transaction: Transaction) {
-    }
-
-    /**
-     * Retrieves information about the user's rewards.
-     * @return List of user rewards.
-     */
-    fun rewards(): List<Reward> {
-        return listOf()
-    }
-
-    /**
-     * Displays the widget for pre-built UIs with a custom theme.
-     * @param theme The custom theme for the widget.
-     */
-    fun widget(theme: Theme?) {
     }
 }

@@ -25,7 +25,7 @@ class EmailActivity : AppCompatActivity() {
             val clientID = extras.getString("clientID") ?: throw Exception("clientID not identified")
             val clientSecret = extras.getString("clientSecret") ?: throw Exception("clientSecret not identified")
             val redirectURI = extras.getString("redirectURI") ?: throw Exception("redirectURI not identified")
-            val (authIntent, authService) = TikiClient.email.authRequest(this@EmailActivity, provider, clientID, redirectURI)
+            val (authIntent, authService) = TikiClient.auth.emailAuthRequest(this@EmailActivity, provider, clientID, redirectURI)
 
             val startForResult = registerForActivityResult(
                 ActivityResultContracts.StartActivityForResult()

@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.email.messageResponse.Message
@@ -13,10 +12,6 @@ import com.mytiki.publish.client.email.messageResponse.MessagePartBody
 import com.mytiki.publish.client.email.messageResponse.MessageResponse
 import com.mytiki.publish.client.utils.apiService.ApiService
 import kotlinx.coroutines.*
-import net.openid.appauth.AuthorizationRequest
-import net.openid.appauth.AuthorizationService
-import net.openid.appauth.AuthorizationServiceConfiguration
-import net.openid.appauth.ResponseTypeValues
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import java.io.File
@@ -30,8 +25,6 @@ import kotlin.io.encoding.ExperimentalEncodingApi
  */
 class EmailService {
 
-    var googleKeys: EmailKeys? = null
-    var outlookKeys: EmailKeys? = null
     val emailRepository = EmailRepository()
 
     var loginCallback: (String) -> Unit = {}
@@ -55,30 +48,6 @@ class EmailService {
         intent.putExtra("redirectURI", redirectURI)
 
         context.startActivity(intent)
-    }
-
-    /**
-     * Initiates the authorization request with the specified parameters.
-     * @param context The context.
-     * @param provider The email provider (GOOGLE or OUTLOOK).
-     * @param clientID The client ID.
-     * @param redirectURI The redirect URI.
-     * @return A pair containing the authorization request intent and the authorization service.
-     */
-    fun authRequest(context: Context, provider: EmailProviderEnum, clientID: String, redirectURI: String): Pair<Intent?, AuthorizationService> {
-        val authServiceConfig = AuthorizationServiceConfiguration(
-            Uri.parse(provider.authorizationEndpoint),
-            Uri.parse(provider.tokenEndpoint)
-        )
-        val authRequest = AuthorizationRequest.Builder(
-            authServiceConfig,
-            clientID,
-            ResponseTypeValues.CODE,
-            Uri.parse(redirectURI)
-        )
-        authRequest.setScope(provider.scopes)
-        val authService = AuthorizationService(context)
-        return Pair(authService.getAuthorizationRequestIntent(authRequest.build()), authService)
     }
 
     /**
@@ -199,7 +168,7 @@ class EmailService {
      * @return A CompletableDeferred indicating the completion of the scraping process.
      */
     fun scrape(context: Context, email: String, clientID: String): CompletableDeferred<Boolean> {
-        TikiClient.auth.refresh(context, email, clientID)
+        TikiClient.auth.emailAuthRefresh(context, email, clientID)
         val scrape = CompletableDeferred<Boolean>()
         CoroutineScope(Dispatchers.IO).launch {
             var isWorking = true
@@ -474,23 +443,4 @@ class EmailService {
         TikiClient.email.emailRepository.deleteIndexes(context, email)
         TikiClient.email.emailRepository.removeData(context, email)
     }
-
-    /**
-     * Sets Google OAuth client credentials.
-     * @param clientId The client ID.
-     * @param clientSecret The client secret.
-     */
-    fun googleKeys(clientId: String, clientSecret: String) {
-        googleKeys = EmailKeys(clientId, clientSecret)
-    }
-
-    /**
-     * Sets Outlook OAuth client credentials.
-     * @param clientId The client ID.
-     * @param clientSecret The client secret.
-     */
-    fun outlookKeys(clientId: String, clientSecret: String) {
-        outlookKeys = EmailKeys(clientId, clientSecret)
-    }
-
 }

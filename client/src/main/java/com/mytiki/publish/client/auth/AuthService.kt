@@ -1,29 +1,25 @@
 package com.mytiki.publish.client.auth
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
+import com.mytiki.publish.client.TikiClient
+import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.utils.apiService.ApiService
 import kotlinx.coroutines.*
+import net.openid.appauth.AuthorizationRequest
+import net.openid.appauth.AuthorizationService
+import net.openid.appauth.AuthorizationServiceConfiguration
+import net.openid.appauth.ResponseTypeValues
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.internal.EMPTY_REQUEST
-import okhttp3.logging.HttpLoggingInterceptor
-import org.bouncycastle.cert.jcajce.JcaCertStore
-import org.bouncycastle.cms.CMSProcessableByteArray
-import org.bouncycastle.cms.CMSSignedDataGenerator
-import org.bouncycastle.cms.CMSTypedData
-import org.bouncycastle.cms.jcajce.JcaSignerInfoGeneratorBuilder
 import org.bouncycastle.jcajce.provider.digest.SHA3
-import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder
-import org.bouncycastle.operator.jcajce.JcaDigestCalculatorProviderBuilder
-import org.bouncycastle.util.Store
 import org.json.JSONObject
-import java.io.ByteArrayInputStream
 import java.security.*
-import java.security.cert.CertificateFactory
-import java.security.cert.X509Certificate
 import java.util.*
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
@@ -36,29 +32,18 @@ class AuthService {
     val authRepository = AuthRepository()
 
     /**
-     * Authenticates with TIKI and saves the auth and refresh tokens.
-     * @param publishingId The publishing ID.
-     * @param userId The user ID.
-     * @return The authentication token.
-     */
-    fun authenticate(publishingId: String, userId: String): String {
-        // Placeholder method, to be implemented
-        return ""
-    }
-
-    /**
      * Retrieves the authentication token, refreshing if necessary.
      * @param providerID The provider ID.
      * @param publicKey The public key.
      * @return The authentication token.
      */
-    fun token(providerID: String, publicKey: String): CompletableDeferred<String> {
+    fun token(): CompletableDeferred<String> {
         val token = CompletableDeferred<String>()
         CoroutineScope(Dispatchers.IO).launch {
             val body = FormBody.Builder()
                 .add("grant_type", "client_credentials")
-                .add("client_id", "provider:$providerID")
-                .add("client_secret", publicKey)
+                .add("client_id", "provider:${TikiClient.config.providerId}")
+                .add("client_secret", TikiClient.config.publicKey)
                 .add("scope", "account:provider trail publish")
                 .add("expires", "600")
                 .build()
@@ -154,34 +139,35 @@ class AuthService {
      * @return The registration response.
      */
     @OptIn(ExperimentalEncodingApi::class)
-    fun registerAddress(providerID: String, publicKey: String, userId: String): CompletableDeferred<RegisterAddressResponse> {
+    fun registerAddress(): CompletableDeferred<RegisterAddressResponse> {
+
         val registerAddress = CompletableDeferred<RegisterAddressResponse>()
         try {
             MainScope().async {
                 val keyPair = getKey()
                 val address = keyPair?.let { address(it) }
                 val signature = address?.let { address ->
-                    signMessage("$userId.$address", keyPair.private)?.let { Base64.Default.encode(it) }
+                    signMessage("${TikiClient.userID}.$address", keyPair.private)?.let { Base64.Default.encode(it) }
                 }
                 val pubKey = keyPair?.let { Base64.Default.encode(it.public.encoded) }
 
                 if (!address.isNullOrEmpty() && !pubKey.isNullOrEmpty() && !signature.isNullOrEmpty()) {
                     val jsonBody = JSONObject()
-                        .put("id", userId)
+                        .put("id", TikiClient.userID)
                         .put("address", address)
                         .put("pubKey", pubKey)
                         .put("signature", signature)
                         .toString()
                         .toRequestBody("application/json".toMediaTypeOrNull())
 
-                    val token = token(providerID, publicKey).await()
+                    val token = token().await()
 
                     val response = ApiService.post(
                         mapOf(
                             "Authorization" to "Bearer $token",
                             "accept" to "application/json"
                         ),
-                        "https://account.mytiki.com/api/latest/provider/$providerID/user",
+                        "https://account.mytiki.com/api/latest/provider/${TikiClient.config.providerId}/user",
                         jsonBody,
                         Exception("error on registerAddress")
                     ).await()
@@ -201,6 +187,31 @@ class AuthService {
         // Placeholder method, to be implemented
     }
 
+
+    /**
+     * Initiates the authorization request with the specified parameters.
+     * @param context The context.
+     * @param provider The email provider (GOOGLE or OUTLOOK).
+     * @param clientID The client ID.
+     * @param redirectURI The redirect URI.
+     * @return A pair containing the authorization request intent and the authorization service.
+     */
+    fun emailAuthRequest(context: Context, provider: EmailProviderEnum, clientID: String, redirectURI: String): Pair<Intent?, AuthorizationService> {
+        val authServiceConfig = AuthorizationServiceConfiguration(
+            Uri.parse(provider.authorizationEndpoint),
+            Uri.parse(provider.tokenEndpoint)
+        )
+        val authRequest = AuthorizationRequest.Builder(
+            authServiceConfig,
+            clientID,
+            ResponseTypeValues.CODE,
+            Uri.parse(redirectURI)
+        )
+        authRequest.setScope(provider.scopes)
+        val authService = AuthorizationService(context)
+        return Pair(authService.getAuthorizationRequestIntent(authRequest.build()), authService)
+    }
+
     /**
      * Refreshes the authentication token.
      * @param context The context.
@@ -208,9 +219,9 @@ class AuthService {
      * @param clientID The client ID.
      * @return The updated authentication token.
      */
-    fun refresh(context: Context, email: String, clientID: String): CompletableDeferred<AuthToken> {
+    fun emailAuthRefresh(context: Context, email: String, clientID: String): CompletableDeferred<AuthToken> {
         val refreshResponse = CompletableDeferred<AuthToken>()
-        val authToken = authRepository.get(context, email)
+        val authToken = TikiClient.auth.authRepository.get(context, email)
         if (authToken != null) {
             CoroutineScope(Dispatchers.IO).launch {
                 val response = ApiService.post(
@@ -228,7 +239,7 @@ class AuthService {
                     Date(authToken.expiration.time + json.getLong("expires_in")),
                     authToken.provider
                 )
-                authRepository.save(context, refreshAuthToken)
+                TikiClient.auth.authRepository.save(context, refreshAuthToken)
                 refreshResponse.complete(refreshAuthToken)
             }
             return refreshResponse

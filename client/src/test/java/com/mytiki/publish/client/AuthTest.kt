@@ -21,16 +21,14 @@ class AuthTest {
         assert(auth.equals(newAuth))
     }
 
-    @OptIn(ExperimentalEncodingApi::class)
     @Test
     fun test_Address_Passing(){
-        val pubKey = "pub_key_test".toByteArray()
-        val sha3 ="435e9c70afe599801e31cd05129cd139e2cc4204d9e4446d1b625be08afb3397".toByteArray()
-
+        val mockPubKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA5+WkJoKVztWrBdsbbpYdU004laU5u7rTyi5ktiQSwfpus1ug5hb8jm8jreb9RcQuMMO9by0C8Lto0iLXoTg6BvFVjnib5n9h3g35b8G1UCjfYOvU1Dgayy6JxFx4F7R+wxTyzkImCdSo/hl1WaC2yHM/69FKB/FEabiLzi8GLrTW2smRQ0d704zmw3g0qy0n5iI9M7LJXbHJaGVJUyvyqeDWJ34PbpJ/8FRvEVuuCd2bFa//Rm1AMrVopU6qKoWz5CF29PobA59b9PpggxoZpNbeJaRtqYdAKQd85VvJcaxMAAK4/vuoPVCj7ROaPAZ6wsrDiF/afb9x7JNwiON9jQIDAQAB".toByteArray()
+        val mockAddress = "OLpxy2iCCmfGVrLr2BHKAsoE6cDFXMOm6tOpZEJAz0I"
         val keyPair = mockk<KeyPair>()
-        every { keyPair.public.encoded } returns pubKey
+        every { keyPair.public.encoded } returns mockPubKey
 
-        val addressSHA3 = AuthService().address(keyPair)?.let { Base64.UrlSafe.decode(it) }
-        assert(sha3.contentEquals(addressSHA3))
+        val address = AuthService().address(keyPair)
+        assert(address == mockAddress)
     }
 }
