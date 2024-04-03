@@ -1,22 +1,13 @@
 package com.mytiki.publish.client.auth
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import com.mytiki.publish.client.TikiClient
-import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.utils.apiService.ApiService
 import kotlinx.coroutines.*
-import net.openid.appauth.AuthorizationRequest
-import net.openid.appauth.AuthorizationService
-import net.openid.appauth.AuthorizationServiceConfiguration
-import net.openid.appauth.ResponseTypeValues
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.internal.EMPTY_REQUEST
 import org.bouncycastle.jcajce.provider.digest.SHA3
 import org.json.JSONObject
 import java.security.*
@@ -29,7 +20,6 @@ import kotlin.io.encoding.ExperimentalEncodingApi
  */
 class AuthService {
 
-    val authRepository = AuthRepository()
 
     /**
      * Retrieves the authentication token, refreshing if necessary.
@@ -185,64 +175,5 @@ class AuthService {
      */
     fun revoke() {
         // Placeholder method, to be implemented
-    }
-
-
-    /**
-     * Initiates the authorization request with the specified parameters.
-     * @param context The context.
-     * @param provider The email provider (GOOGLE or OUTLOOK).
-     * @param clientID The client ID.
-     * @param redirectURI The redirect URI.
-     * @return A pair containing the authorization request intent and the authorization service.
-     */
-    fun emailAuthRequest(context: Context, provider: EmailProviderEnum, clientID: String, redirectURI: String): Pair<Intent?, AuthorizationService> {
-        val authServiceConfig = AuthorizationServiceConfiguration(
-            Uri.parse(provider.authorizationEndpoint),
-            Uri.parse(provider.tokenEndpoint)
-        )
-        val authRequest = AuthorizationRequest.Builder(
-            authServiceConfig,
-            clientID,
-            ResponseTypeValues.CODE,
-            Uri.parse(redirectURI)
-        )
-        authRequest.setScope(provider.scopes)
-        val authService = AuthorizationService(context)
-        return Pair(authService.getAuthorizationRequestIntent(authRequest.build()), authService)
-    }
-
-    /**
-     * Refreshes the authentication token.
-     * @param context The context.
-     * @param email The email.
-     * @param clientID The client ID.
-     * @return The updated authentication token.
-     */
-    fun emailAuthRefresh(context: Context, email: String, clientID: String): CompletableDeferred<AuthToken> {
-        val refreshResponse = CompletableDeferred<AuthToken>()
-        val authToken = TikiClient.auth.authRepository.get(context, email)
-        if (authToken != null) {
-            CoroutineScope(Dispatchers.IO).launch {
-                val response = ApiService.post(
-                    null,
-                    authToken.provider.refreshTokenEndpoint(authToken.refresh, clientID),
-                    EMPTY_REQUEST,
-                    Exception("error on generate refresh token")
-                ).await()
-
-                val json = JSONObject(response?.string()!!)
-                val refreshAuthToken = AuthToken(
-                    email,
-                    json.getString("access_token"),
-                    authToken.refresh,
-                    Date(authToken.expiration.time + json.getLong("expires_in")),
-                    authToken.provider
-                )
-                TikiClient.auth.authRepository.save(context, refreshAuthToken)
-                refreshResponse.complete(refreshAuthToken)
-            }
-            return refreshResponse
-        } else throw Exception("User not logged")
     }
 }

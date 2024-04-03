@@ -1,18 +1,13 @@
 package com.mytiki.publish.client
 
-import android.content.Context
 import androidx.activity.ComponentActivity
 import com.mytiki.publish.client.auth.AuthService
 import com.mytiki.publish.client.capture.CaptureService
-import com.mytiki.publish.client.clo.CloService
-import com.mytiki.publish.client.clo.Offer
-import com.mytiki.publish.client.clo.Reward
-import com.mytiki.publish.client.clo.Transaction
 import com.mytiki.publish.client.config.Config
-import com.mytiki.publish.client.email.EmailKeys
-import com.mytiki.publish.client.email.EmailProviderEnum
-import com.mytiki.publish.client.email.EmailService
 import com.mytiki.publish.client.license.LicenseService
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.async
 
 /**
  * Tiki Client Library
@@ -48,24 +43,6 @@ object TikiClient {
         }
 
     /**
-     * CloService instance for managing card-linked offers.
-     */
-    val clo = CloService()
-        get() {
-            check()
-            return field
-        }
-
-    /**
-     * EmailService instance for managing email operations.
-     */
-    val email = EmailService()
-        get() {
-            check()
-            return field
-        }
-
-    /**
      * LicenseService instance for managing licensing.
      */
     val license = LicenseService()
@@ -81,9 +58,9 @@ object TikiClient {
         private set
 
     private fun check(): Boolean {
-        if (this::config.isInitialized) throw Exception(
+        if (!this::config.isInitialized) throw Exception(
             "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration."
-        ) else if (userID.isEmpty() || this::userID.isInitialized) throw Exception(
+        ) else if (userID.isEmpty() || !this::userID.isInitialized) throw Exception(
             "User ID is not set. Use the TikiClient.initialize method to set the user ID."
         ) else return true
     }
@@ -91,11 +68,17 @@ object TikiClient {
     fun configure(config: Config){
         this.config = config
     }
-    fun initialize(userID: String){
-        if (this::config.isInitialized) throw Exception(
+    fun initialize(userID: String):CompletableDeferred<Unit>{
+        if (!this::config.isInitialized) throw Exception(
             "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration."
         ) else if (userID.isNotEmpty()){
-            this.userID = userID
+            val isInitialized = CompletableDeferred<Unit>()
+            MainScope().async {
+                this@TikiClient.userID = userID
+                auth.registerAddress().await()
+                isInitialized.complete(Unit)
+            }
+            return isInitialized
         } else throw Exception(
             "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID."
         )
@@ -105,61 +88,7 @@ object TikiClient {
      * @param activity The ComponentActivity instance.
      * @return The scanned receipt data or an empty string if the scan is unsuccessful.
      */
-    fun scan(activity: ComponentActivity): String {
-        return ""
-    }
-
-    /**
-     * Initiates the process of logging in to an email account.
-     * @param context The Context instance.
-     * @param provider The email provider (GOOGLE or OUTLOOK).
-     * @param emailKeys The EmailKeys instance.
-     * @param redirectURI The redirect URI.
-     * @param loginCallback Optional callback function after login.
-     */
-    fun login(
-        context: Context,
-        provider: EmailProviderEnum,
-        emailKeys: EmailKeys,
-        redirectURI: String,
-        loginCallback: ((String) -> Unit)? = null
-    ) {
-        email.login(context, provider, emailKeys, redirectURI) { email ->
-            TikiClient.email.messagesIndex(context, email)
-            loginCallback?.invoke(email)
-        }
-    }
-
-    /**
-     * Removes a previously added email account.
-     * @param context The Context instance.
-     * @param email The email account to be removed.
-     */
-    fun logout(context: Context, email: String) {
-        TikiClient.email.logout(context, email)
-    }
-
-    /**
-     * Retrieves the list of connected email accounts.
-     * @param context The Context instance.
-     * @return List of connected email accounts.
-     */
-    fun accounts(context: Context): List<String> {
-        val emailList = mutableListOf<String>()
-        EmailProviderEnum.values().forEach { provider ->
-            val list = email.accountsPerProvider(context, provider)
-            if (list.isNotEmpty()) emailList.addAll(list)
-        }
-        return emailList
-    }
-
-    /**
-     * Initiates the process of scraping receipts from emails.
-     * @param context The Context instance.
-     * @param email The email account.
-     * @param clientID The client ID.
-     */
-    fun scrape(context: Context, email: String, clientID: String) {
-        TikiClient.email.scrape(context, email, clientID)
+    fun scan(activity: ComponentActivity) {
+        capture.camera(activity)
     }
 }

@@ -1,15 +1,12 @@
 package com.mytiki.publish.client
 
 import com.mytiki.publish.client.auth.AuthService
-import com.mytiki.publish.client.auth.AuthToken
 import com.mytiki.publish.client.email.EmailProviderEnum
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
 import java.security.KeyPair
 import java.util.*
-import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
 
 class AuthTest {
     @Test
