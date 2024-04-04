@@ -35,7 +35,7 @@ class CaptureService {
         // Placeholder method, to be implemented
         val isPublished = CompletableDeferred<Unit>()
         CoroutineScope(Dispatchers.IO).launch {
-            val auth = TikiClient.auth.providerToken().await()
+            val auth = TikiClient.auth.addressToken().await()
             val file = File.createTempFile("receipt", ".jpeg")
             val output = file.outputStream()
             val image = data.compress(Bitmap.CompressFormat.JPEG, 100, output)
