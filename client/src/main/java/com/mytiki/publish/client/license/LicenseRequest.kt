@@ -1,6 +1,7 @@
 package com.mytiki.publish.client.license
 
 import android.content.Context
+import android.util.Log
 import com.mytiki.publish.client.TikiClient
 import org.json.JSONArray
 import org.json.JSONObject
@@ -18,6 +19,7 @@ class LicenseRequest(
         userSignature = address?.let { TikiClient.auth.signMessage(it, keys.private) }
     }
 
+    @OptIn(ExperimentalEncodingApi::class)
     fun toJSON(context: Context): JSONObject{
         val jsonBody = JSONObject()
             .put("ptr", TikiClient.userID)
@@ -32,6 +34,14 @@ class LicenseRequest(
             .put("origin", context.packageName)
             .put("expiry", JSONObject.NULL)
             .put("terms", TikiClient.license.terms(context))
+
+        val privateKey = TikiClient.auth.getKey()?.private ?:
+        throw Exception("Private key not found")
+
+        val signature =  TikiClient.auth.signMessage(jsonBody.toString(), privateKey) ?:
+        throw Exception("Error on Signing Message")
+
+        jsonBody.put("signature", Base64.Default.encode(signature))
         return jsonBody
     }
 }

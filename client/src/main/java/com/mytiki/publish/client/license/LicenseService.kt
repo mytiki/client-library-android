@@ -32,10 +32,6 @@ class LicenseService {
     suspend fun create(context: Context): Boolean {
         val licenseRequest = LicenseRequest(TikiClient.userID)
         val jsonBody = licenseRequest.toJSON(context)
-        val privateKey = TikiClient.auth.getKey()?.private ?: throw Exception("Private key not found")
-        val signature =  TikiClient.auth.signMessage(jsonBody.toString(), privateKey)
-        Log.d("**************", signature.toString())
-        jsonBody.put("signature", signature)
         val body = jsonBody.toString().toRequestBody("application/json".toMediaType())
         ApiService.post(
             header = mapOf(
