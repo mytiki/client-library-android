@@ -52,13 +52,14 @@ class CaptureService {
                     .build()
 
                 ApiService.post(
-                    mapOf(
+                    header =  mapOf(
                         "Content-Type" to "image/jpeg",
                         "Authorization" to "Bearer $auth"
                     ),
-                    "https://publish.mytiki.com/receipt/${id}",
-                    Exception("error uploading image"),
-                    body
+
+                    endPoint = "https://publish.mytiki.com/receipt/${id}",
+                    onError = Exception("error uploading image"),
+                    body,
                 ).await()
                 isPublished.complete(Unit)
             } else throw Exception("error on compressing image")

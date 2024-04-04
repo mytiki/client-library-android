@@ -38,7 +38,6 @@ fun providerToken(): Deferred<String> = CoroutineScope(Dispatchers.IO).async {
         onError = Exception("error on getting token"),
         body
     ).await()
-
     TikiTokenResponse.fromJson(JSONObject(response?.string()!!)).access_token
 }
 
@@ -49,7 +48,6 @@ fun addressToken(): Deferred<String> = CoroutineScope(Dispatchers.IO).async {
     val signature = Base64.Default.encode(
         signMessage(address, keyPair.private)?: throw Exception("error on signing message")
     )
-
     val body = FormBody.Builder()
         .add("grant_type", "client_credentials")
         .add("client_id","addr:${TikiClient.config.providerId}:$address")
@@ -57,7 +55,6 @@ fun addressToken(): Deferred<String> = CoroutineScope(Dispatchers.IO).async {
         .add("scope", "trail publish")
         .add("expires", "600")
         .build()
-
     val response = ApiService.post(
         header =  mapOf(
             "Accept" to "application/json",
@@ -67,7 +64,6 @@ fun addressToken(): Deferred<String> = CoroutineScope(Dispatchers.IO).async {
         onError = Exception("error on getting token"),
         body,
     ).await()
-
     TikiTokenResponse.fromJson(JSONObject(response?.string()!!)).access_token
 }
 
