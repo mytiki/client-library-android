@@ -35,7 +35,7 @@ class CaptureService {
         // Placeholder method, to be implemented
         val isPublished = CompletableDeferred<Unit>()
         CoroutineScope(Dispatchers.IO).launch {
-            if(TikiClient.license.verify()) throw Exception("The License is invalid. Use the TikiClient.license method to issue a new License.")
+            if(!TikiClient.license.verify()) throw Exception("The License is invalid. Use the TikiClient.license method to issue a new License.")
             val auth = TikiClient.auth.addressToken().await()
             val file = File.createTempFile("receipt", ".jpeg")
             val output = file.outputStream()
