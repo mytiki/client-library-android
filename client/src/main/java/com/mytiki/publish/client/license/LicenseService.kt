@@ -1,11 +1,8 @@
 package com.mytiki.publish.client.license
 
 import android.content.Context
-import android.util.Log
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.utils.apiService.ApiService
-import org.json.JSONArray
-import org.json.JSONObject
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 
@@ -33,16 +30,15 @@ class LicenseService {
         val licenseRequest = LicenseRequest(TikiClient.userID)
         val jsonBody = licenseRequest.toJSON(context)
         val body = jsonBody.toString().toRequestBody("application/json".toMediaType())
+        val addressToken = TikiClient.auth.addressToken().await()
         ApiService.post(
             header = mapOf(
-                "Authorization" to "Bearer ${TikiClient.auth.token().await()}",
+                "Authorization" to "Bearer $addressToken",
                 "Content-Type" to "application/json",
-                "Access-Control-Allow-Origin" to "http://localhost:5173",
-                "Access-Control-Allow-Credentials" to "true",
             ),
             endPoint = "https://trail.mytiki.com/license/create",
-            body = body,
-            onError = Exception("error on creating license")
+            onError = Exception("error on creating license"),
+            body = body
         ).await()
         return true
     }
@@ -61,7 +57,17 @@ class LicenseService {
      * @param userId The user ID.
      * @return True if the license is valid, false otherwise.
      */
-    suspend fun verify(userId: String) {}
+    suspend fun verify(): Boolean {
+        ApiService.post(
+            header = mapOf(
+                "Authorization" to "Bearer ${TikiClient.auth.addressToken().await()}",
+                "Content-Type" to "application/json",
+            ),
+            endPoint = "https://trail.mytiki.com/license/verify",
+            onError = Exception("error on creating license")
+        ).await()
+        return true
+    }
 
     /**
      * Retrieves the terms of service.

@@ -75,10 +75,19 @@ class MainActivity : AppCompatActivity() {
                                 loginOutput = resp.address
                             }
                         }
+
                         Spacer(modifier = Modifier.height(30.dp))
-                        MainButton(text = "Get TikiToken") {
+                        MainButton(text = "Get Provider Token") {
                             CoroutineScope(Dispatchers.IO).launch {
-                                val resp =  TikiClient.auth.token().await()
+                                val resp =  TikiClient.auth.providerToken().await()
+                                loginOutput = resp
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(30.dp))
+                        MainButton(text = "Get Address Token") {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val resp =  TikiClient.auth.addressToken().await()
                                 loginOutput = resp
                             }
                         }
@@ -87,6 +96,14 @@ class MainActivity : AppCompatActivity() {
                         MainButton(text = "Create license") {
                             CoroutineScope(Dispatchers.IO).launch {
                                 val license = TikiClient.license.create(this@MainActivity)
+                                loginOutput = license.toString()
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(30.dp))
+                        MainButton(text = "Verify license") {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val license = TikiClient.license.verify()
                                 loginOutput = license.toString()
                             }
                         }
