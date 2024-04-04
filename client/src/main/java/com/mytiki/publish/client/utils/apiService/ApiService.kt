@@ -1,32 +1,54 @@
 package com.mytiki.publish.client.utils.apiService
 
-import com.mytiki.publish.client.auth.AuthToken
-import com.mytiki.publish.client.email.EmailProviderEnum
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.Response
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
-import java.io.File
+import java.util.UUID
 
 
 object ApiService{
+    private val client = OkHttpClient.Builder()
+        .addInterceptor(HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        })
+        .build()
 
-
-    fun getEmail(providerEnum: EmailProviderEnum, token: AuthToken): Response {
-        val client = OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
-            .build()
-        val request = Request.Builder()
-            .url(providerEnum.userInfoEndpoint)
-            .addHeader("Authorization", "Bearer (${token.auth})")
-            .get()
-            .build()
-        return client.newCall(request).execute()
+    fun get(header: Map<String, String>, endPoint: String, onError: Exception): CompletableDeferred<ResponseBody?> {
+        val get = CompletableDeferred<ResponseBody?>()
+        CoroutineScope(Dispatchers.IO).launch {
+            val request = Request.Builder().apply {
+                url(endPoint)
+                header.forEach{ (key, value) ->
+                    addHeader(key, value)
+                }
+                get()
+            }.build()
+            val apiResponse = client.newCall(request).execute()
+            if (apiResponse.code in 200..299) {
+                get.complete(apiResponse.body)
+            } else get.completeExceptionally(onError)
+        }
+        return get
+    }
+    fun post(header: Map<String, String>?, endPoint: String, body: RequestBody, onError: Exception): CompletableDeferred<ResponseBody?> {
+        val post = CompletableDeferred<ResponseBody?>()
+        CoroutineScope(Dispatchers.IO).launch {
+            val request = Request.Builder().apply {
+                url(endPoint)
+                header?.forEach{ (key, value) ->
+                    addHeader(key, value)
+                }
+                post(body)
+            }.build()
+            val apiResponse = client.newCall(request).execute()
+            if (apiResponse.code in 200..299) {
+                post.complete(apiResponse.body)
+            } else post.completeExceptionally(onError)
+        }
+        return post
     }
 
 }

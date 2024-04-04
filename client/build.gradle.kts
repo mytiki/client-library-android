@@ -61,8 +61,6 @@ dependencies {
     val material3Version = "1.2.0"
     val composeBom = platform("androidx.compose:compose-bom:2023.03.00")
 
-//  Tiki
-    implementation("com.mytiki:tiki-sdk-android:2.2.1")
 
 //    Android
     implementation("androidx.core:core-ktx:1.12.0")
@@ -83,8 +81,6 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.7")
     androidTestImplementation("androidx.navigation:navigation-testing:2.7.7")
 
-//    AppAuth
-    implementation ("net.openid:appauth:0.11.1")
 
 //    Okhttp
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
@@ -121,7 +117,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     androidTestImplementation("com.android.support.test:rules:1.0.2")
     debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.1")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.2")
     debugImplementation("androidx.test:core:1.5.0")
     debugImplementation("androidx.test:rules:1.5.0")
     debugImplementation("androidx.test:runner:1.5.2")

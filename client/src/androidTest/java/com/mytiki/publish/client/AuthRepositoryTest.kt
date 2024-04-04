@@ -1,14 +1,8 @@
-package com.mytiki.publish.client.email
+package com.mytiki.publish.client
 
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
-import com.mytiki.publish.client.auth.AuthToken
 import org.junit.Before
-import org.junit.Test
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
-
-import java.util.Date
 
 class AuthRepositoryTest {
     private lateinit var instrumentationContext: Context
