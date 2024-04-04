@@ -31,24 +31,20 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val config = Config(
-            providerId = "fd861faf-aab9-4fa8-9c31-8160d98c74f0",
-            publicKey = "MIIBCgKCAQEA09WSEv5TMj4k/dYNdq74t2BPrFcq+jTVyfFy142Abik+ucscJ0mPunUVGBFrXK+vNnxVsklNRA5p6hsMNNYPL+WyhXG4VdXMiAaQVSR5fUZ8voTrGrPSAk5v9Cshagk7CcSKLDtyHYtPAziRvbDtKC7yB7evcdiCzN+7kDUw0L3me89pz1o4rb7dllP6PtcZE9koHxje6EUB31pT+nXz/fqzIf5dCkfM19H1pqW6QZmvjRuQjKJijEXmBwUtrJXEw2fcWICktGhGyzAOado+oXaNzSVvIgNN7FVtd8JqjWu+K0xrW7V+h/Y8tF217yJtlE41T7WPABoikRQ+PYYoqQIDAQAB",
-            companyName = "MyTiki",
+            providerId = "2b08b660-84cd-410c-9c92-836993e90c93",
+            publicKey = "MIIBCgKCAQEAoHhIrvp0aY+VhRquH6dW3fgwg+n7QqSICVvjoWceSFnGiAGCmI661BQp8QYpTqdHgkaehWMgADtFTuaHJvbG88NY1Ah9wbKf2uGzu+uIaXTfBFojc/9hvwPe+U5bJ6O9rFcpoAhxqcR0qC8h17Q/fRIPNrNFm8u0pfK/kLRQzsnH7rrZYYOjFqzpazSdmKuSUxVoKOGlAddlqQpYH8oEdNmJKj7aWmMXgZMScaEd2JqQihgULXGTuA23iTaBFmmBXSp2iCLxLRLEAjh+zLQhNg00bk/jW3pU1A+36ktCAwOBa8vX6sl5xMO57+iGAJgvBVyA61U1t9QPVOdsjjjg9QIDAQAB",
+            companyName = "gabriel",
             companyJurisdiction = "US",
             tosUrl = "https://mytiki.com",
             privacyUrl = "https://mytiki.com"
         )
         TikiClient.configure(config)
-        TikiClient.initialize("test@gmail.com")
+        TikiClient.initialize("gabriel@gmail.com")
 
 
         setContent {
             var loginOutput by remember {
                 mutableStateOf("")
-            }
-
-            fun onError(error: Throwable) {
-                error.message?.let { loginOutput = it }
             }
 
             TikiClientTheme {
@@ -66,47 +62,94 @@ class MainActivity : AppCompatActivity() {
                         Text(
                             text = "Tiki Example",
                         )
-
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Text(
+                            text = loginOutput,
+                        )
                         Spacer(modifier = Modifier.height(30.dp))
                         MainButton(text = "Register Address") {
                             CoroutineScope(Dispatchers.IO).launch {
-                                val resp =  TikiClient.auth.registerAddress().await()
+                                try {
+                                    val resp = TikiClient.auth.registerAddress().await()
 
-                                loginOutput = resp.address
+                                    loginOutput = resp.address
+                                }catch (e: Throwable) {
+                                    loginOutput = e.message.toString()
+                                }
                             }
                         }
                         Spacer(modifier = Modifier.height(30.dp))
                         MainButton(text = "Get TikiToken") {
                             CoroutineScope(Dispatchers.IO).launch {
-                                val resp =  TikiClient.auth.token().await()
-                                loginOutput = resp
+                                try{
+                                    val resp =  TikiClient.auth.providerToken().await()
+                                    loginOutput = resp
+                                }catch (e: Throwable) {
+                                    loginOutput = e.message.toString()
+                                }
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(30.dp))
+                        MainButton(text = "Get Address Token") {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                try{
+                                    val resp =  TikiClient.auth.addressToken().await()
+                                    loginOutput = resp
+                                }catch (e: Throwable) {
+                                    loginOutput = e.message.toString()
+                                }
                             }
                         }
 
                         Spacer(modifier = Modifier.height(30.dp))
                         MainButton(text = "Create license") {
                             CoroutineScope(Dispatchers.IO).launch {
+                                try {
                                 val license = TikiClient.license.create(this@MainActivity)
                                 loginOutput = license.toString()
+                                }catch (e: Throwable) {
+                                    loginOutput = e.message.toString()
+                                }
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(30.dp))
+                        MainButton(text = "Verify license") {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                try {
+                                    val license = TikiClient.license.verify()
+                                    Log.d("************", license.toString())
+                                    loginOutput = license.toString()
+                                }catch (e: Throwable) {
+                                loginOutput = e.message.toString()
+                        }
                             }
                         }
 
                         Spacer(modifier = Modifier.height(30.dp))
                         MainButton(text = "Get Tiki key") {
                             CoroutineScope(Dispatchers.IO).launch {
-                                val keyPair = TikiClient.auth.getKey()
-                                loginOutput = keyPair?.public?.encoded?.let { Base64.Default.encode(it) }.toString()
-                                Log.d("**** keyPair ****", loginOutput)
+                                try {
+                                    val keyPair = TikiClient.auth.getKey()
+                                    loginOutput = keyPair?.public?.encoded?.let { Base64.Default.encode(it) }.toString()
+                                }catch (e: Throwable) {
+                                    loginOutput = e.message.toString()
+                                }
                             }
                         }
 
                         Spacer(modifier = Modifier.height(30.dp))
                         MainButton(text = "Get address") {
                             CoroutineScope(Dispatchers.IO).launch {
-                                val keyPair = TikiClient.auth.getKey()
-                                val address = keyPair?.let { TikiClient.auth.address(it) }
-                                loginOutput = address.toString()
-                                Log.d("**** address ****", address.toString())
+                                try{
+                                    val keyPair = TikiClient.auth.getKey()
+                                    val address = keyPair?.let { TikiClient.auth.address(it) }
+                                    loginOutput = address.toString()
+                                    Log.d("**** address ****", address.toString())
+                                }catch (e: Throwable) {
+                                    loginOutput = e.message.toString()
+                                }
                             }
                         }
 

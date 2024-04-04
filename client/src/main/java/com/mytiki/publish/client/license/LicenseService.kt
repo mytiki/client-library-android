@@ -1,23 +1,19 @@
 package com.mytiki.publish.client.license
 
 import android.content.Context
-import android.util.Log
 import com.mytiki.publish.client.TikiClient
+import com.mytiki.publish.client.license.rsp.RspCreate
+import com.mytiki.publish.client.license.rsp.RspVerify
 import com.mytiki.publish.client.utils.apiService.ApiService
-import org.json.JSONArray
-import org.json.JSONObject
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 
 /**
  * Service for managing licenses.
  */
 class LicenseService {
 
-    /**
-     * The current license status.
-     */
-    private var isLicensed: Boolean = false
 
     private val baseUrl = "https://trail.mytiki.com"
 
@@ -33,35 +29,38 @@ class LicenseService {
         val licenseRequest = LicenseRequest(TikiClient.userID)
         val jsonBody = licenseRequest.toJSON(context)
         val body = jsonBody.toString().toRequestBody("application/json".toMediaType())
-        ApiService.post(
+        val addressToken = TikiClient.auth.addressToken().await()
+        val response = ApiService.post(
             header = mapOf(
-                "Authorization" to "Bearer ${TikiClient.auth.token().await()}",
+                "Authorization" to "Bearer $addressToken",
                 "Content-Type" to "application/json",
-                "Access-Control-Allow-Origin" to "http://localhost:5173",
-                "Access-Control-Allow-Credentials" to "true",
             ),
-            endPoint = "https://trail.mytiki.com/license/create",
-            body = body,
-            onError = Exception("error on creating license")
+            endPoint = "$baseUrl/license/create",
+            onError = Exception("error on creating license"),
+            body = body
         ).await()
-        return true
+        if (response == null) throw Exception("error on creating license")
+        val rspCreate = RspCreate.fromJson(JSONObject(response.string()))
+        return rspCreate.id.isNotEmpty()
     }
-
-    /**
-     * Revokes the user's existing license.
-     * @param context The context.
-     * @param userId The user ID.
-     * @param providerId The provider ID.
-     * @return The revoked license.
-     */
-    suspend fun revoke(context: Context) {}
 
     /**
      * Verifies the validity of the user's license.
      * @param userId The user ID.
      * @return True if the license is valid, false otherwise.
      */
-    suspend fun verify(userId: String) {}
+    suspend fun verify(): Boolean {
+        val response = ApiService.post(
+            header = mapOf(
+                "Authorization" to "Bearer ${TikiClient.auth.addressToken().await()}",
+                "Content-Type" to "application/json",
+            ),
+            endPoint = "$baseUrl/license/verify",
+            onError = Exception("error on creating license")
+        ).await()
+        if (response == null) throw Exception("error on verify license")
+        return RspVerify.fromJson(JSONObject(response.string())).verified
+    }
 
     /**
      * Retrieves the terms of service.
