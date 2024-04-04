@@ -1,18 +1,14 @@
 package com.mytiki.publish.client.license
 
+import android.content.Context
 import com.mytiki.publish.client.TikiClient
-import com.mytiki.tiki_sdk_android.trail.Use
 import org.json.JSONArray
 import org.json.JSONObject
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 class LicenseRequest(
     val ptr: String,
-    val tags: Array<String>,
-    val uses: Array<Use>,
-    val terms: String,
-    val expiry: String? = null,
-    val titleDesc: String? = null,
-    val licenseDesc: String
 ){
     val userSignature: ByteArray?
 
@@ -22,33 +18,20 @@ class LicenseRequest(
         userSignature = address?.let { TikiClient.auth.signMessage(it, keys.private) }
     }
 
-    fun toJSON(): JSONObject{
-        val jsonUse = JSONArray()
-        uses.forEach { use ->
-            val usecases = JSONArray()
-            use.usecases.forEach { usecase ->
-                usecases.put(usecase.value)
-            }
-            val destinations = JSONArray()
-            use.destinations?.forEach { destination ->
-                destinations.put(destination)
-            }
-            jsonUse.put(
-                JSONObject()
-                 .put("usecases", usecases)
-                 .put("destinations", destinations)
-            )
-        }
-
-        val json = JSONObject()
-        json.put("ptr", ptr)
-        json.put("tags", JSONArray(tags))
-        json.put("uses", jsonUse)
-        json.put("terms", terms)
-        json.put("expiry", expiry)
-        json.put("titleDesc", titleDesc)
-        json.put("licenseDesc", licenseDesc)
-        json.put("userSignature", userSignature)
-        return json
+    fun toJSON(context: Context): JSONObject{
+        val jsonBody = JSONObject()
+            .put("ptr", TikiClient.userID)
+            .put("tags", JSONArray().put("purchase_history"))
+            .put("uses", JSONArray().put(
+                JSONObject().apply {
+                    put("usecases", JSONArray().put("attribution"))
+                    put("destinations", JSONArray().put("*"))
+                }
+            ))
+            .put("description", "")
+            .put("origin", context.packageName)
+            .put("expiry", JSONObject.NULL)
+            .put("terms", TikiClient.license.terms(context))
+        return jsonBody
     }
 }

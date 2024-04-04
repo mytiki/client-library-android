@@ -27,7 +27,7 @@ class AuthService {
      * @param publicKey The public key.
      * @return The authentication token.
      */
-    fun token(): CompletableDeferred<String> {
+    fun token(address: String? = null): CompletableDeferred<String> {
         val token = CompletableDeferred<String>()
         CoroutineScope(Dispatchers.IO).launch {
             val body = FormBody.Builder()
