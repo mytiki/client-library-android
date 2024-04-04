@@ -15,7 +15,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders["appAuthRedirectScheme"] = "com.googleusercontent.apps.1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e"
 
         vectorDrawables {
             useSupportLibrary = true
@@ -52,10 +51,6 @@ android {
 }
 
 dependencies {
-
-    //  Tiki
-    implementation("com.mytiki:tiki-sdk-android:2.2.1")
-
     //Jetpack Compose
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
