@@ -1,7 +1,5 @@
 package com.mytiki.publish.client
 
-import com.mytiki.publish.client.email.EmailProviderEnum
-
 interface ProvidersInterface{
 
 

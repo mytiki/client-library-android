@@ -4,11 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -23,8 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.config.Config
-import com.mytiki.publish.client.email.EmailKeys
-import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.example_app.theme.TikiClientTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -73,48 +67,6 @@ class MainActivity : AppCompatActivity() {
                             text = "Tiki Example",
                         )
 
-                        Spacer(modifier = Modifier.height(60.dp))
-                        MainButton(text = "Login") {
-                            TikiClient.login(
-                                this@MainActivity,
-                                EmailProviderEnum.GOOGLE,
-                                EmailKeys("1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e.apps.googleusercontent.com", ""),
-                                "com.googleusercontent.apps.1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e:/oauth2redirect"
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(30.dp))
-                        MainButton(text = "Logout") {
-                            TikiClient.logout(
-                                this@MainActivity,
-                                "gabrielschuler3@gmail.com",
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(30.dp))
-                        MainButton(text = "Get Token") {
-                            val tokenList = TikiClient.auth.authRepository.get(this@MainActivity, "gabrielschuler3@gmail.com")
-                            loginOutput = tokenList.toString()
-                        }
-
-                        Spacer(modifier = Modifier.height(30.dp))
-                        MainButton(text = "Refresh Token") {
-                            val token = TikiClient.auth.emailAuthRefresh(
-                                this@MainActivity,
-                                "gabrielschuler3@gmail.com",
-                                "1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e.apps.googleusercontent.com"
-                            )
-                            loginOutput = token.toString()
-                        }
-
-                        Spacer(modifier = Modifier.height(30.dp))
-                        MainButton(text = "Messages") {
-                            TikiClient.scrape(
-                                this@MainActivity,
-                                "gabrielschuler3@gmail.com",
-                                "1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e.apps.googleusercontent.com"
-                            )
-                        }
                         Spacer(modifier = Modifier.height(30.dp))
                         MainButton(text = "Register Address") {
                             CoroutineScope(Dispatchers.IO).launch {
@@ -123,11 +75,36 @@ class MainActivity : AppCompatActivity() {
                                 loginOutput = resp.address
                             }
                         }
+
                         Spacer(modifier = Modifier.height(30.dp))
-                        MainButton(text = "Get TikiToken") {
+                        MainButton(text = "Get Provider Token") {
                             CoroutineScope(Dispatchers.IO).launch {
-                                val resp =  TikiClient.auth.token().await()
+                                val resp =  TikiClient.auth.providerToken().await()
                                 loginOutput = resp
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(30.dp))
+                        MainButton(text = "Get Address Token") {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val resp =  TikiClient.auth.addressToken().await()
+                                loginOutput = resp
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(30.dp))
+                        MainButton(text = "Create license") {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val license = TikiClient.license.create(this@MainActivity)
+                                loginOutput = license.toString()
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(30.dp))
+                        MainButton(text = "Verify license") {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val license = TikiClient.license.verify()
+                                loginOutput = license.toString()
                             }
                         }
 

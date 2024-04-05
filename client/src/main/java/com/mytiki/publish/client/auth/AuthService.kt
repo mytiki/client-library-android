@@ -27,22 +27,57 @@ class AuthService {
      * @param publicKey The public key.
      * @return The authentication token.
      */
-    fun token(): CompletableDeferred<String> {
+    fun providerToken(): CompletableDeferred<String> {
         val token = CompletableDeferred<String>()
         CoroutineScope(Dispatchers.IO).launch {
             val body = FormBody.Builder()
                 .add("grant_type", "client_credentials")
-                .add("client_id", "provider:${TikiClient.config.providerId}")
+                .add("client_id","provider:${TikiClient.config.providerId}")
                 .add("client_secret", TikiClient.config.publicKey)
                 .add("scope", "account:provider trail publish")
                 .add("expires", "600")
                 .build()
 
             val response = ApiService.post(
-                mapOf("accept" to "application/json"),
-                "https://account.mytiki.com/api/latest/auth/token",
+                header =  mapOf(
+                    "accept" to "application/json",
+                    "Content-Type" to "application/x-www-form-urlencoded"
+                ),
+                endPoint = "https://account.mytiki.com/api/latest/auth/token",
+                onError = Exception("error on getting token"),
                 body,
-                Exception("error on getting token")
+            ).await()
+
+            token.complete(TikiTokenResponse.fromJson(JSONObject(response?.string()!!)).access_token)
+        }
+        return token
+    }
+
+    @OptIn(ExperimentalEncodingApi::class)
+    fun addressToken(): CompletableDeferred<String> {
+        val token = CompletableDeferred<String>()
+        CoroutineScope(Dispatchers.IO).launch {
+            val keyPair = getKey() ?: throw Exception("error on getting key")
+            val address = address(keyPair) ?: throw Exception("error on getting address")
+            val signature = signMessage(address, keyPair.private)?:
+            throw Exception("error on signing message")
+
+            val body = FormBody.Builder()
+                .add("grant_type", "client_credentials")
+                .add("client_id","addr:${TikiClient.config.providerId}:$address")
+                .add("client_secret", Base64.Default.encode(signature))
+                .add("scope", "account:provider trail publish")
+                .add("expires", "600")
+                .build()
+
+            val response = ApiService.post(
+                header =  mapOf(
+                    "accept" to "application/json",
+                    "Content-Type" to "application/x-www-form-urlencoded"
+                ),
+                endPoint = "https://account.mytiki.com/api/latest/auth/token",
+                onError = Exception("error on getting token"),
+                body,
             ).await()
 
             token.complete(TikiTokenResponse.fromJson(JSONObject(response?.string()!!)).access_token)
@@ -150,7 +185,7 @@ class AuthService {
                         .toString()
                         .toRequestBody("application/json".toMediaTypeOrNull())
 
-                    val token = token().await()
+                    val token = providerToken().await()
 
                     val response = ApiService.post(
                         mapOf(
@@ -158,8 +193,8 @@ class AuthService {
                             "accept" to "application/json"
                         ),
                         "https://account.mytiki.com/api/latest/provider/${TikiClient.config.providerId}/user",
-                        jsonBody,
-                        Exception("error on registerAddress")
+                        Exception("error on registerAddress"),
+                        jsonBody
                     ).await()
                     registerAddress.complete(RegisterAddressResponse.fromJson(JSONObject(response?.string()!!)))
                 } else registerAddress.completeExceptionally(Exception("error on registerAddress"))

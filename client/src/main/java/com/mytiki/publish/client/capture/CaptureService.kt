@@ -35,7 +35,7 @@ class CaptureService {
         // Placeholder method, to be implemented
         val isPublished = CompletableDeferred<Unit>()
         CoroutineScope(Dispatchers.IO).launch {
-            val auth = TikiClient.auth.token().await()
+            val auth = TikiClient.auth.addressToken().await()
             val file = File.createTempFile("receipt", ".jpeg")
             val output = file.outputStream()
             val image = data.compress(Bitmap.CompressFormat.JPEG, 100, output)
@@ -51,13 +51,13 @@ class CaptureService {
                     .build()
 
                 ApiService.post(
-                    mapOf(
+                    header =  mapOf(
                         "Content-Type" to "image/jpeg",
                         "Authorization" to "Bearer $auth"
                     ),
-                    "https://publish.mytiki.com/receipt/${id}",
+                    endPoint = "https://publish.mytiki.com/receipt/${id}",
+                    onError = Exception("error uploading image"),
                     body,
-                    Exception("error uploading image")
                 ).await()
                 isPublished.complete(Unit)
             } else throw Exception("error on compressing image")
