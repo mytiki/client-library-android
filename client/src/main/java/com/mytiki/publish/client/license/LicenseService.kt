@@ -20,10 +20,8 @@ class LicenseService {
     /**
      * Creates a new license for the user.
      * @param context The context.
-     * @param userId The user ID.
-     * @param providerId The provider ID.
-     * @param terms The terms.
-     * @return The created LicenseRecord.
+     * @return Boolean indicating the success of the license creation.
+     * @throws Exception if there is an error creating the license.
      */
     suspend fun create(context: Context): Boolean {
         val licenseRequest = LicenseRequest(TikiClient.userID)
@@ -46,8 +44,8 @@ class LicenseService {
 
     /**
      * Verifies the validity of the user's license.
-     * @param userId The user ID.
-     * @return True if the license is valid, false otherwise.
+     * @return Boolean indicating whether the license is valid.
+     * @throws Exception if there is an error verifying the license.
      */
     suspend fun verify(): Boolean {
         val response = ApiService.post(
@@ -65,7 +63,7 @@ class LicenseService {
     /**
      * Retrieves the terms of service.
      * @param context The context.
-     * @return The terms of service.
+     * @return The terms of service as a String.
      */
     fun terms(context: Context): String {
         val terms = context.assets.open("terms.md").bufferedReader().use { it.readText() }

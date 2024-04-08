@@ -1,5 +1,7 @@
 package com.mytiki.publish.client
 
+import android.bluetooth.le.ScanCallback
+import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
 import com.mytiki.publish.client.auth.AuthService
 import com.mytiki.publish.client.capture.CaptureService
@@ -8,6 +10,7 @@ import com.mytiki.publish.client.license.LicenseService
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
+
 
 /**
  * Tiki Client Library
@@ -51,12 +54,18 @@ object TikiClient {
             return field
         }
 
-
+    // User ID for the client
     lateinit var userID: String
         private set
+    // Configuration for the client
     lateinit var config: Config
         private set
 
+    /**
+     * Checks if the client is properly configured and the user ID is set.
+     * @throws Exception if the client is not configured or the user ID is not set.
+     * @return true if the client is properly configured and the user ID is set.
+     */
     private fun check(): Boolean {
         if (!this::config.isInitialized) throw Exception(
             "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration."
@@ -65,9 +74,20 @@ object TikiClient {
         ) else return true
     }
 
+    /**
+     * Configures the client with the provided configuration.
+     * @param config The configuration to set.
+     */
     fun configure(config: Config){
         this.config = config
     }
+
+    /**
+     * Initializes the client with the provided user ID.
+     * @param userID The user ID to set.
+     * @throws Exception if the client is not configured or the user ID is empty.
+     * @return A CompletableDeferred that completes when the client is initialized.
+     */
     fun initialize(userID: String):CompletableDeferred<Unit>{
         if (!this::config.isInitialized) throw Exception(
             "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration."
@@ -83,12 +103,31 @@ object TikiClient {
             "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID."
         )
     }
+
     /**
      * Initiates the process of scanning a physical receipt and returns the receipt ID.
      * @param activity The ComponentActivity instance.
      * @return The scanned receipt data or an empty string if the scan is unsuccessful.
      */
-    fun scan(activity: ComponentActivity) {
-        capture.camera(activity)
+    fun scan(activity: ComponentActivity, scanCallback: (Bitmap) -> Unit){
+        capture.camera(activity, scanCallback)
+    }
+
+     /**
+     * Publishes a single bitmap image for receipt data extraction.
+     * @param data The bitmap image data.
+     * @return A CompletableDeferred object that will resolve when the data has been published.
+     */
+    fun publish(data: Bitmap): CompletableDeferred<Unit> {
+        return capture.publish(data)
+    }
+
+    /**
+     * Publishes an array of bitmap images for receipt data extraction.
+     * @param data The array of bitmap image data.
+     * @return A CompletableDeferred object that will resolve when all the data has been published.
+     */
+    fun publish(data: Array<Bitmap>): CompletableDeferred<Unit> {
+        return capture.publish(data)
     }
 }

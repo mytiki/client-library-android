@@ -1,12 +1,10 @@
 package com.mytiki.publish.client.license
 
 import android.content.Context
-import android.util.Log
+import android.util.Base64
 import com.mytiki.publish.client.TikiClient
 import org.json.JSONArray
 import org.json.JSONObject
-import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
 
 class LicenseRequest(
     val ptr: String,
@@ -19,7 +17,6 @@ class LicenseRequest(
         userSignature = address?.let { TikiClient.auth.signMessage(it, keys.private) }
     }
 
-    @OptIn(ExperimentalEncodingApi::class)
     fun toJSON(context: Context): JSONObject{
         val jsonBody = JSONObject()
             .put("ptr", TikiClient.userID)
@@ -41,7 +38,7 @@ class LicenseRequest(
         val signature =  TikiClient.auth.signMessage(jsonBody.toString(), privateKey) ?:
         throw Exception("Error on Signing Message")
 
-        jsonBody.put("signature", Base64.Default.encode(signature))
+        jsonBody.put("signature", Base64.encodeToString(signature, Base64.DEFAULT or Base64.NO_WRAP))
         return jsonBody
     }
 }

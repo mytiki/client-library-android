@@ -23,7 +23,7 @@ class CaptureActivity : AppCompatActivity() {
         val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 if (result?.data != null && result.data?.extras != null) {
-                    TikiClient.capture.publish(result.data?.extras?.get("data") as Bitmap)
+                    TikiClient.capture.imageCallback(result.data?.extras?.get("data") as Bitmap)
                 }
             }
             this.finish()

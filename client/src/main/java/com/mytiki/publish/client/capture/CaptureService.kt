@@ -16,20 +16,24 @@ import java.util.*
  * Service class for capturing and processing receipt data.
  */
 class CaptureService {
+    var imageCallback: (Bitmap) -> Unit = {}
+    private set
 
     /**
-     * Captures an image of a receipt for processing.
+     * Launches the camera activity for capturing an image of a receipt.
      * @param activity The ComponentActivity launching the camera.
      */
-    fun camera(activity: ComponentActivity) {
+    fun camera(activity: ComponentActivity, imageCallback: (Bitmap) -> Unit){
+        this.imageCallback = imageCallback
         activity.startActivity(Intent(activity, CaptureActivity::class.java))
     }
 
 
     /**
-     * Uploads receipt images or email data for receipt data extraction.
-     * @param data The binary image or email data.
-     * @return True if the data was successfully published, false otherwise.
+     * Uploads a bitmap image for receipt data extraction.
+     * @param data The bitmap image data.
+     * @return A CompletableDeferred object that will resolve when the data has been published.
+     * @throws Exception if there is an error during the process.
      */
     fun publish(data: Bitmap): CompletableDeferred<Unit> {
         // Placeholder method, to be implemented
@@ -67,6 +71,11 @@ class CaptureService {
         return isPublished
     }
 
+    /**
+     * Uploads an array of bitmap images for receipt data extraction.
+     * @param data The array of bitmap image data.
+     * @return A CompletableDeferred object that will resolve when all the data has been published.
+     */
     fun publish(data: Array<Bitmap>):CompletableDeferred<Unit>{
         val isPublished = CompletableDeferred<Unit>()
         MainScope().async {

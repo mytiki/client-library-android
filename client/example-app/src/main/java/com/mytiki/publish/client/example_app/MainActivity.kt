@@ -1,5 +1,6 @@
 package com.mytiki.publish.client.example_app
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
@@ -7,9 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,7 +26,7 @@ import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 class MainActivity : AppCompatActivity() {
-    @OptIn(ExperimentalEncodingApi::class)
+    @OptIn(ExperimentalEncodingApi::class, ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val config = Config(
@@ -39,12 +38,16 @@ class MainActivity : AppCompatActivity() {
             privacyUrl = "https://mytiki.com"
         )
         TikiClient.configure(config)
-        TikiClient.initialize("gabriel@gmail.com")
-
 
         setContent {
+            var userIdInput by remember {
+                mutableStateOf("")
+            }
             var loginOutput by remember {
                 mutableStateOf("")
+            }
+            var image by remember {
+                mutableStateOf<Bitmap?>(null)
             }
 
             TikiClientTheme {
@@ -58,104 +61,44 @@ class MainActivity : AppCompatActivity() {
                             .verticalScroll(rememberScrollState()),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+
                         Spacer(modifier = Modifier.height(40.dp))
                         Text(
                             text = "Tiki Example",
                         )
                         Spacer(modifier = Modifier.height(20.dp))
+                        OutlinedTextField(
+                            value = userIdInput,
+                            label = { Text(text = "User ID") },
+                            onValueChange = {
+                                userIdInput = it
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(20.dp))
                         Text(
                             text = loginOutput,
-                        )
-                        Spacer(modifier = Modifier.height(30.dp))
-                        MainButton(text = "Register Address") {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                try {
-                                    val resp = TikiClient.auth.registerAddress().await()
 
-                                    loginOutput = resp.address
-                                }catch (e: Throwable) {
-                                    loginOutput = e.message.toString()
-                                }
-                            }
-                        }
+                            )
+
                         Spacer(modifier = Modifier.height(30.dp))
-                        MainButton(text = "Get TikiToken") {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                try{
-                                    val resp =  TikiClient.auth.providerToken().await()
-                                    loginOutput = resp
-                                }catch (e: Throwable) {
-                                    loginOutput = e.message.toString()
-                                }
-                            }
+                        MainButton(text = "Initialize") {
+                            TikiClient.initialize(userIdInput)
                         }
 
                         Spacer(modifier = Modifier.height(30.dp))
-                        MainButton(text = "Get Address Token") {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                try{
-                                    val resp =  TikiClient.auth.addressToken().await()
-                                    loginOutput = resp
-                                }catch (e: Throwable) {
-                                    loginOutput = e.message.toString()
-                                }
+                        MainButton(text = "Scan") {
+                            TikiClient.scan(this@MainActivity){
+                                image = it
+                                loginOutput = "Worked"
                             }
                         }
-
                         Spacer(modifier = Modifier.height(30.dp))
-                        MainButton(text = "Create license") {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                try {
-                                val license = TikiClient.license.create(this@MainActivity)
-                                loginOutput = license.toString()
-                                }catch (e: Throwable) {
-                                    loginOutput = e.message.toString()
-                                }
+                        MainButton(text = "Publish") {
+                            if (image != null) {
+                                TikiClient.publish(image!!)
+                                loginOutput = "image published"
                             }
-                        }
-
-                        Spacer(modifier = Modifier.height(30.dp))
-                        MainButton(text = "Verify license") {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                try {
-                                    val license = TikiClient.license.verify()
-                                    Log.d("************", license.toString())
-                                    loginOutput = license.toString()
-                                }catch (e: Throwable) {
-                                loginOutput = e.message.toString()
-                        }
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(30.dp))
-                        MainButton(text = "Get Tiki key") {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                try {
-                                    val keyPair = TikiClient.auth.getKey()
-                                    loginOutput = keyPair?.public?.encoded?.let { Base64.Default.encode(it) }.toString()
-                                }catch (e: Throwable) {
-                                    loginOutput = e.message.toString()
-                                }
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(30.dp))
-                        MainButton(text = "Get address") {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                try{
-                                    val keyPair = TikiClient.auth.getKey()
-                                    val address = keyPair?.let { TikiClient.auth.address(it) }
-                                    loginOutput = address.toString()
-                                    Log.d("**** address ****", address.toString())
-                                }catch (e: Throwable) {
-                                    loginOutput = e.message.toString()
-                                }
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(30.dp))
-                        MainButton(text = "Camera") {
-                            TikiClient.capture.camera(this@MainActivity)
+                            else loginOutput = "No image to publish"
                         }
                     }
                 }
