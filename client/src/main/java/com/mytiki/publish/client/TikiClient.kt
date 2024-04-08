@@ -1,6 +1,6 @@
 package com.mytiki.publish.client
 
-import android.bluetooth.le.ScanCallback
+import android.content.Context
 import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
 import com.mytiki.publish.client.auth.AuthService
@@ -29,6 +29,12 @@ import kotlinx.coroutines.async
 object TikiClient {
     /**
      * AuthService instance for handling authentication.
+     *
+     * This property is a getter that returns an instance of AuthService. It checks if the client is
+     * properly configured and the user ID is set before returning the AuthService instance.
+     *
+     * @throws Exception if the client is not configured or the user ID is not set.
+     * @return An instance of AuthService.
      */
     val auth = AuthService()
         get() {
@@ -38,6 +44,12 @@ object TikiClient {
 
     /**
      * CaptureService instance for handling receipt capture.
+     *
+     * This property is a getter that returns an instance of CaptureService. It checks if the client is
+     * properly configured and the user ID is set before returning the CaptureService instance.
+     *
+     * @throws Exception if the client is not configured or the user ID is not set.
+     * @return An instance of CaptureService.
      */
     val capture = CaptureService()
         get() {
@@ -47,6 +59,12 @@ object TikiClient {
 
     /**
      * LicenseService instance for managing licensing.
+     *
+     * This property is a getter that returns an instance of LicenseService. It checks if the client is
+     * properly configured and the user ID is set before returning the LicenseService instance.
+     *
+     * @throws Exception if the client is not configured or the user ID is not set.
+     * @return An instance of LicenseService.
      */
     val license = LicenseService()
         get() {
@@ -54,15 +72,30 @@ object TikiClient {
             return field
         }
 
-    // User ID for the client
+    /**
+     * User ID for the client.
+     *
+     * This property is a lateinit variable that holds the user ID for the client. It is private and
+     * can only be set within the TikiClient object.
+     */
     lateinit var userID: String
         private set
-    // Configuration for the client
+
+    /**
+     * Configuration for the client.
+     *
+     * This property is a lateinit variable that holds the configuration for the client. It is private
+     * and can only be set within the TikiClient object.
+     */
     lateinit var config: Config
         private set
 
     /**
      * Checks if the client is properly configured and the user ID is set.
+     *
+     * This function checks if the client is properly configured and the user ID is set. It throws an
+     * exception if the client is not configured or the user ID is not set.
+     *
      * @throws Exception if the client is not configured or the user ID is not set.
      * @return true if the client is properly configured and the user ID is set.
      */
@@ -75,18 +108,29 @@ object TikiClient {
     }
 
     /**
-     * Configures the client with the provided configuration.
-     * @param config The configuration to set.
+     * Configures the TikiClient with the provided configuration.
+     *
+     * This function is used to set the configuration for the TikiClient. The configuration includes
+     * all the necessary parameters and settings that the TikiClient needs to operate correctly.
+     *
+     * @param config The Config object that contains the configuration settings for the TikiClient.
      */
     fun configure(config: Config){
         this.config = config
     }
 
     /**
-     * Initializes the client with the provided user ID.
-     * @param userID The user ID to set.
-     * @throws Exception if the client is not configured or the user ID is empty.
-     * @return A CompletableDeferred that completes when the client is initialized.
+     * Initializes the TikiClient with the provided user ID.
+     *
+     * This function is used to set the user ID for the TikiClient. The user ID is a unique identifier
+     * for the user and is required for the TikiClient to operate correctly. The function checks if
+     * the TikiClient is configured and if the user ID is not empty before setting the user ID.
+     *
+     * @param userID The unique identifier for the user.
+     * @throws Exception if the TikiClient is not configured or the user ID is empty.
+     * @return A CompletableDeferred object that completes when the TikiClient is initialized. The
+     * CompletableDeferred object does not contain any value and is only used to signal that the
+     * initialization process is complete.
      */
     fun initialize(userID: String):CompletableDeferred<Unit>{
         if (!this::config.isInitialized) throw Exception(
@@ -104,19 +148,31 @@ object TikiClient {
         )
     }
 
-    /**
+       /**
      * Initiates the process of scanning a physical receipt and returns the receipt ID.
-     * @param activity The ComponentActivity instance.
-     * @return The scanned receipt data or an empty string if the scan is unsuccessful.
+     *
+     * This function initiates the process of scanning a physical receipt. It uses the provided
+     * ComponentActivity instance to start the scanning process. The result of the scanning process
+     * is returned through the provided callback function.
+     *
+     * @param activity The ComponentActivity instance. This is typically the current activity from
+     * which this function is called. It is used to provide context for the scanning process.
+     * @param scanCallback The callback function that will be called with the scanned receipt data
+     * when the scanning process is finished.
      */
     fun scan(activity: ComponentActivity, scanCallback: (Bitmap) -> Unit){
         capture.camera(activity, scanCallback)
     }
 
-     /**
+    /**
      * Publishes a single bitmap image for receipt data extraction.
-     * @param data The bitmap image data.
-     * @return A CompletableDeferred object that will resolve when the data has been published.
+     *
+     * This function publishes a single bitmap image for receipt data extraction. The provided bitmap
+     * image data is sent to the capture service for processing. The function is asynchronous and
+     * returns a CompletableDeferred object that will be completed when the data has been published.
+     *
+     * @param data The bitmap image data to be published.
+     * @return A CompletableDeferred object that will be completed when the data has been published.
      */
     fun publish(data: Bitmap): CompletableDeferred<Unit> {
         return capture.publish(data)
@@ -124,10 +180,52 @@ object TikiClient {
 
     /**
      * Publishes an array of bitmap images for receipt data extraction.
-     * @param data The array of bitmap image data.
-     * @return A CompletableDeferred object that will resolve when all the data has been published.
+     *
+     * This function publishes an array of bitmap images for receipt data extraction. The provided
+     * array of bitmap image data is sent to the capture service for processing. The function is
+     * asynchronous and returns a CompletableDeferred object that will be completed when all the data
+     * has been published.
+     *
+     * @param data The array of bitmap image data to be published.
+     * @return A CompletableDeferred object that will be completed when all the data has been published.
      */
     fun publish(data: Array<Bitmap>): CompletableDeferred<Unit> {
         return capture.publish(data)
     }
+
+    /**
+     * Creates a license for the user.
+     *
+     * This function is asynchronous and returns a CompletableDeferred object that will be completed
+     * when the license creation process is finished. The result of the license creation process
+     * is a Boolean value indicating whether the license was successfully created or not.
+     *
+     * @param activity The ComponentActivity instance. This is typically the current activity from
+     * which this function is called. It is used to provide context for the license creation process.
+     *
+     * @return A CompletableDeferred object that will be completed with a Boolean value when the
+     * license creation process is finished. The Boolean value indicates whether the license was
+     * successfully created (true) or not (false).
+     */
+    fun createLicense(activity: ComponentActivity): CompletableDeferred<Boolean> {
+        val license = CompletableDeferred<Boolean>()
+        MainScope().async {
+            val resp = this@TikiClient.license.create(activity)
+            license.complete(resp)
+        }
+        return license
+    }
+
+    /**
+     * Retrieves the terms of the license.
+     *
+     * This function retrieves the terms of the license from the LicenseService. It uses the provided
+     * Context instance to get the resources necessary for retrieving the terms. The function is
+     * synchronous and returns a String containing the terms of the license.
+     *
+     * @param context The Context instance. This is typically the current activity or application context
+     * from which this function is called. It is used to provide context for retrieving the license terms.
+     * @return A String containing the terms of the license.
+     */
+    fun terms(context: Context) = license.terms(context)
 }

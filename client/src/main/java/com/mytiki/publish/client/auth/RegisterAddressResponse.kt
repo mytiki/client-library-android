@@ -1,7 +1,6 @@
 package com.mytiki.publish.client.auth
 
 import org.json.JSONObject
-import java.util.Date
 
 
 class RegisterAddressResponse(val id: String, val address: String, val pubKey: String) {

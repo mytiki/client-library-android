@@ -19,9 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.config.Config
 import com.mytiki.publish.client.example_app.theme.TikiClientTheme
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -84,7 +82,12 @@ class MainActivity : AppCompatActivity() {
                         MainButton(text = "Initialize") {
                             TikiClient.initialize(userIdInput)
                         }
-
+                        Spacer(modifier = Modifier.height(30.dp))
+                        MainButton(text = "Creatre License") {
+                            MainScope().async {
+                                loginOutput = TikiClient.createLicense(this@MainActivity).await().toString()
+                            }
+                        }
                         Spacer(modifier = Modifier.height(30.dp))
                         MainButton(text = "Scan") {
                             TikiClient.scan(this@MainActivity){
