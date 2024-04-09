@@ -74,16 +74,16 @@ class AuthService {
      * @return The address as a string or null if an error occurred.
      */
     fun address(keyPair: KeyPair): String? {
-        try {
+        return try {
             val publicKeyBytes = keyPair.public.encoded
 
             val digest = SHA3.Digest256()
             val addressBytes = digest.digest(publicKeyBytes)
 
-            return Base64.encodeToString(addressBytes, Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP)
+            Base64.encodeToString(addressBytes, Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP)
         } catch (e: NoSuchAlgorithmException) {
             e.printStackTrace()
-            return null
+            null
         }
     }
 
@@ -114,9 +114,9 @@ class AuthService {
             MainScope().async {
                 val keyPair = getKey()
                 val address = keyPair?.let { address(it) }
-                val signature = address?.let { address ->
-                    signMessage("${TikiClient.userID}.$address", keyPair.private)?.let {
-                        Base64.encodeToString(it, Base64.DEFAULT or Base64.NO_PADDING or Base64.NO_WRAP)
+                val signature = address?.let { addr ->
+                    signMessage("${TikiClient.userID}.$addr", keyPair.private)?.let { bytes ->
+                        Base64.encodeToString(bytes, Base64.DEFAULT or Base64.NO_PADDING or Base64.NO_WRAP)
                     }
                 }
                 val pubKey = keyPair?.let {
