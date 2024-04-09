@@ -91,23 +91,6 @@ object TikiClient {
         private set
 
     /**
-     * Checks if the client is properly configured and the user ID is set.
-     *
-     * This function checks if the client is properly configured and the user ID is set. It throws an
-     * exception if the client is not configured or the user ID is not set.
-     *
-     * @throws Exception if the client is not configured or the user ID is not set.
-     * @return true if the client is properly configured and the user ID is set.
-     */
-    private fun check(): Boolean {
-        if (!this::config.isInitialized) throw Exception(
-            "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration."
-        ) else if (userID.isEmpty() || !this::userID.isInitialized) throw Exception(
-            "User ID is not set. Use the TikiClient.initialize method to set the user ID."
-        ) else return true
-    }
-
-    /**
      * Configures the TikiClient with the provided configuration.
      *
      * This function is used to set the configuration for the TikiClient. The configuration includes
@@ -140,7 +123,6 @@ object TikiClient {
             MainScope().async {
                 this@TikiClient.userID = userID
                 auth.registerAddress().await()
-                isInitialized.complete(Unit)
             }
             return isInitialized
         } else throw Exception(
@@ -148,7 +130,7 @@ object TikiClient {
         )
     }
 
-       /**
+    /**
      * Initiates the process of scanning a physical receipt and returns the receipt ID.
      *
      * This function initiates the process of scanning a physical receipt. It uses the provided
@@ -161,7 +143,7 @@ object TikiClient {
      * when the scanning process is finished.
      */
     fun scan(activity: ComponentActivity, scanCallback: (Bitmap) -> Unit){
-        capture.camera(activity, scanCallback)
+        capture.scan(activity, scanCallback)
     }
 
     /**
@@ -228,4 +210,22 @@ object TikiClient {
      * @return A String containing the terms of the license.
      */
     fun terms(context: Context) = license.terms(context)
+
+    /**
+     * Checks if the client is properly configured and the user ID is set.
+     *
+     * This function checks if the client is properly configured and the user ID is set. It throws an
+     * exception if the client is not configured or the user ID is not set.
+     *
+     * @throws Exception if the client is not configured or the user ID is not set.
+     * @return true if the client is properly configured and the user ID is set.
+     */
+    private fun check(): Boolean {
+        if (!this::config.isInitialized) throw Exception(
+            "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration."
+        ) else if (userID.isEmpty() || !this::userID.isInitialized) throw Exception(
+            "User ID is not set. Use the TikiClient.initialize method to set the user ID."
+        ) else return true
+    }
+
 }

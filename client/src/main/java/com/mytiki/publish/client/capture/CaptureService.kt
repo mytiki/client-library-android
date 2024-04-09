@@ -23,11 +23,10 @@ class CaptureService {
      * Launches the camera activity for capturing an image of a receipt.
      * @param activity The ComponentActivity launching the camera.
      */
-    fun camera(activity: ComponentActivity, imageCallback: (Bitmap) -> Unit){
+    fun scan(activity: ComponentActivity, imageCallback: (Bitmap) -> Unit){
         this.imageCallback = imageCallback
         activity.startActivity(Intent(activity, CaptureActivity::class.java))
     }
-
 
     /**
      * Uploads a bitmap image for receipt data extraction.

@@ -13,8 +13,6 @@ import org.json.JSONObject
  * Service for managing licenses.
  */
 class LicenseService {
-
-
     private val baseUrl = "https://trail.mytiki.com"
 
     /**
@@ -24,7 +22,7 @@ class LicenseService {
      * @throws Exception if there is an error creating the license.
      */
     suspend fun create(context: Context): Boolean {
-        val licenseRequest = LicenseRequest(TikiClient.userID)
+        val licenseRequest = LicenseRequest()
         val jsonBody = licenseRequest.toJSON(context)
         val body = jsonBody.toString().toRequestBody("application/json".toMediaType())
         val addressToken = TikiClient.auth.addressToken().await()
@@ -36,8 +34,7 @@ class LicenseService {
             endPoint = "$baseUrl/license/create",
             onError = Exception("error on creating license"),
             body = body
-        ).await()
-        if (response == null) throw Exception("error on creating license")
+        ).await() ?: throw Exception("error on creating license")
         val rspCreate = RspCreate.fromJson(JSONObject(response.string()))
         return rspCreate.id.isNotEmpty()
     }

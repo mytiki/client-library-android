@@ -20,30 +20,6 @@ import java.security.*
 class AuthService {
 
     /**
-     * Provides a token for the provider.
-     * @return A Deferred object that will resolve to the token string.
-     */
-    fun providerToken(): Deferred<String> = CoroutineScope(Dispatchers.IO).async {
-        val body = FormBody.Builder()
-            .add("grant_type", "client_credentials")
-            .add("client_id","provider:${TikiClient.config.providerId}")
-            .add("client_secret", TikiClient.config.publicKey)
-            .add("scope", "account:provider")
-            .add("expires", "600")
-            .build()
-        val response = ApiService.post(
-            header =  mapOf(
-                "Accept" to "application/json",
-                "Content-Type" to "application/x-www-form-urlencoded"
-            ),
-            endPoint = "https://account.mytiki.com/api/latest/auth/token",
-            onError = Exception("error on getting token"),
-            body
-        ).await()
-        TikiTokenResponse.fromJson(JSONObject(response?.string()!!)).access_token
-    }
-
-    /**
      * Provides a token for the address.
      * @return A Deferred object that will resolve to the token string.
      */
@@ -71,7 +47,7 @@ class AuthService {
             onError = Exception("error on getting token"),
             body,
         ).await()
-        TikiTokenResponse.fromJson(JSONObject(response?.string()!!)).access_token
+        AuthTokenRsp.fromJson(JSONObject(response?.string()!!)).access_token
     }
 
     /**
@@ -90,26 +66,6 @@ class AuthService {
             e.printStackTrace()
             null
         }
-    }
-
-    /**
-     * Generates a new RSA key pair.
-     * @return The newly generated RSA key pair.
-     */
-    private fun generateKeyPair(): KeyPair {
-        val keyPairGenerator = KeyPairGenerator.getInstance(
-            KeyProperties.KEY_ALGORITHM_RSA, "AndroidKeyStore"
-        )
-
-        val builder = KeyGenParameterSpec.Builder(
-            "TikiKeyPair",
-            KeyProperties.PURPOSE_SIGN or KeyProperties.PURPOSE_VERIFY
-        ).setDigests(KeyProperties.DIGEST_SHA256)
-            .setSignaturePaddings(KeyProperties.SIGNATURE_PADDING_RSA_PKCS1)
-            .setKeySize(2048)
-
-        keyPairGenerator.initialize(builder.build())
-        return keyPairGenerator.generateKeyPair()
     }
 
     /**
@@ -151,9 +107,9 @@ class AuthService {
      * Registers the address.
      * @return A CompletableDeferred object that will resolve to the registration response.
      */
-    fun registerAddress(): CompletableDeferred<RegisterAddressResponse> {
+    fun registerAddress(): CompletableDeferred<AuthAddrRsp> {
 
-        val registerAddress = CompletableDeferred<RegisterAddressResponse>()
+        val registerAddress = CompletableDeferred<AuthAddrRsp>()
         try {
             MainScope().async {
                 val keyPair = getKey()
@@ -187,7 +143,7 @@ class AuthService {
                         Exception("error on registerAddress"),
                         jsonBody
                     ).await()
-                    registerAddress.complete(RegisterAddressResponse.fromJson(JSONObject(response?.string()!!)))
+                    registerAddress.complete(AuthAddrRsp.fromJson(JSONObject(response?.string()!!)))
                 } else registerAddress.completeExceptionally(Exception("error on registerAddress"))
             }
         } catch (e: Exception) {
@@ -195,4 +151,49 @@ class AuthService {
         }
         return registerAddress
     }
+
+    /**
+     * Provides a token for the provider.
+     * @return A Deferred object that will resolve to the token string.
+     */
+    private fun providerToken(): Deferred<String> = CoroutineScope(Dispatchers.IO).async {
+        val body = FormBody.Builder()
+            .add("grant_type", "client_credentials")
+            .add("client_id","provider:${TikiClient.config.providerId}")
+            .add("client_secret", TikiClient.config.publicKey)
+            .add("scope", "account:provider")
+            .add("expires", "600")
+            .build()
+        val response = ApiService.post(
+            header =  mapOf(
+                "Accept" to "application/json",
+                "Content-Type" to "application/x-www-form-urlencoded"
+            ),
+            endPoint = "https://account.mytiki.com/api/latest/auth/token",
+            onError = Exception("error on getting token"),
+            body
+        ).await()
+        AuthTokenRsp.fromJson(JSONObject(response?.string()!!)).access_token
+    }
+
+    /**
+     * Generates a new RSA key pair.
+     * @return The newly generated RSA key pair.
+     */
+    private fun generateKeyPair(): KeyPair {
+        val keyPairGenerator = KeyPairGenerator.getInstance(
+            KeyProperties.KEY_ALGORITHM_RSA, "AndroidKeyStore"
+        )
+
+        val builder = KeyGenParameterSpec.Builder(
+            "TikiKeyPair",
+            KeyProperties.PURPOSE_SIGN or KeyProperties.PURPOSE_VERIFY
+        ).setDigests(KeyProperties.DIGEST_SHA256)
+            .setSignaturePaddings(KeyProperties.SIGNATURE_PADDING_RSA_PKCS1)
+            .setKeySize(2048)
+
+        keyPairGenerator.initialize(builder.build())
+        return keyPairGenerator.generateKeyPair()
+    }
+
 }

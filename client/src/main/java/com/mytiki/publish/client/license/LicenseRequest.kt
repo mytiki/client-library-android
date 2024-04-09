@@ -6,10 +6,8 @@ import com.mytiki.publish.client.TikiClient
 import org.json.JSONArray
 import org.json.JSONObject
 
-class LicenseRequest(
-    val ptr: String,
-){
-    val userSignature: ByteArray?
+class LicenseRequest{
+    private val userSignature: ByteArray?
 
     init {
         val keys = TikiClient.auth.getKey()
