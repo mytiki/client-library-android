@@ -124,4 +124,5 @@ dependencies {
     androidTestImplementation("io.mockk:mockk-agent:1.13.9")
     testImplementation("io.mockk:mockk-android:1.13.9")
     testImplementation("io.mockk:mockk-agent:1.13.9")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2")
 }

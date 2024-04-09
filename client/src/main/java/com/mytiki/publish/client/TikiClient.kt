@@ -227,5 +227,4 @@ object TikiClient {
             "User ID is not set. Use the TikiClient.initialize method to set the user ID."
         ) else return true
     }
-
 }
