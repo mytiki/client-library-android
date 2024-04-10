@@ -33,7 +33,7 @@ class AuthService {
         Log.d("*******signature*******", signature)
         val body = FormBody.Builder()
             .add("grant_type", "client_credentials")
-            .add("client_id","addr:${TikiClient.config.providerId}:$address")
+            .add("client_id","addr:${TikiClient.config?.providerId}:$address")
             .add("client_secret", signature)
             .add("scope", "trail publish")
             .add("expires", "600")
@@ -139,7 +139,7 @@ class AuthService {
                             "Authorization" to "Bearer $token",
                             "accept" to "application/json"
                         ),
-                        "https://account.mytiki.com/api/latest/provider/${TikiClient.config.providerId}/user",
+                        "https://account.mytiki.com/api/latest/provider/${TikiClient.config?.providerId}/user",
                         Exception("error on registerAddress"),
                         jsonBody
                     ).await()
@@ -157,13 +157,15 @@ class AuthService {
      * @return A Deferred object that will resolve to the token string.
      */
     private fun providerToken(): Deferred<String> = CoroutineScope(Dispatchers.IO).async {
-        val body = FormBody.Builder()
-            .add("grant_type", "client_credentials")
-            .add("client_id","provider:${TikiClient.config.providerId}")
-            .add("client_secret", TikiClient.config.publicKey)
-            .add("scope", "account:provider")
-            .add("expires", "600")
-            .build()
+        val body = TikiClient.config?.let {
+            FormBody.Builder()
+                .add("grant_type", "client_credentials")
+                .add("client_id","provider:${TikiClient.config?.providerId}")
+                .add("client_secret", it.publicKey)
+                .add("scope", "account:provider")
+                .add("expires", "600")
+                .build()
+        }
         val response = ApiService.post(
             header =  mapOf(
                 "Accept" to "application/json",
