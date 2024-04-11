@@ -78,7 +78,7 @@ object TikiClient {
      * This property is a lateinit variable that holds the user ID for the client. It is private and
      * can only be set within the TikiClient object.
      */
-    lateinit var userID: String
+    var userID: String? =null
         private set
 
     /**
@@ -87,7 +87,7 @@ object TikiClient {
      * This property is a lateinit variable that holds the configuration for the client. It is private
      * and can only be set within the TikiClient object.
      */
-    lateinit var config: Config
+    var config: Config? =null
         private set
 
     /**
@@ -99,7 +99,21 @@ object TikiClient {
      * @param config The Config object that contains the configuration settings for the TikiClient.
      */
     fun configure(config: Config){
-        this.config = config
+        if (config.tosUrl.isEmpty()) throw Exception(
+            "tosUrl property cannot be empty. Use the TikiClient.configure method to add a configuration."
+        ) else if (config.privacyUrl.isEmpty()) throw Exception(
+            "privacyUrl property cannot be empty. Use the TikiClient.configure method to add a configuration."
+        ) else if (config.companyJurisdiction.isEmpty()) throw Exception(
+            "companyJurisdiction property cannot be empty. Use the TikiClient.configure method to add a configuration."
+        ) else if (config.companyName.isEmpty()) throw Exception(
+            "companyName property cannot be empty. Use the TikiClient.configure method to add a configuration."
+        ) else if (config.publicKey.isEmpty()) throw Exception(
+            "publicKey property cannot be empty. Use the TikiClient.configure method to add a configuration."
+        ) else if (config.providerId.isEmpty()) throw Exception(
+            "providerId property cannot be empty. Use the TikiClient.configure method to add a configuration."
+        ) else {
+            this.config = config
+        }
     }
 
     /**
@@ -116,18 +130,18 @@ object TikiClient {
      * initialization process is complete.
      */
     fun initialize(userID: String):CompletableDeferred<Unit>{
-        if (!this::config.isInitialized) throw Exception(
+        if (config == null) throw Exception(
             "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration."
-        ) else if (userID.isNotEmpty()){
+        ) else if (userID.isNullOrEmpty()) throw Exception(
+            "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID."
+        ) else {
             val isInitialized = CompletableDeferred<Unit>()
             MainScope().async {
                 this@TikiClient.userID = userID
                 auth.registerAddress().await()
             }
             return isInitialized
-        } else throw Exception(
-            "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID."
-        )
+        }
     }
 
     /**
@@ -221,11 +235,10 @@ object TikiClient {
      * @return true if the client is properly configured and the user ID is set.
      */
     private fun check(): Boolean {
-        if (!this::config.isInitialized) throw Exception(
+        if (config == null) throw Exception(
             "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration."
-        ) else if (userID.isEmpty() || !this::userID.isInitialized) throw Exception(
-            "User ID is not set. Use the TikiClient.initialize method to set the user ID."
+        ) else if (userID.isNullOrEmpty()) throw Exception(
+            "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID."
         ) else return true
     }
-
 }

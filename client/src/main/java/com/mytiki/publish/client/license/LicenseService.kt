@@ -64,12 +64,17 @@ class LicenseService {
      */
     fun terms(context: Context): String {
         val terms = context.assets.open("terms.md").bufferedReader().use { it.readText() }
-        val replacements = mapOf(
-            "{{{COMPANY}}}" to TikiClient.config.companyName,
-            "{{{JURISDICTION}}}" to TikiClient.config.companyJurisdiction,
-            "{{{TOS}}}" to TikiClient.config.tosUrl,
-            "{{{POLICY}}}" to TikiClient.config.privacyUrl
-        )
-        return replacements.entries.fold(terms) { acc, (key, value) -> acc.replace(key, value) }
+        if (TikiClient.config != null) {
+            val replacements = mapOf(
+                "{{{COMPANY}}}" to TikiClient.config!!.companyName,
+                "{{{JURISDICTION}}}" to TikiClient.config!!.companyJurisdiction,
+                "{{{TOS}}}" to TikiClient.config!!.tosUrl,
+                "{{{POLICY}}}" to TikiClient.config!!.privacyUrl
+            )
+            return replacements.entries.fold(terms) { acc, (key, value) -> acc.replace(key, value) }
+        }
+        else {
+            throw Exception("Config not found")
+        }
     }
 }
