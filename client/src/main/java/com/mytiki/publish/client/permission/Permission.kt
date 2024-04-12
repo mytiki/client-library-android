@@ -18,27 +18,25 @@ import android.os.Build
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.mytiki.publish.client.TikiClient
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.async
 
 
 enum class Permission(val code: Int) {
     CAMERA(100),
     MICROPHONE(101),
     PHOTO_LIBRARY(102),
+    VIDEO_LIBRARY(104),
+    AUDIO_LIBRARY(112),
     LOCATION_IN_USE(103),
-    LOCATION_ALWAYS(104),
-    NOTIFICATIONS(105),
-    CALENDAR(106),
-    CONTACTS(107),
-    REMINDERS(108),
-    SPEECH_RECOGNITION(109),
-    HEALTH(110),
-    MEDIA_LIBRARY(111),
-    MOTION(112),
-    TRACKING(113),
-    BLUETOOTH_CONNECT(116);
+    BACKGROUND_LOCATION(105),
+    NOTIFICATIONS(106),
+    CALENDAR(107),
+    CONTACTS(108),
+    REMINDERS(109),
+    SPEECH_RECOGNITION(110),
+    HEALTH(111),
+    MOTION(113),
+    TRACKING(114),
+    BLUETOOTH_CONNECT(115);
 
     val displayName
         get() = name.lowercase().replace('_', ' ')
@@ -46,20 +44,52 @@ enum class Permission(val code: Int) {
     fun isAuthorized(context: Context): Boolean = when (this) {
         CAMERA -> isPermissionGranted(Manifest.permission.CAMERA, context)
         MICROPHONE -> isPermissionGranted(Manifest.permission.RECORD_AUDIO, context)
-        PHOTO_LIBRARY -> isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, context)
-        LOCATION_IN_USE, LOCATION_ALWAYS -> isLocationPermissionGranted(context)
+        PHOTO_LIBRARY -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+                ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.READ_MEDIA_IMAGES
+                ) == PackageManager.PERMISSION_GRANTED
+            } else {
+                isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, context)
+            }
+        VIDEO_LIBRARY -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+                ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.READ_MEDIA_VIDEO
+                ) == PackageManager.PERMISSION_GRANTED
+            } else {
+                isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, context)
+            }
+        AUDIO_LIBRARY -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+                ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.READ_MEDIA_AUDIO
+                ) == PackageManager.PERMISSION_GRANTED
+            } else {
+                isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, context)
+            }
+        LOCATION_IN_USE -> isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION, context) &&
+                isPermissionGranted(Manifest.permission.ACCESS_COARSE_LOCATION, context)
+
+        BACKGROUND_LOCATION -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            isPermissionGranted(Manifest.permission.ACCESS_BACKGROUND_LOCATION, context)
+        } else {
+            isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION, context) &&
+                    isPermissionGranted(Manifest.permission.ACCESS_COARSE_LOCATION, context)
+        }
+
         NOTIFICATIONS -> isNotificationPermissionGranted(context)
         CALENDAR -> isPermissionGranted(Manifest.permission.READ_CALENDAR, context)
         CONTACTS -> isPermissionGranted(Manifest.permission.READ_CONTACTS, context)
         REMINDERS -> isPermissionGranted(Manifest.permission.READ_CALENDAR, context)
         SPEECH_RECOGNITION -> isPermissionGranted(Manifest.permission.RECORD_AUDIO, context)
         HEALTH -> isPermissionGranted(Manifest.permission.BODY_SENSORS, context)
-        MEDIA_LIBRARY -> isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE, context)
         MOTION -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             isPermissionGranted(Manifest.permission.ACTIVITY_RECOGNITION, context)
         } else {
             isTrackingPermissionGranted(context)
         }
+
         TRACKING -> isTrackingPermissionGranted(context)
         BLUETOOTH_CONNECT -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             isPermissionGranted(Manifest.permission.BLUETOOTH_CONNECT, context)
@@ -79,44 +109,91 @@ enum class Permission(val code: Int) {
                 Manifest.permission.RECORD_AUDIO,
                 code
             )
-            PHOTO_LIBRARY -> requestPermission(
-                context,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                code
-            )
-            LOCATION_IN_USE -> requestLocationPermission(context)
-            LOCATION_ALWAYS -> requestLocationPermission(context)
+
+            PHOTO_LIBRARY -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                requestPermission(
+                    context,
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    code
+                )
+            } else {
+                requestPermission(
+                    context,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    code
+                )
+            }
+
+            VIDEO_LIBRARY -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                requestPermission(
+                    context,
+                    Manifest.permission.READ_MEDIA_VIDEO,
+                    code
+                )
+            } else {
+                requestPermission(
+                    context,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    code
+                )
+            }
+
+            AUDIO_LIBRARY -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                requestPermission(
+                    context,
+                    Manifest.permission.READ_MEDIA_AUDIO,
+                    code
+                )
+            } else {
+                requestPermission(
+                    context,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    code
+                )
+            }
+
+            LOCATION_IN_USE ->
+                ActivityCompat.requestPermissions(
+                    context as Activity,
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ),
+                    code
+                )
+
+            BACKGROUND_LOCATION -> requestBackgroundLocationPermission(context)
             NOTIFICATIONS -> requestNotificationPermission(context as Context, onRequestResult)
             CALENDAR -> requestPermission(
                 context,
                 Manifest.permission.READ_CALENDAR,
                 code
             )
+
             CONTACTS -> requestPermission(
                 context,
                 Manifest.permission.READ_CONTACTS,
                 code
             )
+
             REMINDERS -> requestPermission(
                 context,
                 Manifest.permission.READ_CALENDAR,
                 code
             )
+
             SPEECH_RECOGNITION -> requestPermission(
                 context,
                 Manifest.permission.RECORD_AUDIO,
                 code
             )
+
             HEALTH -> requestPermission(
                 context,
                 Manifest.permission.BODY_SENSORS,
                 code
             )
-            MEDIA_LIBRARY -> requestPermission(
-                context,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                code
-            )
+
             MOTION -> requestActivityRecognitionPermission(context, code)
             TRACKING -> requestTrackingPermission(context, onRequestResult)
             BLUETOOTH_CONNECT -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -132,51 +209,38 @@ enum class Permission(val code: Int) {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    private fun isLocationPermissionGranted(context: Context): Boolean {
-        return when {
-            Build.VERSION.SDK_INT < Build.VERSION_CODES.M -> {
-                isPermissionGranted(Manifest.permission.ACCESS_COARSE_LOCATION, context)
-                        || isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION, context)
-            }
-            else -> {
-                isPermissionGranted(Manifest.permission.ACCESS_COARSE_LOCATION, context)
-                        && isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION, context)
-            }
-        }
-    }
-
     private fun requestPermission(
         activity: ActivityCompat.OnRequestPermissionsResultCallback,
         permission: String,
         requestCode: Int
     ) {
-
-            ActivityCompat.requestPermissions(
-                activity as Activity,
-                arrayOf(permission),
-                requestCode
-            )
-
+        ActivityCompat.requestPermissions(
+            activity as Activity,
+            arrayOf(permission),
+            requestCode
+        )
     }
 
-    private fun requestLocationPermission(context: ActivityCompat.OnRequestPermissionsResultCallback) {
+    private fun requestBackgroundLocationPermission(
+        activity: ActivityCompat.OnRequestPermissionsResultCallback
+    ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            ActivityCompat.requestPermissions(
-                context as Activity,
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                ),
-                LOCATION_ALWAYS.code
-            )
-        } else {
-            ActivityCompat.requestPermissions(
-                context as Activity,
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
+            if (
+                ActivityCompat.checkSelfPermission(
+                    activity as Context,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(
+                    activity as Context,
                     Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
-                LOCATION_IN_USE.code
+                ) != PackageManager.PERMISSION_GRANTED
+            ) throw Exception(
+                "ACCESS_COARSE_LOCATION and ACCESS_FINE_LOCATION permission is required to request background location permission"
+            )
+            ActivityCompat.requestPermissions(
+                activity as Activity,
+                arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
+                BACKGROUND_LOCATION.code
             )
         }
     }
