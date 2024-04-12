@@ -38,8 +38,6 @@ enum class Permission(val code: Int) {
     MEDIA_LIBRARY(111),
     MOTION(112),
     TRACKING(113),
-    ACCESS_BACKGROUND_LOCATION(114),
-    MANAGE_EXTERNAL_STORAGE(115),
     BLUETOOTH_CONNECT(116);
 
     val displayName
@@ -63,16 +61,6 @@ enum class Permission(val code: Int) {
             isTrackingPermissionGranted(context)
         }
         TRACKING -> isTrackingPermissionGranted(context)
-        ACCESS_BACKGROUND_LOCATION -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            isPermissionGranted(Manifest.permission.ACCESS_BACKGROUND_LOCATION, context)
-        } else {
-            false
-        }
-        MANAGE_EXTERNAL_STORAGE -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            isPermissionGranted(Manifest.permission.MANAGE_EXTERNAL_STORAGE, context)
-        } else {
-            false
-        }
         BLUETOOTH_CONNECT -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             isPermissionGranted(Manifest.permission.BLUETOOTH_CONNECT, context)
         } else {
@@ -131,12 +119,6 @@ enum class Permission(val code: Int) {
             )
             MOTION -> requestActivityRecognitionPermission(context, code)
             TRACKING -> requestTrackingPermission(context, onRequestResult)
-            ACCESS_BACKGROUND_LOCATION -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                requestPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION, code)
-            }
-            MANAGE_EXTERNAL_STORAGE -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                requestPermission(context, Manifest.permission.MANAGE_EXTERNAL_STORAGE, code)
-            }
             BLUETOOTH_CONNECT -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 requestPermission(context, Manifest.permission.BLUETOOTH_CONNECT, code)
             }
@@ -168,14 +150,13 @@ enum class Permission(val code: Int) {
         permission: String,
         requestCode: Int
     ) {
-        MainScope().async {
-            if(!TikiClient.license.verify()) throw Exception("The License is invalid. Use the TikiClient.license method to issue a new License.")
+
             ActivityCompat.requestPermissions(
                 activity as Activity,
                 arrayOf(permission),
                 requestCode
             )
-        }
+
     }
 
     private fun requestLocationPermission(context: ActivityCompat.OnRequestPermissionsResultCallback) {

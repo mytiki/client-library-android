@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.config.Config
 import com.mytiki.publish.client.example_app.theme.TikiClientTheme
+import com.mytiki.publish.client.permission.Permission
 import kotlinx.coroutines.*
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
@@ -103,9 +104,18 @@ class MainActivity : AppCompatActivity() {
                             }
                             else loginOutput = "No image to publish"
                         }
+                        Spacer(modifier = Modifier.height(30.dp))
+                        MainButton(text = "Request Permission") {
+                            Permission.CONTACTS.requestAuth(this@MainActivity)
+                        }
                     }
                 }
             }
         }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Log.e("Permission", "Request code: $requestCode")
     }
 }
