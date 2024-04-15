@@ -3,10 +3,13 @@ package com.mytiki.publish.client
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
+import androidx.core.app.ActivityCompat
 import com.mytiki.publish.client.auth.AuthService
 import com.mytiki.publish.client.capture.CaptureService
 import com.mytiki.publish.client.config.Config
 import com.mytiki.publish.client.license.LicenseService
+import com.mytiki.publish.client.permission.Permission
+import com.mytiki.publish.client.permission.PermissionService
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
@@ -52,6 +55,11 @@ object TikiClient {
      * @return An instance of CaptureService.
      */
     val capture = CaptureService()
+        get() {
+            check()
+            return field
+        }
+    val permission = PermissionService()
         get() {
             check()
             return field
@@ -203,10 +211,13 @@ object TikiClient {
      * license creation process is finished. The Boolean value indicates whether the license was
      * successfully created (true) or not (false).
      */
-    fun createLicense(activity: ComponentActivity): CompletableDeferred<Boolean> {
+    fun createLicense(activity: ActivityCompat.OnRequestPermissionsResultCallback, permissions: List<Permission>): CompletableDeferred<Boolean> {
+        permissions.forEach {
+            it.requestAuth(activity)
+        }
         val license = CompletableDeferred<Boolean>()
         MainScope().async {
-            val resp = this@TikiClient.license.create(activity)
+            val resp = this@TikiClient.license.create(activity as Context)
             license.complete(resp)
         }
         return license
