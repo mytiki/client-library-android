@@ -2,9 +2,6 @@ package com.mytiki.publish.client.permission
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.AppOpsManager
-import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -16,7 +13,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.mytiki.publish.client.TikiClient
-import java.lang.reflect.InvocationTargetException
 
 class PermissionActivity : AppCompatActivity() {
 
@@ -74,9 +70,9 @@ class PermissionActivity : AppCompatActivity() {
   }
 
   fun requestLocation() {
-    if (!Permission.BACKGROUND_LOCATION.isAuthorized(this)) {
-      if (Permission.FINE_LOCATION.isAuthorized(this) &&
-          Permission.COARSE_LOCATION.isAuthorized(this)) {
+    if (!TikiClient.isPermissionAuthorized(this, Permission.BACKGROUND_LOCATION)) {
+      if (TikiClient.isPermissionAuthorized(this, Permission.FINE_LOCATION) &&
+          TikiClient.isPermissionAuthorized(this, Permission.COARSE_LOCATION)) {
         ActivityCompat.requestPermissions(
             this,
             arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
@@ -95,7 +91,7 @@ class PermissionActivity : AppCompatActivity() {
 
   private fun requestNotificationPermission() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      if (!areNotificationsEnabled()) {
+      if (!TikiClient.isPermissionAuthorized(this, Permission.NOTIFICATIONS)) {
         val intent =
             Intent().apply {
               action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
@@ -104,7 +100,8 @@ class PermissionActivity : AppCompatActivity() {
         startActivity(intent)
         isNotificationPermissionRequested = true
       } else {
-        callbackMap[Permission.NOTIFICATIONS] = areNotificationsEnabled()
+        callbackMap[Permission.NOTIFICATIONS] =
+            TikiClient.isPermissionAuthorized(this, Permission.NOTIFICATIONS)
         isNotificationPermissionRequested = false
         diferentPermissions.remove(Permission.NOTIFICATIONS)
         handleDifferentPermissions()
@@ -128,7 +125,8 @@ class PermissionActivity : AppCompatActivity() {
       intent.data = Uri.fromParts("package", packageName, null)
       trackingPermissionLauncher =
           registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            callbackMap[Permission.TRACKING] = Permission.TRACKING.isAuthorized(this)
+            callbackMap[Permission.TRACKING] =
+                TikiClient.isPermissionAuthorized(this, Permission.TRACKING)
             diferentPermissions.remove(Permission.TRACKING)
             handleDifferentPermissions()
           }
@@ -139,7 +137,8 @@ class PermissionActivity : AppCompatActivity() {
   override fun onResume() {
     super.onResume()
     if (isNotificationPermissionRequested) {
-      callbackMap[Permission.NOTIFICATIONS] = areNotificationsEnabled()
+      callbackMap[Permission.NOTIFICATIONS] =
+          TikiClient.isPermissionAuthorized(this, Permission.NOTIFICATIONS)
       isNotificationPermissionRequested = false
       diferentPermissions.remove(Permission.NOTIFICATIONS)
       handleDifferentPermissions()
@@ -162,7 +161,7 @@ class PermissionActivity : AppCompatActivity() {
 
   private fun checkPermissions(permissions: List<Permission>) {
     permissions.forEach {
-      if (!it.isAuthorized(this)) {
+      if (!TikiClient.isPermissionAuthorized(this, it)) {
         if (it == Permission.BACKGROUND_LOCATION ||
             it == Permission.NOTIFICATIONS ||
             it == Permission.TRACKING ||
@@ -173,39 +172,6 @@ class PermissionActivity : AppCompatActivity() {
         }
       } else {
         callbackMap[it] = true
-      }
-    }
-  }
-
-  private fun areNotificationsEnabled(): Boolean {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-      val notificationManager =
-          getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-      notificationManager.areNotificationsEnabled()
-    } else {
-      val appOps = getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-      val appInfo = applicationContext.applicationInfo
-      val pkg = applicationContext.applicationContext.packageName
-      val uid = appInfo.uid
-
-      try {
-        val appOpsClass = Class.forName(AppOpsManager::class.java.name)
-        val checkOpNoThrowMethod =
-            appOpsClass.getMethod("checkOpNoThrow", Integer.TYPE, Integer.TYPE, String::class.java)
-        val opPostNotificationValue = appOpsClass.getDeclaredField("OP_POST_NOTIFICATION")
-
-        val value = opPostNotificationValue.get(Integer::class.java) as Int
-        checkOpNoThrowMethod.invoke(appOps, value, uid, pkg) as Int == AppOpsManager.MODE_ALLOWED
-      } catch (e: ClassNotFoundException) {
-        true
-      } catch (e: NoSuchMethodException) {
-        true
-      } catch (e: NoSuchFieldException) {
-        true
-      } catch (e: InvocationTargetException) {
-        true
-      } catch (e: IllegalAccessException) {
-        true
       }
     }
   }

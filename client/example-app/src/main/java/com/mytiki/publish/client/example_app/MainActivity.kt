@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
 
                 Spacer(modifier = Modifier.height(30.dp))
                 MainButton(text = "request permissions") {
-                  TikiClient.permission.requestPermissions(this@MainActivity, Permission.entries) {
+                  TikiClient.permissions(this@MainActivity, Permission.entries) {
                     loginOutput = it.toString()
                   }
                 }
