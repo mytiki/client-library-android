@@ -1,10 +1,12 @@
 package com.mytiki.publish.client.permission
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AppOpsManager
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -12,90 +14,86 @@ import android.provider.Settings
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.mytiki.publish.client.TikiClient
 import java.lang.reflect.InvocationTargetException
 
 class PermissionActivity : AppCompatActivity() {
 
-  companion object {
-    var instance: PermissionActivity? = null
-      private set
-  }
-
+  private val callbackMap = mutableMapOf<Permission, Boolean>()
+  private var diferentPermissions = mutableListOf<Permission>()
+  private var normalPermissions = mutableListOf<Permission>()
   private var isNotificationPermissionRequested = false
-
   private var trackingPermissionLauncher: ActivityResultLauncher<Intent>? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    instance = this
     val permissions =
-        intent.extras
-            ?.getStringArray("permissions")
-            ?.map { Permission.fromString(it) }
-            ?.filterNotNull()
+        intent.extras?.getStringArray("permissions")?.mapNotNull { Permission.fromString(it) }
+
     if (permissions != null) {
-      requestPermission(0, permissions)
+      checkPermissions(permissions)
+      val permissionString = normalPermissions.mapNotNull { it.permission() }
+      val requestPermissionLauncher =
+          registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+              requestMap ->
+            requestMap.onEachIndexed { index, map ->
+              if (map.key == normalPermissions[index].permission()) {
+                callbackMap[normalPermissions[index]] = map.value
+              }
+            }
+            if (diferentPermissions.isEmpty()) {
+              TikiClient.permission.permissionCallback?.let { it -> it(callbackMap) }
+              this.finish()
+            } else {
+              handleDifferentPermissions()
+            }
+          }
+      requestPermissionLauncher.launch(permissionString.toTypedArray())
+      //      ActivityCompat.requestPermissions(this, permissionString.toTypedArray(), REQUEST_CODE)
     } else {
-      TikiClient.permission.permissionCallback?.let { it(false) }
+      TikiClient.permission.permissionCallback
     }
   }
 
-  override fun onDestroy() {
-    super.onDestroy()
-    instance = null
-  }
-
-  private fun requestPermission(index: Int, permissions: List<Permission>) {
-    if (index >= permissions.size) {
-      TikiClient.permission.permissionCallback?.let { it(true) }
-      return
-    }
-    val callback: (Boolean) -> Unit = { granted: Boolean ->
-      if (granted) {
-        requestPermission(index + 1, permissions)
-      } else {
-        TikiClient.permission.permissionCallback?.let { it(false) }
-      }
-    }
-
-    when (permissions[index]) {
-      Permission.BACKGROUND_LOCATION ->
-          requestBackgroundLocationPermission(permissions[index], callback)
-      Permission.NOTIFICATIONS -> requestNotificationPermission(callback)
-      Permission.TRACKING -> requestTrackingPermission(callback)
-      Permission.BLUETOOTH_CONNECT ->
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-              launchPermission(permissions[index], callback)
-      else -> launchPermission(permissions[index], callback)
-    }
-  }
-
-  private fun launchPermission(permission: Permission, callback: (Boolean) -> Unit) {
-    val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-          callback(it)
+  fun handleDifferentPermissions() {
+    if (diferentPermissions.isNotEmpty()) {
+      when (diferentPermissions[0]) {
+        Permission.BACKGROUND_LOCATION -> requestLocation()
+        Permission.NOTIFICATIONS -> requestNotificationPermission()
+        Permission.TRACKING -> requestTrackingPermission()
+        else -> {
+          TikiClient.permission.permissionCallback?.let { it -> it(callbackMap) }
+          this.finish()
         }
-    if (!permission.isAuthorized(this)) {
-      requestPermissionLauncher.launch(permission.permission())
-    } else callback(true)
+      }
+    } else {
+      TikiClient.permission.permissionCallback?.let { it -> it(callbackMap) }
+      this.finish()
+    }
   }
 
-  private fun requestBackgroundLocationPermission(
-      permission: Permission,
-      callback: (Boolean) -> Unit
-  ) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+  fun requestLocation() {
+    if (!Permission.BACKGROUND_LOCATION.isAuthorized(this)) {
       if (Permission.FINE_LOCATION.isAuthorized(this) &&
           Permission.COARSE_LOCATION.isAuthorized(this)) {
-        launchPermission(permission, callback)
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
+            Permission.BACKGROUND_LOCATION.code)
       } else {
-        callback(false)
+        callbackMap[Permission.BACKGROUND_LOCATION] = false
+        diferentPermissions.remove(Permission.BACKGROUND_LOCATION)
+        handleDifferentPermissions()
       }
+    } else {
+      callbackMap[Permission.BACKGROUND_LOCATION] = true
+      diferentPermissions.remove(Permission.BACKGROUND_LOCATION)
+      handleDifferentPermissions()
     }
   }
 
-  private fun requestNotificationPermission(callback: ((Boolean) -> Unit)) {
+  private fun requestNotificationPermission() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       if (!areNotificationsEnabled()) {
         val intent =
@@ -106,18 +104,76 @@ class PermissionActivity : AppCompatActivity() {
         startActivity(intent)
         isNotificationPermissionRequested = true
       } else {
-        callback(areNotificationsEnabled())
+        callbackMap[Permission.NOTIFICATIONS] = areNotificationsEnabled()
+        isNotificationPermissionRequested = false
+        diferentPermissions.remove(Permission.NOTIFICATIONS)
+        handleDifferentPermissions()
       }
     } else {
-      callback(true)
+      callbackMap[Permission.NOTIFICATIONS] = true
+      isNotificationPermissionRequested = false
+      diferentPermissions.remove(Permission.NOTIFICATIONS)
+      handleDifferentPermissions()
+    }
+  }
+
+  @SuppressLint("AnnotateVersionCheck")
+  private fun requestTrackingPermission() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      callbackMap[Permission.TRACKING] = false
+      diferentPermissions.remove(Permission.TRACKING)
+      handleDifferentPermissions()
+    } else {
+      val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+      intent.data = Uri.fromParts("package", packageName, null)
+      trackingPermissionLauncher =
+          registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            callbackMap[Permission.TRACKING] = Permission.TRACKING.isAuthorized(this)
+            diferentPermissions.remove(Permission.TRACKING)
+            handleDifferentPermissions()
+          }
+      trackingPermissionLauncher?.launch(intent)
     }
   }
 
   override fun onResume() {
     super.onResume()
     if (isNotificationPermissionRequested) {
-      TikiClient.permission.permissionCallback?.let { it(areNotificationsEnabled()) }
+      callbackMap[Permission.NOTIFICATIONS] = areNotificationsEnabled()
       isNotificationPermissionRequested = false
+      diferentPermissions.remove(Permission.NOTIFICATIONS)
+      handleDifferentPermissions()
+    }
+  }
+
+  override fun onRequestPermissionsResult(
+      requestCode: Int,
+      permissions: Array<out String>,
+      grantResults: IntArray
+  ) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    if (requestCode == Permission.BACKGROUND_LOCATION.code) {
+      callbackMap[Permission.BACKGROUND_LOCATION] =
+          grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
+      diferentPermissions.remove(Permission.BACKGROUND_LOCATION)
+      handleDifferentPermissions()
+    }
+  }
+
+  private fun checkPermissions(permissions: List<Permission>) {
+    permissions.forEach {
+      if (!it.isAuthorized(this)) {
+        if (it == Permission.BACKGROUND_LOCATION ||
+            it == Permission.NOTIFICATIONS ||
+            it == Permission.TRACKING ||
+            it == Permission.BLUETOOTH_CONNECT) {
+          diferentPermissions.add(it)
+        } else {
+          normalPermissions.add(it)
+        }
+      } else {
+        callbackMap[it] = true
+      }
     }
   }
 
@@ -151,21 +207,6 @@ class PermissionActivity : AppCompatActivity() {
       } catch (e: IllegalAccessException) {
         true
       }
-    }
-  }
-
-  @SuppressLint("AnnotateVersionCheck")
-  private fun requestTrackingPermission(callback: ((Boolean) -> Unit)) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-      callback(false)
-    } else {
-      val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-      intent.data = Uri.fromParts("package", packageName, null)
-      trackingPermissionLauncher =
-          registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            callback(Permission.TRACKING.isAuthorized(this))
-          }
-      trackingPermissionLauncher?.launch(intent)
     }
   }
 }
