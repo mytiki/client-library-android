@@ -72,7 +72,7 @@ dependencies {
 }
 
 tasks.dokkaHtml {
-    outputDirectory.set(file("./doc"))
+    outputDirectory.set(file("../docs"))
 }
 
 signing {
