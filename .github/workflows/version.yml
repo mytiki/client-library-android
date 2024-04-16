@@ -48,6 +48,6 @@ jobs:
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GH Action"
-          git add client/build.gradle
+          git add client/build.gradle.kts
           git commit -m 'version bump'
           git push
