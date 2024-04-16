@@ -40,7 +40,7 @@ jobs:
       - name: Bump version
         uses: Swisyn/android-version-generator-actions@v1.5
         with:
-          gradlePath: client/build.gradle
+          gradlePath: client/build.gradle.kts
           versionCode: ${{github.run_number}}
           versionName: ${{ steps.semver.outputs.nextStrict }}
 
