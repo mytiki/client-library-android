@@ -90,7 +90,7 @@ val result = TikiClient.publish(data)
 ```
 
 Upon execution, this method returns a `CompletableDeferred` object that will be completed when the data has been published.
-
+ 
 ## API Reference
 
 The central API interface in the library is the `TikiClient` object, designed to abstract the complexities of authorization and API requests. While serving as the primary entry point, it's important to note that all APIs within the library are public and accessible.
