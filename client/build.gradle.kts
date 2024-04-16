@@ -1,7 +1,9 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
+    id("org.jetbrains.dokka")
+    id("maven-publish")
+    id("signing")
 }
 
 android {
@@ -10,7 +12,7 @@ android {
 
     defaultConfig {
         minSdk = 23
-
+        version = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
         vectorDrawables {
@@ -35,12 +37,7 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
-        compose = true
         viewBinding = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.8"
     }
 
     packaging {
@@ -48,81 +45,95 @@ android {
             excludes += "/META-INF/{NOTICE,LICENSE,DEPENDENCIES,LICENSE.md,NOTICE.txt,NOTICE.md}"
         }
     }
-
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
-    }
 }
 
 dependencies {
 
-    val material3Version = "1.2.0"
-    val composeBom = platform("androidx.compose:compose-bom:2023.03.00")
-
-
-//    Android
+    // Android
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.2")
 
-    //Navigation
-    implementation("androidx.navigation:navigation-compose:2.7.7")
-    androidTestImplementation("androidx.navigation:navigation-testing:2.7.7")
-
-
-//    Okhttp
+    // Okhttp
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
-    //Jetpack Compose
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.activity:activity-compose:1.8.2")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
-    implementation(composeBom)
-    implementation("androidx.compose.foundation:foundation")
-    implementation("androidx.compose.runtime:runtime-livedata")
-    implementation("androidx.compose.material3:material3:$material3Version")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
-
-//    Coil
-    implementation("io.coil-kt:coil-compose:2.2.2")
-
-//    Bouncy Castle
+    // Bouncy Castle
     implementation("org.bouncycastle:bcpkix-jdk15to18:1.68")
     implementation("org.bouncycastle:bcprov-jdk15to18:1.68")
 
-//  Test
-    androidTestImplementation(composeBom)
+    // Test
     testImplementation("junit:junit:4.13.2")
-    testImplementation("org.json:json:20230227")
-    testImplementation ("io.mockk:mockk:1.13.9")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation ("io.mockk:mockk-android:1.13.9")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    androidTestImplementation("com.android.support.test:rules:1.0.2")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.2")
-    debugImplementation("androidx.test:core:1.5.0")
-    debugImplementation("androidx.test:rules:1.5.0")
-    debugImplementation("androidx.test:runner:1.5.2")
-    androidTestImplementation("io.mockk:mockk-agent:1.13.9")
-    testImplementation("io.mockk:mockk-android:1.13.9")
-    testImplementation("io.mockk:mockk-agent:1.13.9")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2")
+}
+
+tasks.dokkaHtml {
+    outputDirectory.set(file("./doc"))
+}
+
+signing {
+    val signingKey = System.getenv("PGP_PRIVATE_KEY")
+    val signingPassword = System.getenv("PGP_PASSPHRASE")
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign(publishing.publications)
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            register("release", MavenPublication::class) {
+                from(components["release"])
+                groupId = "com.mytiki"
+                artifactId = "publish-client"
+                version = "1.0.0"
+
+                pom {
+                    name.set("TIKI Publish Client [Android]")
+                    description.set("A package for adding TIKI's decentralized infrastructure to Android projects. Add tokenized data ownership, consent, and rewards to your app in minutes.")
+                    url.set("https://docs.mytiki.com/reference/client-library-overview")
+
+                    licenses {
+                        license {
+                            name.set("MIT")
+                            url.set("https://github.com/tiki/tiki-sdk-android/blob/main/LICENSE")
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            name.set("The TIKI Team")
+                            email.set("hello@mytiki.com")
+                            organization.set("TIKI")
+                            organizationUrl.set("https://mytiki.com")
+                        }
+                    }
+
+                    scm {
+                        url.set("https://github.com/tiki/publish-client-android")
+                        tag.set("1.0.0")
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                name = "localRepo"
+                setUrl(layout.buildDirectory.dir("repo"))
+            }
+
+            maven {
+                name = "OSSRH"
+                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+                credentials {
+                    username = System.getenv("OSSRH_USER")
+                    password = System.getenv("OSSRH_TOKEN")
+                }
+            }
+        }
+    }
 }

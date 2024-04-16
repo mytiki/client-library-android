@@ -5,18 +5,8 @@
 
     <application>
         <activity
-            android:name=".email.EmailActivity"
-            android:exported="false"
-            android:label="@string/title_activity_email"
-            android:theme="@style/Theme.TIKIClientLibrary" />
-        <activity
-            android:name=".ui.UIActivity"
-            android:exported="false"
-            android:theme="@style/Theme.AppCompat.Translucent" />
-        <activity
             android:name=".capture.CaptureActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-
     </application>
 </manifest>
