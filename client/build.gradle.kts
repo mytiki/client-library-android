@@ -74,13 +74,14 @@ dependencies {
 tasks.dokkaHtml {
     outputDirectory.set(file("../doc/api"))
 }
-//
-//signing {
-//    val signingKey = System.getenv("PGP_PRIVATE_KEY")
-//    val signingPassword = System.getenv("PGP_PASSPHRASE")
-//    useInMemoryPgpKeys(signingKey, signingPassword)
-//    sign(publishing.publications)
-//}
+
+signing {
+    val signingKey = System.getenv("PGP_PRIVATE_KEY")
+    val signingPassword = System.getenv("PGP_PASSPHRASE")
+    useInMemoryPgpKeys(signingKey, signingPassword)
+    sign(publishing.publications)
+}
+
 afterEvaluate {
     publishing {
         publications {
@@ -113,7 +114,7 @@ afterEvaluate {
 
                     scm {
                         url.set("https://github.com/tiki/publish-client-android")
-                        tag.set(android.defaultConfig.versionName)
+                        tag.set("1.0.0")
                     }
                 }
             }
@@ -124,24 +125,15 @@ afterEvaluate {
                 name = "localRepo"
                 setUrl(layout.buildDirectory.dir("repo"))
             }
-//
-//        maven {
-//            name = "OSSRH"
-//            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-//            credentials {
-//                username = System.getenv("OSSRH_USER")
-//                password = System.getenv("OSSRH_TOKEN")
-//            }
-//        }
-//
-//        maven {
-//            name = "GitHubPackages"
-//            url = (uri("https://maven.pkg.github.com/tiki/tiki-sdk-android"))
-//            credentials {
-//                username = System.getenv("GITHUB_USER")
-//                password = System.getenv("GITHUB_TOKEN")
-//            }
-//        }
+
+            maven {
+                name = "OSSRH"
+                url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+                credentials {
+                    username = System.getenv("OSSRH_USER")
+                    password = System.getenv("OSSRH_TOKEN")
+                }
+            }
         }
     }
 }
