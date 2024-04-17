@@ -39,7 +39,7 @@ jobs:
 
       - name: Bump version
         run: | 
-          perl -i -pe 's/(var versionName = ")([^"]+)/$1&${{ steps.semver.outputs.nextStrict }}/gs' client/build.gradle.kts
+          perl -i -pe 's/(val versionName = ")([^"]+)/$1&${{ steps.semver.outputs.nextStrict }}/gs' client/build.gradle.kts
 
       - name: Commit Changes
         continue-on-error: true
