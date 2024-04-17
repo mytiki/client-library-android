@@ -1,70 +1,70 @@
-#name: Dokka
-#
-#on:
-#  pull_request:
-#    branches:
-#      - main
-#    types:
-#      - closed
-#
-#permissions:
-#  contents: write
-#  pages: write
-#  id-token: write
-#
-#concurrency:
-#  group: ${{ github.ref }}-${{ github.workflow }}
-#  cancel-in-progress: true
-#
-#jobs:
-#  docs:
-#    if: startsWith(github.head_ref, 'release/')
-#    environment:
-#      name: Production
-#      url: ${{ steps.deployment.outputs.page_url }}
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout TIKI Publish Client
-#        uses: actions/checkout@v4
-#        with:
-#          fetch-depth: 0
-#
-#      - name: Checkout PR
-#        id: getpr
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        run: |
-#          gh pr checkout ${{ github.event.pull_request.number }}
-#          export PR_BRANCH=$(git branch --show-current)
-#          echo "branch=$PR_BRANCH" >> $GITHUB_OUTPUT
-#
-#      - name: Set up Java
-#        uses: actions/setup-java@v3
-#        with:
-#          java-version: '17'
-#          distribution: 'adopt'
-#
-#      - name: Setup Android SDK
-#        uses: android-actions/setup-android@v3
-#
-#      - name: Validate Gradle Wrapper
-#        uses: gradle/wrapper-validation-action@v1
-#
-#      - name: Generate Docs
-#        uses: gradle/gradle-build-action@v2
-#        with:
-#          arguments: dokkaHtml
-#        env:
-#          GITHUB_USER: ${{ github.actor }}
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#
-#      - name: Commit Docs
-#        continue-on-error: true
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        run: |
-#          git config --global user.email "action@github.com"
-#          git config --global user.name "GH Action"
-#          git add docs
-#          git commit -m 'docs: automatic docs generation'
-#          git push
+name: Dokka
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  docs:
+    if: startsWith(github.head_ref, 'release/')
+    environment:
+      name: Production
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout TIKI Publish Client
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout PR
+        id: getpr
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr checkout ${{ github.event.pull_request.number }}
+          export PR_BRANCH=$(git branch --show-current)
+          echo "branch=$PR_BRANCH" >> $GITHUB_OUTPUT
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Generate Docs
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: dokkaHtml
+        env:
+          GITHUB_USER: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit Docs
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GH Action"
+          git add docs
+          git commit -m 'docs: automatic docs generation'
+          git push
