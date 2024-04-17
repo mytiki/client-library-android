@@ -18,17 +18,25 @@ concurrency:
 
 jobs:
   docs:
-    #if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
+    if: startsWith(github.head_ref, 'release/')
     environment:
       name: Production
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout TIKI SDK Android
+      - name: Checkout TIKI Publish Client
         uses: actions/checkout@v4
         with:
-          repository: tiki/publish-client-android
-          
+          fetch-depth: 0
+      
+      - name: Checkout PR
+        id: getpr
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr checkout ${{ github.event.pull_request.number }}
+          export PR_BRANCH=$(git branch --show-current)
+          echo "branch=$PR_BRANCH" >> $GITHUB_OUTPUT
 
       - name: Set up Java
         uses: actions/setup-java@v3
