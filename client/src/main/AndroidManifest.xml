@@ -8,6 +8,5 @@
         <activity
                 android:name=".permission.PermissionActivity"
                 android:exported="false"/>
-
     </application>
 </manifest>
