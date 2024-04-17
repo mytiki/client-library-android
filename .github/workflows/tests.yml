@@ -1,4 +1,4 @@
-name: Integration Tests
+name: Tests
 
 on:
   pull_request:
@@ -25,20 +25,5 @@ jobs:
       - name: Gradle cache
         uses: gradle/gradle-build-action@v2
 
-      - name: Publish to local maven repo
-        uses: gradle/gradle-build-action@v2
-        env:
-          GITHUB_USER: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          arguments: publishAllPublicationsToLocalRepoRepository
-
-      - name: run tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 29
-          force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: true
-          working-directory: integration_tests
-          script: ./gradlew connectedCheck
+      - name: Unit tests
+        run: ./gradlew test

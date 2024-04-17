@@ -6,13 +6,14 @@ plugins {
     id("signing")
 }
 
+.0.2"
+
 android {
     namespace = "com.mytiki.publish.client"
     compileSdk = 34
 
     defaultConfig {
         minSdk = 23
-        version = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
         vectorDrawables {
@@ -89,7 +90,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.mytiki"
                 artifactId = "publish-client"
-                version = "1.0.0"
+                version = versionName
 
                 pom {
                     name.set("TIKI Publish Client [Android]")
@@ -114,7 +115,7 @@ afterEvaluate {
 
                     scm {
                         url.set("https://github.com/tiki/publish-client-android")
-                        tag.set("1.0.0")
+                        tag.set(versionName)
                     }
                 }
             }

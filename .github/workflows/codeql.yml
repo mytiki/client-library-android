@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'java' ]
+        language: [ 'kotlin', 'java' ]
 
     steps:
       - name: Checkout TIKI Client Android

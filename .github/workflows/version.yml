@@ -38,11 +38,8 @@ jobs:
           branch: ${{ steps.getpr.outputs.branch }}
 
       - name: Bump version
-        uses: Swisyn/android-version-generator-actions@v1.5
-        with:
-          gradlePath: client/build.gradle
-          versionCode: ${{github.run_number}}
-          versionName: ${{ steps.semver.outputs.nextStrict }}
+        run: | 
+          perl -i -pe 's/(val versionName = ")([^"]+)/$1${{ steps.semver.outputs.nextStrict }}/gs' client/build.gradle.kts
 
       - name: Commit Changes
         continue-on-error: true
@@ -51,6 +48,6 @@ jobs:
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GH Action"
-          git add app/build.gradle
+          git add client/build.gradle.kts
           git commit -m 'version bump'
           git push
