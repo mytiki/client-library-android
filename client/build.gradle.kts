@@ -9,7 +9,7 @@ plugins {
     id("signing")
 }
 
-val versionName = "0.0.7"
+val versionName = "0.1.0"
 val localProps = Properties()
 try {
     localProps.load(File("local.properties").reader())
