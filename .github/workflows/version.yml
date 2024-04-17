@@ -38,7 +38,7 @@ jobs:
           branch: ${{ steps.getpr.outputs.branch }}
 
       - name: Bump version
-        run: | 
+        run: |
           perl -i -pe 's/(val versionName = ")([^"]+)/${1}${{ steps.semver.outputs.nextStrict }}/gs' client/build.gradle.kts
 
       - name: Commit Changes

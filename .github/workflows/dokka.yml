@@ -8,7 +8,7 @@ on:
       - closed
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -17,17 +17,26 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  publish:
-    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
+  docs:
+    if: startsWith(github.head_ref, 'release/')
     environment:
       name: Production
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout TIKI SDK Android
+      - name: Checkout TIKI Publish Client
         uses: actions/checkout@v4
         with:
-          repository: tiki/tiki-sdk-android
+          fetch-depth: 0
+
+      - name: Checkout PR
+        id: getpr
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr checkout ${{ github.event.pull_request.number }}
+          export PR_BRANCH=$(git branch --show-current)
+          echo "branch=$PR_BRANCH" >> $GITHUB_OUTPUT
 
       - name: Set up Java
         uses: actions/setup-java@v3
@@ -49,14 +58,13 @@ jobs:
           GITHUB_USER: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
-        with:
-          path: './docs'
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+      - name: Commit Docs
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GH Action"
+          git add docs
+          git commit -m 'docs: automatic docs generation'
+          git push

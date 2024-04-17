@@ -17,8 +17,27 @@ jobs:
     runs-on: ubuntu-latest
     environment: Production
     steps:
-      - name: 'Checkout'
+      - name: Checkout TIKI Publish Client
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout PR
+        id: getpr
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr checkout ${{ github.event.pull_request.number }}
+          export PR_BRANCH=$(git branch --show-current)
+          echo "branch=$PR_BRANCH" >> $GITHUB_OUTPUT
+          git log
+
+      - name: Get Version
+        id: semver
+        uses: ietf-tools/semver-action@v1
+        with:
+          token: ${{ github.token }}
+          branch: ${{ steps.getpr.outputs.branch }}
 
       - name: Set up Java
         uses: actions/setup-java@v3
@@ -32,29 +51,17 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
 
-      - name: Get Version
-        id: semver
-        uses: ietf-tools/semver-action@v1
-        with:
-          token: ${{ github.token }}
-
       - name: Release
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.semver.outputs.nextStrict }}
 
-      - name: "Get Staging Profile Id"
+      - name: "Publish"
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: getStagingProfile
+          arguments: publishReleasePublicationToOSSRHRepository
         env:
           OSSRH_USER: ${{ secrets.OSSRH_USER }}
           OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
-
-      - name: "Close and release to Maven Central"
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: closeAndReleaseRepository
-        env:
-          OSSRH_USER: ${{ secrets.OSSRH_USER }}
-          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
+          PGP_PRIVATE_KEY: ${{ secrets.PGP_PRIVATE_KEY }}
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
