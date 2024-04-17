@@ -4,8 +4,8 @@ on:
   pull_request:
     branches:
       - main
-    # types:
-    #   - closed
+    types:
+      - closed
 
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   publish:
-    # if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
+    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
     runs-on: ubuntu-latest
     environment: Production
     steps:
@@ -29,29 +29,29 @@ jobs:
           echo "version: $VERSION"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      # - name: Set up Java
-      #   uses: actions/setup-java@v3
-      #   with:
-      #     java-version: '17'
-      #     distribution: 'adopt'
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
 
-      # - name: Setup Android SDK
-      #   uses: android-actions/setup-android@v3
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
 
-      # - name: Validate Gradle Wrapper
-      #   uses: gradle/wrapper-validation-action@v1
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
 
-      # - name: Release
-      #   uses: ncipollo/release-action@v1
-      #   with:
-      #     tag: ${{ steps.extract_version.outputs.version }}
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.extract_version.outputs.version }}
 
-      # - name: "Publish"
-      #   uses: gradle/gradle-build-action@v2
-      #   with:
-      #     arguments: publishReleasePublicationToOSSRHRepository
-      #   env:
-      #     OSSRH_USER: ${{ secrets.OSSRH_USER }}
-      #     OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
-      #     PGP_PRIVATE_KEY: ${{ secrets.PGP_PRIVATE_KEY }}
-      #     PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+      - name: "Publish"
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: publishReleasePublicationToOSSRHRepository
+        env:
+          OSSRH_USER: ${{ secrets.OSSRH_USER }}
+          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
+          PGP_PRIVATE_KEY: ${{ secrets.PGP_PRIVATE_KEY }}
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
