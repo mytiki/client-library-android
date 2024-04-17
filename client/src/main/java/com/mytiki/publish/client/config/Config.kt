@@ -1,7 +1,7 @@
 package com.mytiki.publish.client.config
 
 /**
- * Config
+ * Publish client configuration.
  *
  * @property providerId
  * @property publicKey
