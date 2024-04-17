@@ -43,18 +43,12 @@ jobs:
         with:
           tag: ${{ steps.semver.outputs.nextStrict }}
 
-      - name: "Get Staging Profile Id"
+      - name: "Publish"
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: getStagingProfile
+          arguments: publishReleasePublicationToOSSRHRepository
         env:
           OSSRH_USER: ${{ secrets.OSSRH_USER }}
           OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
-
-      - name: "Close and release to Maven Central"
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: closeAndReleaseRepository
-        env:
-          OSSRH_USER: ${{ secrets.OSSRH_USER }}
-          OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
+          PGP_PRIVATE_KEY: ${{ secrets.PGP_PRIVATE_KEY }}
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
