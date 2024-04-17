@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException
 import java.util.Properties
 
 plugins {
@@ -10,7 +11,11 @@ plugins {
 
 val versionName = "0.0.5"
 val localProps = Properties()
-localProps.load(File("local.properties").reader())
+try {
+    localProps.load(File("local.properties").reader())
+} catch (e: FileNotFoundException) {
+    println("local.properties file not found. Using env secrets.")
+}
 
 android {
     namespace = "com.mytiki.publish.client"
