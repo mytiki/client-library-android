@@ -37,6 +37,7 @@ jobs:
         uses: ietf-tools/semver-action@v1
         with:
           token: ${{ github.token }}
+          branch: ${{ steps.getpr.outputs.branch }}
   
       - name: Set up Java
         uses: actions/setup-java@v3
