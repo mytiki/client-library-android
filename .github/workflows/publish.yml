@@ -30,6 +30,13 @@ jobs:
           gh pr checkout ${{ github.event.pull_request.number }}
           export PR_BRANCH=$(git branch --show-current)
           echo "branch=$PR_BRANCH" >> $GITHUB_OUTPUT
+          git log
+
+      - name: Get Version
+        id: semver
+        uses: ietf-tools/semver-action@v1
+        with:
+          token: ${{ github.token }}
   
       - name: Set up Java
         uses: actions/setup-java@v3
@@ -43,11 +50,7 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
 
-      - name: Get Version
-        id: semver
-        uses: ietf-tools/semver-action@v1
-        with:
-          token: ${{ github.token }}
+
 
       - name: Release
         uses: ncipollo/release-action@v1
