@@ -6,7 +6,7 @@ plugins {
     id("signing")
 }
 
-val versionName = "0.0.2"
+val versionName = "0.0.5"
 
 android {
     namespace = "com.mytiki.publish.client"
