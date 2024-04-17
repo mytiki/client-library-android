@@ -6,7 +6,7 @@ on:
       - main
 
 concurrency:
-  group: ${{ github.ref }}-${{ github.workflow }}
+  group: ${{ github.ref }}-${{ github.workflow }}z
   cancel-in-progress: true
 
 jobs:
