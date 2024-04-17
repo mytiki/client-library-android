@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -7,6 +9,8 @@ plugins {
 }
 
 val versionName = "0.0.5"
+val localProps = Properties()
+localProps.load(File("local.properties").reader())
 
 android {
     namespace = "com.mytiki.publish.client"
@@ -77,8 +81,8 @@ tasks.dokkaHtml {
 }
 
 signing {
-    val signingKey = System.getenv("PGP_PRIVATE_KEY")
-    val signingPassword = System.getenv("PGP_PASSPHRASE")
+    val signingKey = System.getenv("PGP_PRIVATE_KEY") ?: localProps.getProperty("PGP_PRIVATE_KEY")
+    val signingPassword = System.getenv("PGP_PASSPHRASE") ?: localProps.getProperty("PGP_PASSPHRASE")
     useInMemoryPgpKeys(signingKey, signingPassword)
     sign(publishing.publications)
 }
@@ -131,8 +135,8 @@ afterEvaluate {
                 name = "OSSRH"
                 url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
                 credentials {
-                    username = System.getenv("OSSRH_USER")
-                    password = System.getenv("OSSRH_TOKEN")
+                    username = System.getenv("OSSRH_USER") ?: localProps.getProperty("OSSRH_USER")
+                    password = System.getenv("OSSRH_TOKEN") ?: localProps.getProperty("OSSRH_TOKEN")
                 }
             }
         }
