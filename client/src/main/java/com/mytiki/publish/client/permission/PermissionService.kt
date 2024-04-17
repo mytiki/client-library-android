@@ -23,7 +23,6 @@ class PermissionService {
    * indicating whether each permission was granted.
    */
   var permissionCallback: ((Map<Permission, Boolean>) -> Unit)? = null
-
   /**
    * This function is used to request permissions. It starts a new PermissionActivity and passes the
    * requested permissions as an extra in the intent.
@@ -39,9 +38,9 @@ class PermissionService {
       permissionCallback: (Map<Permission, Boolean>) -> Unit,
   ) {
     this.permissionCallback = permissionCallback
-    val permissionsList = permissions.map { it.toString() }
+    val permissionsWrapper = PermissionWrapper(permissions)
     val intent = Intent(activity, PermissionActivity::class.java)
-    intent.putExtra("permissions", permissionsList.toTypedArray())
+    intent.putExtra("permissionsWrapper", permissionsWrapper)
     activity.startActivity(intent)
   }
 

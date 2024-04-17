@@ -6,8 +6,9 @@ package com.mytiki.publish.client.permission
 
 import android.Manifest
 import android.os.Build
+import java.io.Serializable
 
-enum class Permission(val code: Int, private val permission: String? = null) {
+enum class Permission(val code: Int, private val permission: String? = null) : Serializable {
   CAMERA(100, Manifest.permission.CAMERA),
   MICROPHONE(101, Manifest.permission.RECORD_AUDIO),
   PHOTO_LIBRARY(

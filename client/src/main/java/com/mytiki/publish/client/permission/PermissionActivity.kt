@@ -21,55 +21,58 @@ class PermissionActivity : AppCompatActivity() {
   private var normalPermissions = mutableListOf<Permission>()
   private var isNotificationPermissionRequested = false
   private var trackingPermissionLauncher: ActivityResultLauncher<Intent>? = null
+  private var callback: ((Map<Permission, Boolean>) -> Unit)? = null
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    val permissions =
-        intent.extras?.getStringArray("permissions")?.mapNotNull { Permission.fromString(it) }
+    val permissionsWrapper: PermissionWrapper =
+        intent.extras?.getSerializable("permissionsWrapper", PermissionWrapper::class.java)
+            ?: throw Exception("Permissions not found")
+    val permissions = permissionsWrapper.permissions
 
-    if (permissions != null) {
-      checkPermissions(permissions)
-      val permissionString = normalPermissions.mapNotNull { it.permission() }
-      val requestPermissionLauncher =
-          registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-              requestMap ->
-            requestMap.onEachIndexed { index, map ->
-              if (map.key == normalPermissions[index].permission()) {
-                callbackMap[normalPermissions[index]] = map.value
-              }
-            }
-            if (diferentPermissions.isEmpty()) {
-              TikiClient.permission.permissionCallback?.let { it -> it(callbackMap) }
-              this.finish()
-            } else {
-              handleDifferentPermissions()
-            }
-          }
-      requestPermissionLauncher.launch(permissionString.toTypedArray())
-      //      ActivityCompat.requestPermissions(this, permissionString.toTypedArray(), REQUEST_CODE)
-    } else {
-      TikiClient.permission.permissionCallback
+    this.callback = {
+      TikiClient.permission.permissionCallback?.let { it1 -> it1(it) }
+      this.finish()
     }
+    requestPermission(permissions)
   }
 
-  fun handleDifferentPermissions() {
+  private fun requestPermission(permissions: List<Permission>) {
+    checkPermissions(permissions)
+    val permissionString = normalPermissions.mapNotNull { it.permission() }
+    val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { requestMap
+          ->
+          requestMap.onEachIndexed { index, map ->
+            if (map.key == normalPermissions[index].permission()) {
+              callbackMap[normalPermissions[index]] = map.value
+            }
+          }
+          if (diferentPermissions.isEmpty()) {
+            this.callback?.let { it(callbackMap) }
+          } else {
+            handleDifferentPermissions()
+          }
+        }
+    requestPermissionLauncher.launch(permissionString.toTypedArray())
+  }
+
+  private fun handleDifferentPermissions() {
     if (diferentPermissions.isNotEmpty()) {
       when (diferentPermissions[0]) {
         Permission.BACKGROUND_LOCATION -> requestLocation()
         Permission.NOTIFICATIONS -> requestNotificationPermission()
         Permission.TRACKING -> requestTrackingPermission()
         else -> {
-          TikiClient.permission.permissionCallback?.let { it -> it(callbackMap) }
-          this.finish()
+          this.callback?.let { it(callbackMap) }
         }
       }
     } else {
-      TikiClient.permission.permissionCallback?.let { it -> it(callbackMap) }
-      this.finish()
+      this.callback?.let { it(callbackMap) }
     }
   }
 
-  fun requestLocation() {
+  private fun requestLocation() {
     if (!TikiClient.isPermissionAuthorized(this, Permission.BACKGROUND_LOCATION)) {
       if (TikiClient.isPermissionAuthorized(this, Permission.FINE_LOCATION) &&
           TikiClient.isPermissionAuthorized(this, Permission.COARSE_LOCATION)) {
