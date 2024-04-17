@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
 import com.mytiki.publish.client.auth.AuthService
 import com.mytiki.publish.client.capture.CaptureService
+import com.mytiki.publish.client.capture.ReceiptResponse
 import com.mytiki.publish.client.config.Config
 import com.mytiki.publish.client.license.LicenseService
 import kotlinx.coroutines.CompletableDeferred
@@ -224,6 +225,22 @@ object TikiClient {
      * @return A String containing the terms of the license.
      */
     fun terms(context: Context) = license.terms(context)
+
+
+    /**
+     * Retrieve the structured data extracted from the processed receipt image.
+     *
+     * This method fetches the result of the receipt image processing from the server.
+     *
+     * @param receiptId The unique identifier for the receipt obtained from the publish method.
+     * @param onResult A callback functions that revceives the array of ReceiptResponse objects,
+     * each containing the structured data extracted from an image of the receipt, or null if the
+     * retrieval fails.
+     */
+    suspend fun receipt(receiptId: String, onResult: (Array<ReceiptResponse?>) -> Unit){
+        val token = auth.addressToken().await()
+        return capture.receipt(receiptId, token, onResult);
+    }
 
     /**
      * Checks if the client is properly configured and the user ID is set.
