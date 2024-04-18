@@ -170,12 +170,12 @@ to `TikiClient.receipt(receiptId)` shortly after using `TikiClient.publish` migh
 false `404` errors from the API. We recommend allowing sufficient time for the extraction process to complete before
 attempting to retrieve the extracted data.
 
-#### Permissions
+### Permissions
 
 The TIKI Client Library provides a set of APIs to handle permissions in your Android application. It simplifies the
 process of requesting and checking permissions.
 
-##### Requesting Permissions
+#### Requesting Permissions
 
 To request permissions, use the `TikiClient.permissions` method. This method accepts a `ComponentActivity` instance, a
 list of permissions to request, and a callback function to handle the result of the permissions request.
