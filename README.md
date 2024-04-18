@@ -34,11 +34,11 @@ pluginManagement {
 2. Add the dependency in the module `build.gradle`:
 In Kotlin:
 ```kotlin
-implementation("com.mytiki:publish-client-android:0.0.5")
+implementation("com.mytiki:publish-client:0.2.0")
 ```
 In Groovy
 ```groovy
-implementation "com.mytiki:publish-client-android:0.0.5"
+implementation "com.mytiki:publish-client:0.2.0"
 ```
 
 3. Sync the project

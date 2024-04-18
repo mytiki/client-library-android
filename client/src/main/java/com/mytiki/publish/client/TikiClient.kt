@@ -29,84 +29,84 @@ import kotlinx.coroutines.async
  * simplify the integration process or opt for individual libraries based on their specific needs.
  */
 object TikiClient {
-  /**
-   * AuthService instance for handling authentication.
-   *
-   * This property is a getter that returns an instance of AuthService. It checks if the client is
-   * properly configured and the user ID is set before returning the AuthService instance.
-   *
-   * @return An instance of AuthService.
-   * @throws Exception if the client is not configured or the user ID is not set.
-   */
-  val auth = AuthService()
+    /**
+    * AuthService instance for handling authentication.
+    *
+    * This property is a getter that returns an instance of AuthService. It checks if the client is
+    * properly configured and the user ID is set before returning the AuthService instance.
+    *
+    * @return An instance of AuthService.
+    * @throws Exception if the client is not configured or the user ID is not set.
+    */
+    val auth = AuthService()
     get() {
       check()
       return field
     }
 
-  /**
-   * CaptureService instance for handling receipt capture.
-   *
-   * This property is a getter that returns an instance of CaptureService. It checks if the client
-   * is properly configured and the user ID is set before returning the CaptureService instance.
-   *
-   * @return An instance of CaptureService.
-   * @throws Exception if the client is not configured or the user ID is not set.
-   */
-  val capture = CaptureService()
+    /**
+    * CaptureService instance for handling receipt capture.
+    *
+    * This property is a getter that returns an instance of CaptureService. It checks if the client
+    * is properly configured and the user ID is set before returning the CaptureService instance.
+    *
+    * @return An instance of CaptureService.
+    * @throws Exception if the client is not configured or the user ID is not set.
+    */
+    val capture = CaptureService()
     get() {
       check()
       return field
     }
 
-  val permission = PermissionService()
+    val permission = PermissionService()
     get() {
       check()
       return field
     }
 
-  /**
-   * LicenseService instance for managing licensing.
-   *
-   * This property is a getter that returns an instance of LicenseService. It checks if the client
-   * is properly configured and the user ID is set before returning the LicenseService instance.
-   *
-   * @return An instance of LicenseService.
-   * @throws Exception if the client is not configured or the user ID is not set.
-   */
-  val license = LicenseService()
+    /**
+    * LicenseService instance for managing licensing.
+    *
+    * This property is a getter that returns an instance of LicenseService. It checks if the client
+    * is properly configured and the user ID is set before returning the LicenseService instance.
+    *
+    * @return An instance of LicenseService.
+    * @throws Exception if the client is not configured or the user ID is not set.
+    */
+    val license = LicenseService()
     get() {
       check()
       return field
     }
 
-  /**
-   * User ID for the client.
-   *
-   * This property is a lateinit variable that holds the user ID for the client. It is private and
-   * can only be set within the TikiClient object.
-   */
-  var userID: String? = null
+    /**
+    * User ID for the client.
+    *
+    * This property is a lateinit variable that holds the user ID for the client. It is private and
+    * can only be set within the TikiClient object.
+    */
+    var userID: String? = null
     private set
 
-  /**
-   * Configuration for the client.
-   *
-   * This property is a lateinit variable that holds the configuration for the client. It is private
-   * and can only be set within the TikiClient object.
-   */
-  var config: Config? = null
+    /**
+    * Configuration for the client.
+    *
+    * This property is a lateinit variable that holds the configuration for the client. It is private
+    * and can only be set within the TikiClient object.
+    */
+    var config: Config? = null
     private set
 
-  /**
-   * Configures the TikiClient with the provided configuration.
-   *
-   * This function is used to set the configuration for the TikiClient. The configuration includes
-   * all the necessary parameters and settings that the TikiClient needs to operate correctly.
-   *
-   * @param config The Config object that contains the configuration settings for the TikiClient.
-   */
-  fun configure(config: Config) {
+    /**
+    * Configures the TikiClient with the provided configuration.
+    *
+    * This function is used to set the configuration for the TikiClient. The configuration includes
+    * all the necessary parameters and settings that the TikiClient needs to operate correctly.
+    *
+    * @param config The Config object that contains the configuration settings for the TikiClient.
+    */
+    fun configure(config: Config) {
     if (config.tosUrl.isEmpty())
         throw Exception(
             "tosUrl property cannot be empty. Use the TikiClient.configure method to add a configuration.")
@@ -128,22 +128,22 @@ object TikiClient {
     else {
       this.config = config
     }
-  }
+    }
 
-  /**
-   * Initializes the TikiClient with the provided user ID.
-   *
-   * This function is used to set the user ID for the TikiClient. The user ID is a unique identifier
-   * for the user and is required for the TikiClient to operate correctly. The function checks if
-   * the TikiClient is configured and if the user ID is not empty before setting the user ID.
-   *
-   * @param userID The unique identifier for the user.
-   * @return A CompletableDeferred object that completes when the TikiClient is initialized. The
-   *   CompletableDeferred object does not contain any value and is only used to signal that the
-   *   initialization process is complete.
-   * @throws Exception if the TikiClient is not configured or the user ID is empty.
-   */
-  fun initialize(userID: String): CompletableDeferred<Unit> {
+    /**
+    * Initializes the TikiClient with the provided user ID.
+    *
+    * This function is used to set the user ID for the TikiClient. The user ID is a unique identifier
+    * for the user and is required for the TikiClient to operate correctly. The function checks if
+    * the TikiClient is configured and if the user ID is not empty before setting the user ID.
+    *
+    * @param userID The unique identifier for the user.
+    * @return A CompletableDeferred object that completes when the TikiClient is initialized. The
+    *   CompletableDeferred object does not contain any value and is only used to signal that the
+    *   initialization process is complete.
+    * @throws Exception if the TikiClient is not configured or the user ID is empty.
+    */
+    fun initialize(userID: String): CompletableDeferred<Unit> {
     if (config == null)
         throw Exception(
             "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration.")
@@ -158,51 +158,37 @@ object TikiClient {
       }
       return isInitialized
     }
-  }
-
-  /**
-   * Initiates the process of scanning a physical receipt and returns the receipt ID.
-   *
-   * This function initiates the process of scanning a physical receipt. It uses the provided
-   * ComponentActivity instance to start the scanning process. The result of the scanning process is
-   * returned through the provided callback function.
-   *
-   * @param activity The ComponentActivity instance. This is typically the current activity from
-   *   which this function is called. It is used to provide context for the scanning process.
-   * @param scanCallback The callback function that will be called with the scanned receipt data
-   *   when the scanning process is finished.
-   */
-  fun scan(activity: ComponentActivity, scanCallback: (Bitmap) -> Unit) {
-    capture.scan(activity, scanCallback)
-  }
-
-  /**
-   * Publishes a single bitmap image for receipt data extraction.
-   *
-   * This function publishes a single bitmap image for receipt data extraction. The provided bitmap
-   * image data is sent to the capture service for processing. The function is asynchronous and
-   * returns a CompletableDeferred object that will be completed when the data has been published.
-   *
-   * @param data The bitmap image data to be published.
-   * @return A CompletableDeferred object that will be completed when the data has been published.
-   */
-  fun publish(data: Bitmap): CompletableDeferred<Unit> {
-    return capture.publish(data)
-  }
+    }
 
     /**
-     * Retrieves the terms of the license.
-     *
-     * This function retrieves the terms of the license from the LicenseService. It uses the provided
-     * Context instance to get the resources necessary for retrieving the terms. The function is
-     * synchronous and returns a String containing the terms of the license.
-     *
-     * @param context The Context instance. This is typically the current activity or application context
-     * from which this function is called. It is used to provide context for retrieving the license terms.
-     * @return A String containing the terms of the license.
-     */
-    fun terms(context: Context) = license.terms(context)
+    * Initiates the process of scanning a physical receipt and returns the receipt ID.
+    *
+    * This function initiates the process of scanning a physical receipt. It uses the provided
+    * ComponentActivity instance to start the scanning process. The result of the scanning process is
+    * returned through the provided callback function.
+    *
+    * @param activity The ComponentActivity instance. This is typically the current activity from
+    *   which this function is called. It is used to provide context for the scanning process.
+    * @param scanCallback The callback function that will be called with the scanned receipt data
+    *   when the scanning process is finished.
+    */
+    fun scan(activity: ComponentActivity, scanCallback: (Bitmap) -> Unit) {
+    capture.scan(activity, scanCallback)
+    }
 
+    /**
+    * Publishes a single bitmap image for receipt data extraction.
+    *
+    * This function publishes a single bitmap image for receipt data extraction. The provided bitmap
+    * image data is sent to the capture service for processing. The function is asynchronous and
+    * returns a CompletableDeferred object that will be completed when the data has been published.
+    *
+    * @param data The bitmap image data to be published.
+    * @return A CompletableDeferred object that will be completed when the data has been published.
+    */
+    fun publish(data: Bitmap): CompletableDeferred<Unit> {
+    return capture.publish(data)
+    }
 
     /**
      * Retrieve the structured data extracted from the processed receipt image.
@@ -220,92 +206,72 @@ object TikiClient {
     }
 
     /**
-     * Checks if the client is properly configured and the user ID is set.
-     *
-     * This function checks if the client is properly configured and the user ID is set. It throws an
-     * exception if the client is not configured or the user ID is not set.
-     *
-     * @throws Exception if the client is not configured or the user ID is not set.
-     * @return true if the client is properly configured and the user ID is set.
-     */
-    private fun check(): Boolean {
-        if (config == null) throw Exception(
-            "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration."
-        ) else if (userID.isNullOrEmpty()) throw Exception(
-            "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID."
-        ) else return true
-
-    }
-    return license
-  }
-
-  /**
-   * Requests the specified permissions.
-   *
-   * This function uses the PermissionService to request the specified permissions. The result of
-   * the permissions request is returned through the provided callback function.
-   *
-   * @param activity The ComponentActivity instance. This is typically the current activity from
-   *   which this function is called. It is used to provide context for the permissions request.
-   * @param permissions The list of permissions to request.
-   * @param permissionCallback The callback function that will be called with the result of the
-   *   permissions request when it is finished. The result is a map where the keys are the requested
-   *   permissions and the values are Booleans indicating whether each permission was granted.
-   */
-  fun permissions(
+    * Requests the specified permissions.
+    *
+    * This function uses the PermissionService to request the specified permissions. The result of
+    * the permissions request is returned through the provided callback function.
+    *
+    * @param activity The ComponentActivity instance. This is typically the current activity from
+    *   which this function is called. It is used to provide context for the permissions request.
+    * @param permissions The list of permissions to request.
+    * @param permissionCallback The callback function that will be called with the result of the
+    *   permissions request when it is finished. The result is a map where the keys are the requested
+    *   permissions and the values are Booleans indicating whether each permission was granted.
+    */
+    fun permissions(
       activity: ComponentActivity,
       permissions: List<Permission>,
       permissionCallback: (Map<Permission, Boolean>) -> Unit
-  ) {
+    ) {
     permission.requestPermissions(activity, permissions, permissionCallback)
-  }
+    }
 
-  /**
-   * Checks if a specific permission is authorized.
-   *
-   * This function uses the PermissionService to check if a specific permission is authorized. It
-   * returns a Boolean indicating whether the permission is granted.
-   *
-   * @param context The Context instance. This is typically the current activity or application
-   *   context from which this function is called. It is used to provide context for the permission
-   *   check.
-   * @param permission The Permission instance representing the permission to check.
-   * @return A Boolean indicating whether the permission is granted.
-   */
-  fun isPermissionAuthorized(context: Context, permission: Permission): Boolean {
+    /**
+    * Checks if a specific permission is authorized.
+    *
+    * This function uses the PermissionService to check if a specific permission is authorized. It
+    * returns a Boolean indicating whether the permission is granted.
+    *
+    * @param context The Context instance. This is typically the current activity or application
+    *   context from which this function is called. It is used to provide context for the permission
+    *   check.
+    * @param permission The Permission instance representing the permission to check.
+    * @return A Boolean indicating whether the permission is granted.
+    */
+    fun isPermissionAuthorized(context: Context, permission: Permission): Boolean {
     return this.permission.isAuthorized(context, permission)
-  }
+    }
 
-  /**
-   * Retrieves the terms of the license.
-   *
-   * This function retrieves the terms of the license from the LicenseService. It uses the provided
-   * Context instance to get the resources necessary for retrieving the terms. The function is
-   * synchronous and returns a String containing the terms of the license.
-   *
-   * @param context The Context instance. This is typically the current activity or application
-   *   context from which this function is called. It is used to provide context for retrieving the
-   *   license terms.
-   * @return A String containing the terms of the license.
-   */
-  fun terms(context: Context) = license.terms(context)
+    /**
+    * Retrieves the terms of the license.
+    *
+    * This function retrieves the terms of the license from the LicenseService. It uses the provided
+    * Context instance to get the resources necessary for retrieving the terms. The function is
+    * synchronous and returns a String containing the terms of the license.
+    *
+    * @param context The Context instance. This is typically the current activity or application
+    *   context from which this function is called. It is used to provide context for retrieving the
+    *   license terms.
+    * @return A String containing the terms of the license.
+    */
+    fun terms(context: Context) = license.terms(context)
 
-  /**
-   * Checks if the client is properly configured and the user ID is set.
-   *
-   * This function checks if the client is properly configured and the user ID is set. It throws an
-   * exception if the client is not configured or the user ID is not set.
-   *
-   * @return true if the client is properly configured and the user ID is set.
-   * @throws Exception if the client is not configured or the user ID is not set.
-   */
-  private fun check(): Boolean {
-    if (config == null)
-        throw Exception(
-            "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration.")
-    else if (userID.isNullOrEmpty())
-        throw Exception(
-            "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID.")
-    else return true
-  }
+    /**
+    * Checks if the client is properly configured and the user ID is set.
+    *
+    * This function checks if the client is properly configured and the user ID is set. It throws an
+    * exception if the client is not configured or the user ID is not set.
+    *
+    * @return true if the client is properly configured and the user ID is set.
+    * @throws Exception if the client is not configured or the user ID is not set.
+    */
+    private fun check(): Boolean {
+        if (config == null)
+            throw Exception(
+                "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration.")
+        else if (userID.isNullOrEmpty())
+            throw Exception(
+                "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID.")
+        else return true
+    }
 }
