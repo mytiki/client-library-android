@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
 import com.mytiki.publish.client.auth.AuthService
 import com.mytiki.publish.client.capture.CaptureService
+import com.mytiki.publish.client.capture.ReceiptResponse
 import com.mytiki.publish.client.config.Config
 import com.mytiki.publish.client.license.LicenseService
 import com.mytiki.publish.client.permission.Permission
@@ -189,45 +190,51 @@ object TikiClient {
     return capture.publish(data)
   }
 
-  /**
-   * Publishes an array of bitmap images for receipt data extraction.
-   *
-   * This function publishes an array of bitmap images for receipt data extraction. The provided
-   * array of bitmap image data is sent to the capture service for processing. The function is
-   * asynchronous and returns a CompletableDeferred object that will be completed when all the data
-   * has been published.
-   *
-   * @param data The array of bitmap image data to be published.
-   * @return A CompletableDeferred object that will be completed when all the data has been
-   *   published.
-   */
-  fun publish(data: Array<Bitmap>): CompletableDeferred<Unit> {
-    return capture.publish(data)
-  }
+    /**
+     * Retrieves the terms of the license.
+     *
+     * This function retrieves the terms of the license from the LicenseService. It uses the provided
+     * Context instance to get the resources necessary for retrieving the terms. The function is
+     * synchronous and returns a String containing the terms of the license.
+     *
+     * @param context The Context instance. This is typically the current activity or application context
+     * from which this function is called. It is used to provide context for retrieving the license terms.
+     * @return A String containing the terms of the license.
+     */
+    fun terms(context: Context) = license.terms(context)
 
-  /**
-   * Creates a license for the user.
-   *
-   * This function is asynchronous and returns a CompletableDeferred object that will be completed
-   * when the license creation process is finished. The result of the license creation process is a
-   * Boolean value indicating whether the license was successfully created or not.
-   *
-   * @param activity The ComponentActivity instance. This is typically the current activity from
-   *   which this function is called. It is used to provide context for the license creation
-   *   process.
-   * @return A CompletableDeferred object that will be completed with a Boolean value when the
-   *   license creation process is finished. The Boolean value indicates whether the license was
-   *   successfully created (true) or not (false).
-   */
-  fun createLicense(
-      activity: ComponentActivity,
-      permissions: List<Permission>
-  ): CompletableDeferred<Boolean> {
-    permissions.forEach { permissions(activity, permissions) {} }
-    val license = CompletableDeferred<Boolean>()
-    MainScope().async {
-      val resp = this@TikiClient.license.create(activity as Context)
-      license.complete(resp)
+
+    /**
+     * Retrieve the structured data extracted from the processed receipt image.
+     *
+     * This method fetches the result of the receipt image processing from the server.
+     *
+     * @param receiptId The unique identifier for the receipt obtained from the publish method.
+     * @param onResult A callback functions that revceives the array of ReceiptResponse objects,
+     * each containing the structured data extracted from an image of the receipt, or null if the
+     * retrieval fails.
+     */
+    suspend fun receipt(receiptId: String, onResult: (Array<ReceiptResponse?>) -> Unit){
+        val token = auth.addressToken().await()
+        return capture.receipt(receiptId, token, onResult);
+    }
+
+    /**
+     * Checks if the client is properly configured and the user ID is set.
+     *
+     * This function checks if the client is properly configured and the user ID is set. It throws an
+     * exception if the client is not configured or the user ID is not set.
+     *
+     * @throws Exception if the client is not configured or the user ID is not set.
+     * @return true if the client is properly configured and the user ID is set.
+     */
+    private fun check(): Boolean {
+        if (config == null) throw Exception(
+            "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration."
+        ) else if (userID.isNullOrEmpty()) throw Exception(
+            "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID."
+        ) else return true
+
     }
     return license
   }

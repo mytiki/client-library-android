@@ -35,7 +35,6 @@ class CaptureService {
      * @throws Exception if there is an error during the process.
      */
     fun publish(data: Bitmap): CompletableDeferred<Unit> {
-        // Placeholder method, to be implemented
         val isPublished = CompletableDeferred<Unit>()
         CoroutineScope(Dispatchers.IO).launch {
             if(!TikiClient.license.verify()) throw Exception("The License is invalid. Use the TikiClient.license method to issue a new License.")
@@ -84,5 +83,29 @@ class CaptureService {
             }
         }
         return isPublished
+    }
+
+    /**
+     * Retrieve the structured data extracted from the processed receipt images.
+     *
+     * This method fetches the result of the receipt image processing from the server.
+     *
+     * @param receiptId The unique identifier for the receipt obtained from the publish method.
+     * @param token The address token to connect with TIKI API.
+     * @param onResult A callback functions that revceives the array of ReceiptResponse objects,
+     * each containing the structured data extracted from an image of the receipt, or null if the
+     * retrieval fails.
+     */
+    suspend fun receipt(receiptId: String, token: String, onResult: (Array<ReceiptResponse?>) -> Unit) {
+        val response = ApiService.get(
+            header = mapOf(
+                "Content-Type" to "image/jpeg",
+                "Authorization" to "Bearer $token"
+            ),
+
+            endPoint = "https://publish.mytiki.com/receipt/${receiptId}",
+            onError = Exception("error uploading image"),
+        ).await()
+        onResult(listOf(ReceiptResponse.from(response!!)).toTypedArray())
     }
 }

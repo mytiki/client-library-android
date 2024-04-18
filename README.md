@@ -8,8 +8,41 @@ To get started, visit mytiki.com and apply for beta access. Our team will then s
 
 ## Installation
 
-The TIKI Client library is a part of your Android project. Make sure you have the latest version of the library in your project.
+The TIKI Client Library is available in Maven Central reposittory.
 
+1. Check if the Maven Central is included in your project `settings.gradle`:
+In Kotlin:
+```kotlin
+pluginManagement {
+    repositories {
+        mavenCentral()
+        // ... other repos
+    }
+}
+```
+In Groovy
+```groovy
+pluginManagement {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        // ... other repos
+    }
+}
+```
+2. Add the dependency in the module `build.gradle`:
+In Kotlin:
+```kotlin
+implementation("com.mytiki:publish-client-android:0.0.5")
+```
+In Groovy
+```groovy
+implementation "com.mytiki:publish-client-android:0.0.5"
+```
+
+3. Sync the project
+  
 ## Configuration
 
 Before executing any commands with the TikiClient library, you need to configure it. This includes providing the Provider ID and Public Key obtained during Provider Registration, as well as company information for generating license terms.
@@ -62,7 +95,7 @@ val license = TikiClient.createLicense()
 
 This method needs to be invoked once for each device. Once executed, the license is registered in TIKI storage, eliminating the need to recreate it in the future.
 
-### ## Data Capture
+### Data Capture
 
 The Client Library offers an optional method for scanning physical receipts via the mobile device camera.
 
@@ -90,9 +123,21 @@ val result = TikiClient.publish(data)
 ```
 
 Upon execution, this method returns a `CompletableDeferred` object that will be completed when the data has been published.
+
+### Retrieve Results
+
+Once you've uploaded receipt images to TIKI for processing using the `TikiClient.publish` method, you can retrieve the extracted data associated with a specific receipt by calling the `TikiClient.receipt(receiptId)` method.
+
+```typescript
+// Assuming you have the receiptId stored in a variable named 'receiptId'
+let receiptData = await TikiClient.receipt(receiptId);
+console.log(receiptData);
+```
+
+**Note**: The data extraction from receipts is performed asynchronously by Amazon Textract. Processing typically takes a few seconds, but it can occasionally take up to a minute. It's important to note that making subsequent calls to `TikiClient.receipt(receiptId)` shortly after using `TikiClient.publish` might lead to unexpected results and false `404` errors from the API. We recommend allowing sufficient time for the extraction process to complete before attempting to retrieve the extracted data.
  
 ## API Reference
 
 The central API interface in the library is the `TikiClient` object, designed to abstract the complexities of authorization and API requests. While serving as the primary entry point, it's important to note that all APIs within the library are public and accessible.
 
-For detailed usage instructions, please consult the TIKI Client API Documentation. This comprehensive resource provides direct insights into utilizing the various functionalities offered by the TIKI Client Library.
+For detailed usage instructions, please consult the [TIKI Client API Documentation](https://android.client.mytiki.com). This comprehensive resource provides direct insights into utilizing the various functionalities offered by the TIKI Client Library.
