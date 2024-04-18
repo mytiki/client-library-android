@@ -47,7 +47,7 @@ jobs:
           tag: ${{ steps.extract_version.outputs.version }}
 
       - name: "Publish"
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: publishReleasePublicationToOSSRHRepository
         env:
