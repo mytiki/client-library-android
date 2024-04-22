@@ -39,7 +39,7 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v3
 
       - name: Release
         uses: ncipollo/release-action@v1
