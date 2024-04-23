@@ -17,7 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.config.Config
-import com.mytiki.publish.client.example_app.theme.TikiClientTheme
+import com.mytiki.publish.client.email.EmailKeys
+import com.mytiki.publish.client.email.EmailProviderEnum
+import com.mytiki.publish.client.example.theme.TikiClientTheme
 import com.mytiki.publish.client.permission.Permission
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
@@ -90,6 +92,15 @@ class MainActivity : AppCompatActivity() {
                     loginOutput = it.toString()
                   }
                 }
+              Spacer(modifier = Modifier.height(30.dp))
+              MainButton(text = "login") {
+                  TikiClient.email.login(
+                      this@MainActivity,
+                      EmailProviderEnum.GOOGLE,
+                      EmailKeys("1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e.apps.googleusercontent.com", ""),
+                      "com.googleusercontent.apps.1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e:/oauth2redirect"
+                  ){}
+              }
               }
         }
       }

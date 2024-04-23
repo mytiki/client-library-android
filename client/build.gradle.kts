@@ -62,6 +62,9 @@ dependencies {
   implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2")
   implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.2")
 
+  // AppAuth
+  implementation("net.openid:appauth:0.11.1")
+
   // Okhttp
   implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 

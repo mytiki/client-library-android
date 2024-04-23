@@ -7,6 +7,7 @@ import com.mytiki.publish.client.auth.AuthService
 import com.mytiki.publish.client.capture.CaptureService
 import com.mytiki.publish.client.capture.ReceiptResponse
 import com.mytiki.publish.client.config.Config
+import com.mytiki.publish.client.email.EmailService
 import com.mytiki.publish.client.license.LicenseService
 import com.mytiki.publish.client.permission.Permission
 import com.mytiki.publish.client.permission.PermissionService
@@ -75,6 +76,12 @@ object TikiClient {
    * @throws Exception if the client is not configured or the user ID is not set.
    */
   val license = LicenseService()
+    get() {
+      check()
+      return field
+    }
+
+  val email = EmailService()
     get() {
       check()
       return field
