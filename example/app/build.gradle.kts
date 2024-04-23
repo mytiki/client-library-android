@@ -15,6 +15,9 @@ android {
     versionName = "1.0"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    manifestPlaceholders["appAuthRedirectScheme"] =
+        "com.googleusercontent.apps.1079849396355-q687vpf16ovveafo6robcgi1kaoaem3e"
+
 
     vectorDrawables { useSupportLibrary = true }
   }

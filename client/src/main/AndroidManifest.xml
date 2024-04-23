@@ -3,6 +3,10 @@
 
     <application>
         <activity
+                android:name=".email.EmailActivity"
+                android:exported="false"
+        />
+        <activity
                 android:name=".capture.CaptureActivity"
                 android:exported="false"/>
         <activity
