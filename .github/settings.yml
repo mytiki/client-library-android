@@ -1,0 +1,40 @@
+# Reference: https://github.com/repository-settings/app
+
+_extends: .github
+
+repository:
+  name: client-library-android
+  description: integrate your Android app with mytiki.com
+  homepage: https://docs.mytiki.com/reference/client-library-overview
+  topics: android, library
+  private: false
+
+teams:
+  - name: sysadmin
+    permission: admin
+  - name: engineering
+    permission: push
+  - name: product
+    permission: triage
+  - name: frontend
+    permission: push
+
+environments:
+  - name: production
+
+branches:
+  - name: main
+    protection:
+      required_status_checks:
+        strict: true
+        contexts:
+          - Tests
+          - CodeQL
+
+milestones:
+  - title: 0.3.0
+    description: |
+      Adds support for intelligent email scraping of e-receipts. Emails are fetched using a pre-qualified list
+      of known receipt senders and parsed locally to the mobile device to protect privacy. Emails are eagerly fetched
+      starting with the most recent and working progressively in reverse chronological order when time-permitted.
+    state: open
