@@ -8,6 +8,8 @@ repository:
   homepage: https://docs.mytiki.com/reference/client-library-overview
   topics: android, library
   private: false
+  has_projects: true
+  has_discussions: false
 
 teams:
   - name: sysadmin
@@ -28,8 +30,9 @@ branches:
       required_status_checks:
         strict: true
         contexts:
-          - Tests
-          - CodeQL
+          - test
+          - Analyze (java)
+          - Analyze (kotlin)
 
 milestones:
   - title: 0.3.0
