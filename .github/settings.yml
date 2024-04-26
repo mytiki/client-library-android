@@ -10,6 +10,7 @@ repository:
   private: false
   has_projects: true
   has_discussions: false
+  has_issues: true
 
 teams:
   - name: sysadmin
