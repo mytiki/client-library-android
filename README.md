@@ -223,3 +223,10 @@ For detailed usage instructions, please consult the [TIKI Client API Documentati
 This comprehensive resource provides direct insights into utilizing the various functionalities offered by the TIKI
 Client Library.
 
+## Contributing
+Please review our [Contributor Guidelines](https://github.com/mytiki/.github/blob/main/CONTRIBUTING.md) before beginning. Utilize GitHub Issues, Discussions, and Security Advisories to provide feedback.
+
+- [Ask a Question](https://github.com/orgs/mytiki/discussions)
+- [Report a Bug](https://github.com/mytiki/roadmap/issues/new?assignees=&labels=bug%2Crequest&projects=&template=bug.yml)
+- [Report a Vulnerability](https://github.com/mytiki/client-library-android/security/advisories/new)
+- [Request a Feature](https://github.com/mytiki/roadmap/issues/new?assignees=&labels=feature%2Crequest&projects=&template=feature.yml)
