@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.config.Config
-import com.mytiki.publish.client.email.EmailKeys
 import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.example_app.theme.TikiClientTheme
 import com.mytiki.publish.client.permission.Permission
@@ -41,6 +40,11 @@ class MainActivity : AppCompatActivity() {
             tosUrl = "https://mytiki.com",
             privacyUrl = "https://mytiki.com")
     TikiClient.configure(config)
+    TikiClient.emailConfig(
+        "1079849396355-pcadmpajhn1tpmm2augu633cdvbu68k9.apps.googleusercontent.com",
+        "",
+        "com.googleusercontent.apps.1079849396355-pcadmpajhn1tpmm2augu633cdvbu68k9:/oauth2redirect",
+    )
 
     val userID = "example_user_id"
     val md5 = MessageDigest.getInstance("MD5")
@@ -98,20 +102,14 @@ class MainActivity : AppCompatActivity() {
                 }
                 Spacer(modifier = Modifier.height(30.dp))
                 MainButton(text = "login") {
-                  TikiClient.email.login(
+                  TikiClient.login(
                       this@MainActivity,
                       EmailProviderEnum.GOOGLE,
-                      EmailKeys(
-                          "1079849396355-pcadmpajhn1tpmm2augu633cdvbu68k9.apps.googleusercontent.com",
-                          ""),
-                      "com.googleusercontent.apps.1079849396355-pcadmpajhn1tpmm2augu633cdvbu68k9:/oauth2redirect") {}
+                  ) {}
                 }
                 Spacer(modifier = Modifier.height(30.dp))
-                MainButton(text = "get token") {
-                  loginOutput =
-                      TikiClient.auth.repository
-                          .get(this@MainActivity, "gabrielschuler3@gmail.com")
-                          ?.auth ?: "no token"
+                MainButton(text = "accounts") {
+                  loginOutput = TikiClient.accounts(this@MainActivity).toString()
                 }
               }
         }

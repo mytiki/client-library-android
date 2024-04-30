@@ -4,7 +4,6 @@ import java.io.Serializable
 
 enum class TokenProviderEnum : Serializable {
   GOOGLE,
-  OUTLOOK,
   TIKI;
 
   companion object {

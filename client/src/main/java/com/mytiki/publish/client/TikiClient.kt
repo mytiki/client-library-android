@@ -7,6 +7,8 @@ import com.mytiki.publish.client.auth.AuthService
 import com.mytiki.publish.client.capture.CaptureService
 import com.mytiki.publish.client.capture.ReceiptResponse
 import com.mytiki.publish.client.config.Config
+import com.mytiki.publish.client.email.EmailKeys
+import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.email.EmailService
 import com.mytiki.publish.client.license.LicenseService
 import com.mytiki.publish.client.permission.Permission
@@ -81,9 +83,18 @@ object TikiClient {
       return field
     }
 
+  /**
+   * EmailService instance for handling email operations.
+   *
+   * This property is a getter that returns an instance of EmailService. It checks if the client is
+   * properly configured and the user ID is set before returning the EmailService instance.
+   *
+   * @return An instance of EmailService.
+   * @throws Exception if the client is not configured or the user ID is not set.
+   */
   val email = EmailService()
     get() {
-      check()
+      checkEmail()
       return field
     }
 
@@ -103,6 +114,9 @@ object TikiClient {
    * and can only be set within the TikiClient object.
    */
   var config: Config? = null
+    internal set
+
+  var emailKeys: EmailKeys? = null
     internal set
 
   /**
@@ -134,6 +148,18 @@ object TikiClient {
             "providerId property cannot be empty. Use the TikiClient.configure method to add a configuration.")
     else {
       this.config = config
+    }
+  }
+
+  fun emailConfig(clientID: String, clientSecret: String, redirectURI: String) {
+    if (clientID.isEmpty())
+        throw Exception(
+            "clientID property cannot be empty. Use the TikiClient.emailConfig method to add a emailConfig.")
+    else if (redirectURI.isEmpty())
+        throw Exception(
+            "redirectURI property cannot be empty. Use the TikiClient.emailConfig method to add a redirectURI.")
+    else {
+      this.emailKeys = EmailKeys(clientID, clientSecret, redirectURI)
     }
   }
 
@@ -284,6 +310,16 @@ object TikiClient {
    */
   fun terms(context: Context) = license.terms(context)
 
+  fun login(context: Context, provider: EmailProviderEnum, loginCallback: (String) -> Unit) {
+    checkEmail()
+    email.login(context, provider, emailKeys!!, loginCallback)
+  }
+
+  fun accounts(context: Context): List<String> {
+    checkEmail()
+    return email.accounts(context)
+  }
+
   /**
    * Checks if the client is properly configured and the user ID is set.
    *
@@ -300,6 +336,28 @@ object TikiClient {
     else if (userID.isNullOrEmpty())
         throw Exception(
             "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID.")
+    else return true
+  }
+
+  /**
+   * Checks if the client is properly configured and the email keys are set.
+   *
+   * This function first calls the check() function to ensure that the client is properly configured
+   * and the user ID is set. Then, it checks if the email keys are set. If the email keys are not
+   * set, it throws an exception with a message instructing the user to use the
+   * TikiClient.emailConfig method to add the clientID and clientSecret. If the email keys are set,
+   * it returns true.
+   *
+   * @return true if the client is properly configured, the user ID is set, and the email keys are
+   *   set.
+   * @throws Exception if the client is not configured, the user ID is not set, or the email keys
+   *   are not set.
+   */
+  private fun checkEmail(): Boolean {
+    check()
+    if (emailKeys == null)
+        throw Exception(
+            "Email is not configured. Use the TikiClient.emailConfig method to add clientID and clientSecret.")
     else return true
   }
 }
