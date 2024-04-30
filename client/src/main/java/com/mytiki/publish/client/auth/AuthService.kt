@@ -6,7 +6,6 @@ import android.net.Uri
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
-import android.util.Log
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.utils.apiService.ApiService
@@ -41,7 +40,6 @@ class AuthService {
                 signMessage(address, keyPair.private)
                     ?: throw Exception("error on signing message"),
                 Base64.DEFAULT or Base64.NO_PADDING or Base64.NO_WRAP)
-        Log.d("*******signature*******", signature)
         val body =
             FormBody.Builder()
                 .add("grant_type", "client_credentials")

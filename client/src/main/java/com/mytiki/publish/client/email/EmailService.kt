@@ -26,7 +26,7 @@ class EmailService {
 
   val emailRepository = EmailRepository()
 
-  var loginCallback: (String) -> Unit = {}
+  internal var loginCallback: (String) -> Unit = {}
     private set
 
   /**

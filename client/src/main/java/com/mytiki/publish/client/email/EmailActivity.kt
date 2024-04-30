@@ -14,8 +14,6 @@ import net.openid.appauth.AuthorizationResponse
 import net.openid.appauth.ClientSecretBasic
 import java.util.*
 
-const val REQUEST_AUTH = 876357434
-
 class EmailActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,11 +59,11 @@ class EmailActivity : AppCompatActivity() {
                         if (resp) {
                           TikiClient.email.loginCallback(authToken.username)
                         }
+                        this@EmailActivity.finish()
                       }
-                      this@EmailActivity.finish()
                     } else throw Exception("unable to get access token")
                   }
-            }
+            } else throw Exception("unable to get access token")
           }
       startForResult.launch(authIntent)
     }
