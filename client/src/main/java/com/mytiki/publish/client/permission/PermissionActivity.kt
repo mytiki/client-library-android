@@ -25,9 +25,11 @@ class PermissionActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    val permissionsWrapper: PermissionWrapper =
-        intent.extras?.getSerializable("permissionsWrapper", PermissionWrapper::class.java)
-            ?: throw Exception("Permissions not found")
+    val permissionsWrapper: PermissionWrapper = when {
+      Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> intent.extras?.getSerializable("permissionsWrapper", PermissionWrapper::class.java)
+      else -> @Suppress("DEPRECATION") intent.getSerializableExtra("permissionsWrapper") as? PermissionWrapper
+    } ?: throw Exception("Permissions not found")
+
     val permissions = permissionsWrapper.permissions
 
     this.callback = {

@@ -151,7 +151,6 @@ object TikiClient {
    * @throws Exception if the TikiClient is not configured or the user ID is empty.
    */
   fun initialize(userID: String): CompletableDeferred<Unit> {
-    val c = config
     if (config == null)
         throw Exception(
             "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration.")
