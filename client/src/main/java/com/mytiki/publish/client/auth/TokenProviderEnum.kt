@@ -1,8 +1,9 @@
 package com.mytiki.publish.client.auth
 
-enum class TokenProviderEnum {
-  GMAIL,
-  OUTLOOK,
+import java.io.Serializable
+
+enum class TokenProviderEnum : Serializable {
+  GOOGLE,
   TIKI;
 
   companion object {

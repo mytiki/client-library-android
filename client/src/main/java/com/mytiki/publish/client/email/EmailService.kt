@@ -24,9 +24,11 @@ import kotlin.io.encoding.ExperimentalEncodingApi
  */
 class EmailService {
 
+  /** Repository for managing email data. */
   val emailRepository = EmailRepository()
 
-  var loginCallback: (String) -> Unit = {}
+  /** Callback function for handling login events. */
+  internal var loginCallback: (String) -> Unit = {}
     private set
 
   /**
@@ -42,7 +44,6 @@ class EmailService {
       context: Context,
       provider: EmailProviderEnum,
       emailKeys: EmailKeys,
-      redirectURI: String,
       loginCallback: (String) -> Unit
   ) {
     this.loginCallback = loginCallback
@@ -51,7 +52,7 @@ class EmailService {
     intent.putExtra("provider", provider.toString())
     intent.putExtra("clientID", emailKeys.clientId)
     intent.putExtra("clientSecret", emailKeys.clientSecret)
-    intent.putExtra("redirectURI", redirectURI)
+    intent.putExtra("redirectURI", emailKeys.redirectUri)
 
     context.startActivity(intent)
   }
@@ -355,10 +356,13 @@ class EmailService {
     val getAllMultipart = CompletableDeferred<List<Any>?>()
     val messagePart = message.payload
     CoroutineScope(Dispatchers.IO).launch {
+      // Check if the MIME type of the message part is multipart
       if (messagePart?.mimeType?.substringBefore("/") == "multipart") {
         val list = mutableListOf<Any>()
+        // Iterate over each part of the message
         messagePart.parts?.forEach { part ->
           if (part != null) {
+            // If the part has data, decode it based on its MIME type
             if (!part.body?.data.isNullOrEmpty()) {
               val text = getAllText(part).await()
               if (text != null) list.add(text)
@@ -369,6 +373,7 @@ class EmailService {
               val pdf = getAllPdf(context, part).await()
               if (pdf != null) list.add(pdf)
             }
+            // If the part has an attachment ID, retrieve and decode the attachment
             if (!part.body?.attachmentId.isNullOrEmpty()) {
               val attachment =
                   getAttachments(context, email, message.id, part.body?.attachmentId!!).await()
@@ -397,6 +402,7 @@ class EmailService {
   ): CompletableDeferred<Bitmap?> {
     val getAllImage = CompletableDeferred<Bitmap?>()
     CoroutineScope(Dispatchers.IO).launch {
+      // Check if the MIME type of the message part is an image
       if (messagePart.mimeType?.substringBefore("/") == "image") {
         val att = attachment ?: Base64.UrlSafe.decode(messagePart.body?.data!!)
         val resp = BitmapFactory.decodeByteArray(att, 0, att.size)
@@ -420,6 +426,7 @@ class EmailService {
   ): CompletableDeferred<String?> {
     val getAllText = CompletableDeferred<String?>()
     CoroutineScope(Dispatchers.IO).launch {
+      // Check if the MIME type of the message part is text
       if (messagePart.mimeType?.substringBefore("/") == "text") {
         val att = attachment ?: Base64.UrlSafe.decode(messagePart.body?.data!!)
         getAllText.complete(String(att))
@@ -444,6 +451,7 @@ class EmailService {
   ): CompletableDeferred<File?> {
     val getAllPdf = CompletableDeferred<File?>()
     CoroutineScope(Dispatchers.IO).launch {
+      // Check if the MIME type of the message part is a PDF
       if (messagePart.mimeType == "application/pdf") {
         val att = attachment ?: Base64.UrlSafe.decode(messagePart.body?.data!!)
         val filePDF = File(context.filesDir, messagePart.body?.attachmentId + ".pdf")
@@ -483,6 +491,7 @@ class EmailService {
     val auth = token.auth
 
     MainScope().async {
+      // Retrieve the attachment from the email message
       val response =
           ApiService.get(
                   mapOf("Authorization" to "Bearer $auth"),
@@ -503,8 +512,11 @@ class EmailService {
    * @param email The email account to be removed.
    */
   fun logout(context: Context, email: String) {
+    // Remove the email account from the authentication repository
     TikiClient.auth.repository.remove(context, email)
+    // Delete the indexes associated with the email account
     TikiClient.email.emailRepository.deleteIndexes(context, email)
+    // Remove the data associated with the email account
     TikiClient.email.emailRepository.removeData(context, email)
   }
 }
