@@ -10,14 +10,15 @@ import com.mytiki.publish.client.email.messageResponse.MessagePart
 import com.mytiki.publish.client.email.messageResponse.MessagePartBody
 import com.mytiki.publish.client.email.messageResponse.MessageResponse
 import com.mytiki.publish.client.utils.apiService.ApiService
-import kotlinx.coroutines.*
-import okhttp3.ResponseBody
-import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
+import kotlinx.coroutines.*
+import okhttp3.ResponseBody
+import org.json.JSONObject
 
 /**
  * Service for managing email-related operations such as authentication, retrieval, and processing.
@@ -25,7 +26,7 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 class EmailService {
 
   /** Repository for managing email data. */
-  val emailRepository = EmailRepository()
+  val repository = EmailRepository()
 
   /** Callback function for handling login events. */
   internal var loginCallback: (String) -> Unit = {}
@@ -107,78 +108,104 @@ class EmailService {
     return emailList
   }
 
+  fun scrape(context: Context, email: String) {
+    MainScope().async {
+      TikiClient.auth.emailToken(context, email).await()
+
+      var indexData = repository.getData(context, email)
+
+      if (indexData != null && indexData.lastDate == null) {
+        repository.updateData(
+            context,
+            IndexData(
+                email, LocalDateTime.now(), indexData.historicDate, indexData.downloadInProgress))
+        messagesIndex(context, email, before = LocalDateTime.now()).await()
+        indexData = repository.getData(context, email)
+      }
+      downloadEmails(context, email)
+
+      if (indexData?.lastDate != null &&
+          indexData.lastDate!!.isBefore(LocalDateTime.now().minusHours(6L))) {
+        messagesIndex(context, email, after = indexData.lastDate).await()
+        indexData = repository.getData(context, email)
+      }
+      messagesIndex(context, email, before = indexData!!.historicDate).await()
+    }
+  }
+
   /**
    * Retrieves the list of messages for the specified email account.
    *
    * @param context The context.
    * @param email The email account.
-   * @param nextPageToken The token for pagination.
    */
-  fun messagesIndex(context: Context, email: String, nextPageToken: String? = null) {
+  fun messagesIndex(
+      context: Context,
+      email: String,
+      after: LocalDateTime? = null,
+      before: LocalDateTime? = null
+  ): CompletableDeferred<Unit> {
+    val messagesIndex = CompletableDeferred<Unit>()
+    val indexRequestArray = mutableListOf<Deferred<ResponseBody?>>()
+    if (after == null && before == null) {
+      throw Exception("You must provide one date to filter messages")
+    }
+    if (after != null && before != null) {
+      throw Exception("You must provide only one date to filter messages")
+    }
     CoroutineScope(Dispatchers.IO).launch {
-      val indexData = emailRepository.getData(context, email)
-      val token =
-          TikiClient.auth.repository.get(context, email)
-              ?: throw Exception("this email is not logged")
+      val indexData = repository.getData(context, email)
+      val token = TikiClient.auth.emailToken(context, email).await()
       val provider =
           EmailProviderEnum.fromString(token.provider.toString())
               ?: throw Exception("Invalid provider")
       val auth = token.auth
 
-      var isFirst = nextPageToken.isNullOrEmpty()
-      var isWorking = true
-      var endpoint =
-          if (nextPageToken.isNullOrEmpty()) {
-            if (indexData == null) provider.messagesIndexListEndpoint
-            else
-                provider.messagesIndexListEndpoint +
-                    "&q=after:${indexData.date.year}/${indexData.date.month}/${indexData.date.day}"
-          } else provider.messagesIndexListEndpoint + "&pageToken=$nextPageToken"
-
-      while (isWorking) {
-        val response =
-            ApiService.get(
-                    mapOf("Authorization" to "Bearer $auth"),
-                    endpoint,
-                    Exception("error on getting messagesIndex"))
-                .await()
+      val endpoint = provider.messagesIndexListEndpoint
+      val queryList = Sender.toQuery(after, before)
+      queryList.forEach { query ->
+        val response = async {
+          ApiService.get(
+                  mapOf("Authorization" to "Bearer $auth"),
+                  endpoint + query,
+                  Exception("error on getting messagesIndex"))
+              .await()
+        }
+        indexRequestArray.add(response)
+      }
+      val responseList = awaitAll(*indexRequestArray.toTypedArray())
+      responseList.forEach() { response ->
         val messageResponse = MessageResponse.fromJson(JSONObject(response?.string()!!))
         if (!messageResponse.messages.isNullOrEmpty()) {
-          emailRepository.saveIndexes(context, email, messageResponse.messages)
-          if (isFirst) {
-            emailRepository.saveData(
-                context, IndexData(email, Date(), messageResponse.nextPageToken))
-          } else {
-            emailRepository.updateNextPageToken(context, email, messageResponse.nextPageToken)
-          }
-          if (!messageResponse.nextPageToken.isNullOrEmpty()) {
-            endpoint =
-                provider.messagesIndexListEndpoint + "&pageToken=${messageResponse.nextPageToken}"
-          } else {
-            isWorking = false
-          }
-          isFirst = false
+          repository.saveIndexes(context, email, messageResponse.messages, append = before != null)
+          if (before != null) {
+            val lastIndex =
+                messageResponse.messages.last() ?: throw Exception("error on getting messagesIndex")
+            val apiResponse =
+                ApiService.get(
+                        mapOf("Authorization" to "Bearer $auth"),
+                        provider.messageEndpoint(lastIndex.id),
+                        Exception("error on getting messagesIndex"))
+                    .await()
+            val message = Message.fromJson(JSONObject(apiResponse?.string()!!))
+            if (message.internalDate != null && indexData != null) {
+              if (indexData.historicDate == null ||
+                  indexData.historicDate.isBefore(message.internalDate)) {
+                val data =
+                    IndexData(
+                        email,
+                        indexData.lastDate,
+                        message.internalDate,
+                        indexData.downloadInProgress)
+                repository.updateData(context, data)
+              }
+              messagesIndex.complete(Unit)
+            } else messagesIndex.complete(Unit)
+          } else messagesIndex.complete(Unit)
         }
       }
     }
-  }
-
-  /**
-   * Checks for any pending indexes to be scraped.
-   *
-   * @param context The context.
-   */
-  fun checkIndexes(context: Context) {
-    val accounts = accounts(context)
-    accounts.forEach {
-      val indexData = emailRepository.getData(context, it)
-      if (!indexData?.nextPageToken.isNullOrEmpty()) {
-        val token = TikiClient.auth.repository.get(context, it)
-        if (token != null) {
-          messagesIndex(context, token.username, indexData?.nextPageToken)
-        }
-      }
-    }
+    return messagesIndex
   }
 
   /**
@@ -189,18 +216,32 @@ class EmailService {
    * @param clientID The client ID.
    * @return A CompletableDeferred indicating the completion of the scraping process.
    */
-  fun scrape(context: Context, email: String, clientID: String): CompletableDeferred<Boolean> {
-    TikiClient.auth.emailAuthRefresh(context, email, clientID)
-    val scrape = CompletableDeferred<Boolean>()
-    CoroutineScope(Dispatchers.IO)
-        .launch {
-          var isWorking = true
-          while (isWorking) {
-            isWorking = scrapeInChunks(context, email, numberOfItems = 15).await()
+  fun downloadEmails(
+      context: Context,
+      email: String,
+  ): CompletableDeferred<Unit> {
+    val scrape = CompletableDeferred<Unit>()
+    val indexData = repository.getData(context, email)
+    if (indexData!!.downloadInProgress) {
+      scrape.complete(Unit)
+      return scrape
+    } else {
+      val data = IndexData(email, indexData.lastDate, indexData.historicDate, true)
+      repository.updateData(context, data)
+      CoroutineScope(Dispatchers.IO)
+          .launch {
+            var isWorking = true
+            while (isWorking) {
+              isWorking = downloadEmailsInChunks(context, email, numberOfItems = 10).await()
+            }
           }
-        }
-        .invokeOnCompletion { scrape.complete(true) }
-    return scrape
+          .invokeOnCompletion {
+            repository.updateData(
+                context, IndexData(email, indexData.lastDate, indexData.historicDate, false))
+            scrape.complete(Unit)
+          }
+      return scrape
+    }
   }
 
   /**
@@ -211,24 +252,23 @@ class EmailService {
    * @param numberOfItems The number of items to process in each chunk.
    * @return A CompletableDeferred indicating whether further scraping is required.
    */
-  fun scrapeInChunks(
+  fun downloadEmailsInChunks(
       context: Context,
       email: String,
       numberOfItems: Int
   ): CompletableDeferred<Boolean> {
-    val token =
-        TikiClient.auth.repository.get(context, email)
-            ?: throw Exception("this email is not logged")
-    val provider =
-        EmailProviderEnum.fromString(token.provider.toString())
-            ?: throw Exception("Invalid provider")
-    val auth = token.auth
     val scrapeInChunks = CompletableDeferred<Boolean>()
-    val indexes = emailRepository.readIndexes(context, email, numberOfItems)
+    val indexes = repository.readIndexes(context, email, numberOfItems)
     val messageRequestArray = mutableListOf<Deferred<ResponseBody?>>()
     val attachmentRequestArray = mutableListOf<Deferred<Unit>>()
 
     CoroutineScope(Dispatchers.IO).launch {
+      val token = TikiClient.auth.emailToken(context, email).await()
+      val provider =
+          EmailProviderEnum.fromString(token.provider.toString())
+              ?: throw Exception("Invalid provider")
+      val auth = token.auth
+
       indexes.forEachIndexed { index, messageID ->
         val apiRequest = async {
           ApiService.get(
@@ -252,7 +292,7 @@ class EmailService {
         attachmentRequestArray.add(attachmentDeferred)
       }
       awaitAll(*attachmentRequestArray.toTypedArray())
-      val removed = emailRepository.removeIndex(context, email, *indexes)
+      val removed = repository.removeIndex(context, email, *indexes)
       if (!removed) scrapeInChunks.completeExceptionally(Exception("error updating index list"))
       scrapeInChunks.complete(numberOfItems >= messageRequestArray.size)
     }
@@ -515,8 +555,8 @@ class EmailService {
     // Remove the email account from the authentication repository
     TikiClient.auth.repository.remove(context, email)
     // Delete the indexes associated with the email account
-    TikiClient.email.emailRepository.deleteIndexes(context, email)
+    TikiClient.email.repository.deleteIndexes(context, email)
     // Remove the data associated with the email account
-    TikiClient.email.emailRepository.removeData(context, email)
+    TikiClient.email.repository.removeData(context, email)
   }
 }
