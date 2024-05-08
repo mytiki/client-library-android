@@ -8,11 +8,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.auth.AuthToken
 import com.mytiki.publish.client.auth.TokenProviderEnum
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
 import net.openid.appauth.AuthorizationResponse
 import net.openid.appauth.ClientSecretBasic
-import java.util.*
 
 class EmailActivity : AppCompatActivity() {
 
@@ -52,13 +55,21 @@ class EmailActivity : AppCompatActivity() {
                                 emailResponse.email,
                                 authResponse.accessToken!!,
                                 authResponse.refreshToken!!,
-                                Date(authResponse.accessTokenExpirationTime!!),
+                                LocalDateTime.ofInstant(
+                                    Instant.ofEpochMilli(authResponse.accessTokenExpirationTime!!),
+                                    ZoneId.systemDefault()),
                                 TokenProviderEnum.fromString(provider.toString())
                                     ?: throw Exception("Invalid provider"))
-                        val resp = TikiClient.auth.repository.save(this@EmailActivity, authToken)
-                        if (resp) {
+                        val authResp =
+                            TikiClient.auth.repository.save(this@EmailActivity, authToken)
+                        val emailResp =
+                            TikiClient.email.repository.saveData(
+                                this@EmailActivity,
+                                IndexData(emailResponse.email, null, null, false))
+                        if (authResp && emailResp) {
                           TikiClient.email.loginCallback(authToken.username)
-                        }
+                        } else throw Exception("unable to save data")
+
                         this@EmailActivity.finish()
                       }
                     } else throw Exception("unable to get access token")

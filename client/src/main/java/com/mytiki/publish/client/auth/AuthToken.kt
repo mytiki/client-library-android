@@ -1,23 +1,24 @@
 package com.mytiki.publish.client.auth
 
-import org.json.JSONObject
+import java.time.LocalDateTime
 import java.util.*
+import org.json.JSONObject
 
 class AuthToken(
     val username: String,
     val auth: String,
     val refresh: String,
-    val expiration: Date,
+    val expiration: LocalDateTime,
     val provider: TokenProviderEnum
 ) {
   companion object {
-    fun fromString(data: String?, key: String): AuthToken {
+    fun fromString(data: String, key: String): AuthToken {
       val json = JSONObject(data)
       return AuthToken(
           key,
           json.getString("auth"),
           json.getString("refresh"),
-          Date(json.getLong("expiration")),
+          LocalDateTime.parse(json.getString("expiration")),
           TokenProviderEnum.fromString(json.getString("provider"))
               ?: throw Exception("Invalid provider in AuthToken"))
     }
@@ -27,7 +28,7 @@ class AuthToken(
     return JSONObject()
         .put("auth", auth)
         .put("refresh", refresh)
-        .put("expiration", expiration.time)
+        .put("expiration", expiration.toString())
         .put("provider", provider.toString())
         .toString()
   }

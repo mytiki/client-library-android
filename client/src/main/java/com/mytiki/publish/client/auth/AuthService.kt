@@ -9,6 +9,9 @@ import android.util.Base64
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.utils.apiService.ApiService
+import java.security.*
+import java.time.LocalDateTime
+import java.util.*
 import kotlinx.coroutines.*
 import net.openid.appauth.AuthorizationRequest
 import net.openid.appauth.AuthorizationService
@@ -19,8 +22,6 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.bouncycastle.jcajce.provider.digest.SHA3
 import org.json.JSONObject
-import java.security.*
-import java.util.*
 
 /** Service class for authentication with TIKI. */
 class AuthService {
@@ -276,12 +277,28 @@ class AuthService {
                 email,
                 json.getString("access_token"),
                 authToken.refresh,
-                Date(authToken.expiration.time + json.getLong("expires_in")),
+                authToken.expiration.plusSeconds(json.getLong("expires_in")),
                 authToken.provider)
         TikiClient.auth.repository.save(context, refreshAuthToken)
         refreshResponse.complete(refreshAuthToken)
       }
       return refreshResponse
     } else throw Exception("User not logged")
+  }
+
+  fun emailToken(context: Context, email: String): CompletableDeferred<AuthToken> {
+    val deferred = CompletableDeferred<AuthToken>()
+    CoroutineScope(Dispatchers.IO).launch {
+      val token =
+          TikiClient.auth.repository.get(context, email)
+              ?: throw Exception("this email is not logged")
+      deferred.complete(
+          if (token.expiration.isBefore(LocalDateTime.now()))
+              TikiClient.auth
+                  .emailAuthRefresh(context, email, TikiClient.emailKeys?.clientId!!)
+                  .await()
+          else token)
+    }
+    return deferred
   }
 }

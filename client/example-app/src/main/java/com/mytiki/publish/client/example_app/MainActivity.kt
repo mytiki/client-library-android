@@ -22,10 +22,10 @@ import com.mytiki.publish.client.config.Config
 import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.example_app.theme.TikiClientTheme
 import com.mytiki.publish.client.permission.Permission
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.async
 import java.math.BigInteger
 import java.security.MessageDigest
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.async
 
 class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,6 +110,10 @@ class MainActivity : AppCompatActivity() {
                 Spacer(modifier = Modifier.height(30.dp))
                 MainButton(text = "accounts") {
                   loginOutput = TikiClient.accounts(this@MainActivity).toString()
+                }
+                Spacer(modifier = Modifier.height(30.dp))
+                MainButton(text = "scrape") {
+                  TikiClient.scrape(this@MainActivity, "gabrielschuler3@gmail.com")
                 }
               }
         }

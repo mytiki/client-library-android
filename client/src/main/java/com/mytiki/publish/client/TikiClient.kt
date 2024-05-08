@@ -310,14 +310,74 @@ object TikiClient {
    */
   fun terms(context: Context) = license.terms(context)
 
+  /**
+   * Initiates the login process for a user.
+   *
+   * This function initiates the login process for a user. It uses the provided Context instance,
+   * EmailProviderEnum instance, and a callback function. The function checks if the email keys are
+   * set before starting the login process.
+   *
+   * @param context The Context instance. This is typically the current activity or application
+   *   context from which this function is called. It is used to provide context for the login
+   *   process.
+   * @param provider The EmailProviderEnum instance representing the email provider to use for the
+   *   login process.
+   * @param loginCallback The callback function that will be called with the result of the login
+   *   process. The result is a string representing the login status.
+   */
   fun login(context: Context, provider: EmailProviderEnum, loginCallback: (String) -> Unit) {
     checkEmail()
     email.login(context, provider, emailKeys!!, loginCallback)
   }
 
+  /**
+   * Initiates the logout process for a user.
+   *
+   * This function initiates the logout process for a user. It uses the provided Context instance
+   * and a string representing the email of the user. The function checks if the email keys are set
+   * before starting the logout process.
+   *
+   * @param context The Context instance. This is typically the current activity or application
+   *   context from which this function is called. It is used to provide context for the logout
+   *   process.
+   * @param email The string representing the email of the user to logout.
+   */
+  fun logout(context: Context, email: String) {
+    checkEmail()
+    this.email.logout(context, email)
+  }
+
+  /**
+   * Retrieves the list of accounts for a user.
+   *
+   * This function retrieves the list of accounts for a user. It uses the provided Context instance.
+   * The function checks if the email keys are set before retrieving the accounts.
+   *
+   * @param context The Context instance. This is typically the current activity or application
+   *   context from which this function is called. It is used to provide context for retrieving the
+   *   accounts.
+   * @return A list of strings representing the accounts of the user.
+   */
   fun accounts(context: Context): List<String> {
     checkEmail()
     return email.accounts(context)
+  }
+
+  /**
+   * Initiates the process of scraping emails for a user.
+   *
+   * This function initiates the process of scraping emails for a user. It uses the provided Context
+   * instance and a string representing the email of the user. The function checks if the email keys
+   * are set before starting the scraping process.
+   *
+   * @param context The Context instance. This is typically the current activity or application
+   *   context from which this function is called. It is used to provide context for the scraping
+   *   process.
+   * @param email The string representing the email of the user to scrape.
+   */
+  fun scrape(context: Context, email: String) {
+    checkEmail()
+    this.email.scrape(context, email)
   }
 
   /**
