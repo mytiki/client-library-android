@@ -1,22 +1,25 @@
 package com.mytiki.publish.client.capture
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
 import com.mytiki.publish.client.TikiClient
+import com.mytiki.publish.client.email.Attachment
+import com.mytiki.publish.client.email.AttachmentType
 import com.mytiki.publish.client.utils.apiService.ApiService
+import java.util.*
 import kotlinx.coroutines.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import org.json.JSONObject
-import java.io.File
-import java.util.*
 
 /** Service class for capturing and processing receipt data. */
 class CaptureService {
   var imageCallback: (Bitmap) -> Unit = {}
     private set
+
+  private var baseUrl = "https://publish.mytiki.com/receipt/"
 
   /**
    * Launches the camera activity for capturing an image of a receipt.
@@ -35,37 +38,12 @@ class CaptureService {
    * @return A CompletableDeferred object that will resolve when the data has been published.
    * @throws Exception if there is an error during the process.
    */
-  fun publish(data: Bitmap): CompletableDeferred<Unit> {
-    val isPublished = CompletableDeferred<Unit>()
-    CoroutineScope(Dispatchers.IO).launch {
-      if (!TikiClient.license.verify())
-          throw Exception(
-              "The License is invalid. Use the TikiClient.license method to issue a new License.")
-      val auth = TikiClient.auth.addressToken().await()
-      val file = File.createTempFile("receipt", ".jpeg")
-      val output = file.outputStream()
-      val image = data.compress(Bitmap.CompressFormat.JPEG, 100, output)
-
-      if (image) {
-        val id = UUID.randomUUID()
-        val body =
-            MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart(
-                    "file", "receipt.jpeg", file.asRequestBody("image/jpeg".toMediaTypeOrNull()))
-                .build()
-
-        ApiService.post(
-                header = mapOf("Content-Type" to "image/jpeg", "Authorization" to "Bearer $auth"),
-                endPoint = "https://publish.mytiki.com/receipt/${id}",
-                onError = Exception("error uploading image"),
-                body,
-            )
-            .await()
-        isPublished.complete(Unit)
-      } else throw Exception("error on compressing image")
+  fun publish(context: Context, attachment: Attachment): CompletableDeferred<Unit> {
+    return when (attachment.type) {
+      AttachmentType.IMAGE -> publishImage(attachment)
+      AttachmentType.PDF -> publishPdf(context, attachment)
+      AttachmentType.TEXT -> publishText(attachment)
     }
-    return isPublished
   }
 
   /**
@@ -74,19 +52,92 @@ class CaptureService {
    * @param data The array of bitmap image data.
    * @return A CompletableDeferred object that will resolve when all the data has been published.
    */
-  fun publish(data: Array<Bitmap>): CompletableDeferred<Unit> {
+  fun publish(context: Context, attachmentList: Array<Attachment>): CompletableDeferred<Unit> {
     val isPublished = CompletableDeferred<Unit>()
     MainScope().async {
-      data.forEachIndexed { index, bitmap ->
-        publish(bitmap).await()
-        if (index == data.size - 1) isPublished.complete(Unit)
+      attachmentList.forEachIndexed { index, attachment ->
+        publish(context, attachment).await()
+        if (index == attachmentList.size - 1) isPublished.complete(Unit)
       }
     }
     return isPublished
   }
 
-  fun publish(message: JSONObject, attachments: List<Any>): Boolean {
-    return true
+  /**
+   * Uploads a bitmap image for receipt data extraction.
+   *
+   * @param data The bitmap image data.
+   * @return A CompletableDeferred object that will resolve when the data has been published.
+   * @throws Exception if there is an error during the process.
+   */
+  private fun publishImage(attachment: Attachment): CompletableDeferred<Unit> {
+    val isPublished = CompletableDeferred<Unit>()
+    CoroutineScope(Dispatchers.IO).launch {
+      if (!TikiClient.license.verify())
+          throw Exception(
+              "The License is invalid. Use the TikiClient.license method to issue a new License.")
+      val auth = TikiClient.auth.addressToken().await()
+      val image = attachment.toImage()
+      val id = UUID.randomUUID()
+      val body =
+          MultipartBody.Builder()
+              .setType(MultipartBody.FORM)
+              .addFormDataPart(
+                  "file", "receipt.jpeg", image.asRequestBody("image/jpeg".toMediaTypeOrNull()))
+              .build()
+      ApiService.post(
+              header = mapOf("Content-Type" to "image/jpeg", "Authorization" to "Bearer $auth"),
+              endPoint = baseUrl + id,
+              onError = Exception("error uploading image"),
+              body,
+          )
+          .await()
+      isPublished.complete(Unit)
+    }
+    return isPublished
+  }
+
+  private fun publishPdf(context: Context, attachment: Attachment): CompletableDeferred<Unit> {
+    val isPublished = CompletableDeferred<Unit>()
+    CoroutineScope(Dispatchers.IO).launch {
+      if (!TikiClient.license.verify())
+          throw Exception(
+              "The License is invalid. Use the TikiClient.license method to issue a new License.")
+      val auth = TikiClient.auth.addressToken().await()
+
+      val id = UUID.randomUUID()
+      val pdf = attachment.toPdf(context)
+      val body =
+          MultipartBody.Builder()
+              .setType(MultipartBody.FORM)
+              .addFormDataPart(
+                  "file", "${id}.pdf", pdf.asRequestBody("application/pdf".toMediaTypeOrNull()))
+              .build()
+
+      ApiService.post(
+              header =
+                  mapOf("Content-Type" to "application/pdf", "Authorization" to "Bearer $auth"),
+              endPoint = baseUrl + id,
+              onError = Exception("error uploading image"),
+              body,
+          )
+          .await()
+      isPublished.complete(Unit)
+    }
+    return isPublished
+  }
+
+  /**
+   * Uploads a bitmap image for receipt data extraction.
+   *
+   * @param data The bitmap image data.
+   * @return A CompletableDeferred object that will resolve when the data has been published.
+   * @throws Exception if there is an error during the process.
+   */
+  private fun publishText(attachment: Attachment): CompletableDeferred<Unit> {
+    val isPublished = CompletableDeferred<Unit>()
+    isPublished.complete(Unit)
+    return isPublished
   }
 
   /**

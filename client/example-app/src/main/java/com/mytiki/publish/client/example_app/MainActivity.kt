@@ -53,7 +53,6 @@ class MainActivity : AppCompatActivity() {
     TikiClient.initialize(hashID)
 
     setContent {
-      var userIdInput by remember { mutableStateOf("") }
       var loginOutput by remember { mutableStateOf("") }
       var image by remember { mutableStateOf<Bitmap?>(null) }
 
@@ -86,13 +85,6 @@ class MainActivity : AppCompatActivity() {
                     loginOutput = "Worked"
                   }
                 }
-                Spacer(modifier = Modifier.height(30.dp))
-                MainButton(text = "Publish") {
-                  if (image != null) {
-                    TikiClient.publish(image!!)
-                    loginOutput = "image published"
-                  } else loginOutput = "No image to publish"
-                }
 
                 Spacer(modifier = Modifier.height(30.dp))
                 MainButton(text = "request permissions") {
@@ -113,7 +105,9 @@ class MainActivity : AppCompatActivity() {
                 }
                 Spacer(modifier = Modifier.height(30.dp))
                 MainButton(text = "scrape") {
-                  TikiClient.scrape(this@MainActivity, "gabrielschuler3@gmail.com")
+                  TikiClient.accounts(this@MainActivity).forEach { account ->
+                    TikiClient.scrape(this@MainActivity, account)
+                  }
                 }
               }
         }

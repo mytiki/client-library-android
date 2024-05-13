@@ -2,16 +2,12 @@ package com.mytiki.publish.client.email
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.email.messageResponse.Message
 import com.mytiki.publish.client.email.messageResponse.MessagePart
 import com.mytiki.publish.client.email.messageResponse.MessagePartBody
 import com.mytiki.publish.client.email.messageResponse.MessageResponse
 import com.mytiki.publish.client.utils.apiService.ApiService
-import java.io.File
-import java.io.FileOutputStream
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.io.encoding.Base64
@@ -122,7 +118,10 @@ class EmailService {
         messagesIndex(context, email, before = LocalDateTime.now()).await()
         indexData = repository.getData(context, email)
       }
-      downloadEmails(context, email)
+
+      downloadEmails(context, email) { attachmentArray ->
+        TikiClient.capture.publish(context, attachmentArray)
+      }
 
       if (indexData?.lastDate != null &&
           indexData.lastDate!!.isBefore(LocalDateTime.now().minusHours(6L))) {
@@ -219,6 +218,7 @@ class EmailService {
   fun downloadEmails(
       context: Context,
       email: String,
+      onDownload: (attachmentList: Array<Attachment>) -> CompletableDeferred<Unit>
   ): CompletableDeferred<Unit> {
     val scrape = CompletableDeferred<Unit>()
     val indexData = repository.getData(context, email)
@@ -232,7 +232,8 @@ class EmailService {
           .launch {
             var isWorking = true
             while (isWorking) {
-              isWorking = downloadEmailsInChunks(context, email, numberOfItems = 10).await()
+              isWorking =
+                  downloadEmailsInChunks(context, email, numberOfItems = 10, onDownload).await()
             }
           }
           .invokeOnCompletion {
@@ -255,7 +256,8 @@ class EmailService {
   fun downloadEmailsInChunks(
       context: Context,
       email: String,
-      numberOfItems: Int
+      numberOfItems: Int,
+      onDownload: (attachmentList: Array<Attachment>) -> CompletableDeferred<Unit>
   ): CompletableDeferred<Boolean> {
     val scrapeInChunks = CompletableDeferred<Boolean>()
     val indexes = repository.readIndexes(context, email, numberOfItems)
@@ -283,11 +285,9 @@ class EmailService {
       messageResponseList.forEach { apiResponse ->
         val attachmentDeferred = async {
           val message = (Message.fromJson(JSONObject(apiResponse?.string()!!)))
-          val attachmentList = mutableListOf<Any>()
+          val attachmentList = mutableListOf<Attachment>()
           decodeByMimiType(context, email, message, attachmentList).await()
-          val published = TikiClient.capture.publish(message.toJson(), attachmentList)
-          if (!published)
-              scrapeInChunks.completeExceptionally(Exception("error updating index list"))
+          onDownload(attachmentList.toTypedArray()).await()
         }
         attachmentRequestArray.add(attachmentDeferred)
       }
@@ -312,20 +312,14 @@ class EmailService {
       context: Context,
       email: String,
       message: Message,
-      attachmentList: MutableList<Any>
+      attachmentList: MutableList<Attachment>
   ): CompletableDeferred<Unit> {
     val decodeByMimeType = CompletableDeferred<Unit>()
     CoroutineScope(Dispatchers.IO).launch {
       if (!message.payload?.mimeType.isNullOrEmpty()) {
         if (!message.payload?.body?.data.isNullOrEmpty()) {
-          val text = message.payload?.let { getAllText(it).await() }
-          if (!text.isNullOrEmpty()) attachmentList.add(text)
-
-          val image = message.payload?.let { getAllImage(it).await() }
-          if (image != null) attachmentList.add(image)
-
-          val pdf = message.payload?.let { getAllPdf(context, it).await() }
-          if (pdf != null) attachmentList.add(pdf)
+          val att = message.payload?.let { sortAttachment(it).await() }
+          if (att != null) attachmentList.add(att)
         }
 
         val multipart = getAllMultipart(context, message, email).await()
@@ -335,8 +329,7 @@ class EmailService {
           val attachment =
               getAttachments(context, email, message.id, message.payload?.body?.attachmentId!!)
                   .await()
-          val byAttachmentId =
-              message.payload.let { getAllByAttachmentId(context, it, attachment).await() }
+          val byAttachmentId = message.payload.let { getAllByAttachmentId(it, attachment).await() }
           if (byAttachmentId != null) attachmentList.addAll(byAttachmentId)
         }
       }
@@ -348,33 +341,25 @@ class EmailService {
   /**
    * Retrieves and decodes MIME types of email message parts using attachment IDs.
    *
-   * @param context The context.
    * @param messagePart The message part.
    * @param attachment The attachment data.
    * @return A CompletableDeferred containing the list of retrieved parts.
    */
   private fun getAllByAttachmentId(
-      context: Context,
       messagePart: MessagePart,
       attachment: ByteArray
-  ): CompletableDeferred<List<Any>?> {
-    val getAllByAttachmentId = CompletableDeferred<List<Any>?>()
+  ): CompletableDeferred<List<Attachment>?> {
+    val getAllByAttachmentId = CompletableDeferred<List<Attachment>?>()
     CoroutineScope(Dispatchers.IO).launch {
       if (messagePart.mimeType?.substringBefore("/") == "multipart") {
-        val array = mutableListOf<Any>()
+        val list = mutableListOf<Attachment>()
         messagePart.parts?.forEach { part ->
           if (part != null && !part.body?.data.isNullOrEmpty()) {
-            val text = getAllText(part, attachment).await()
-            if (text != null) array.add(text)
-
-            val image = getAllImage(part, attachment).await()
-            if (image != null) array.add(image)
-
-            val pdf = getAllPdf(context, part, attachment).await()
-            if (pdf != null) array.add(pdf)
+            val att = sortAttachment(part, attachment).await()
+            if (att != null) list.add(att)
           }
         }
-        getAllByAttachmentId.complete(array)
+        getAllByAttachmentId.complete(list)
       } else getAllByAttachmentId.complete(null)
     }
     return getAllByAttachmentId
@@ -391,33 +376,27 @@ class EmailService {
   private fun getAllMultipart(
       context: Context,
       message: Message,
-      email: String
-  ): CompletableDeferred<List<Any>?> {
-    val getAllMultipart = CompletableDeferred<List<Any>?>()
+      email: String,
+  ): CompletableDeferred<List<Attachment>?> {
+    val getAllMultipart = CompletableDeferred<List<Attachment>?>()
     val messagePart = message.payload
     CoroutineScope(Dispatchers.IO).launch {
       // Check if the MIME type of the message part is multipart
       if (messagePart?.mimeType?.substringBefore("/") == "multipart") {
-        val list = mutableListOf<Any>()
+        val list = mutableListOf<Attachment>()
         // Iterate over each part of the message
         messagePart.parts?.forEach { part ->
           if (part != null) {
             // If the part has data, decode it based on its MIME type
             if (!part.body?.data.isNullOrEmpty()) {
-              val text = getAllText(part).await()
-              if (text != null) list.add(text)
-
-              val image = getAllImage(part).await()
-              if (image != null) list.add(image)
-
-              val pdf = getAllPdf(context, part).await()
-              if (pdf != null) list.add(pdf)
+              val attachment = sortAttachment(part).await()
+              if (attachment != null) list.add(attachment)
             }
             // If the part has an attachment ID, retrieve and decode the attachment
             if (!part.body?.attachmentId.isNullOrEmpty()) {
               val attachment =
                   getAttachments(context, email, message.id, part.body?.attachmentId!!).await()
-              val byAttachmentId = getAllByAttachmentId(context, part, attachment).await()
+              val byAttachmentId = getAllByAttachmentId(part, attachment).await()
               if (byAttachmentId != null) list.addAll(byAttachmentId)
             }
           }
@@ -428,81 +407,23 @@ class EmailService {
     return getAllMultipart
   }
 
-  /**
-   * Retrieves and decodes image attachments from email message parts.
-   *
-   * @param messagePart The message part.
-   * @param attachment Optional attachment data.
-   * @return A CompletableDeferred containing the decoded bitmap.
-   */
   @OptIn(ExperimentalEncodingApi::class)
-  private fun getAllImage(
+  private fun sortAttachment(
       messagePart: MessagePart,
       attachment: ByteArray? = null
-  ): CompletableDeferred<Bitmap?> {
-    val getAllImage = CompletableDeferred<Bitmap?>()
+  ): CompletableDeferred<Attachment?> {
+    val sortAttachment = CompletableDeferred<Attachment?>()
     CoroutineScope(Dispatchers.IO).launch {
-      // Check if the MIME type of the message part is an image
-      if (messagePart.mimeType?.substringBefore("/") == "image") {
+      val attachmentType =
+          if (messagePart.mimeType?.substringBefore("/") == "image") AttachmentType.IMAGE
+          else if (messagePart.mimeType?.substringBefore("/") == "text") AttachmentType.TEXT
+          else if (messagePart.mimeType == "application/pdf") AttachmentType.PDF else null
+      if (attachmentType != null) {
         val att = attachment ?: Base64.UrlSafe.decode(messagePart.body?.data!!)
-        val resp = BitmapFactory.decodeByteArray(att, 0, att.size)
-        getAllImage.complete(resp)
-      } else getAllImage.complete(null)
+        sortAttachment.complete(Attachment(attachmentType, att))
+      } else sortAttachment.complete(null)
     }
-    return getAllImage
-  }
-
-  /**
-   * Retrieves and decodes text attachments from email message parts.
-   *
-   * @param messagePart The message part.
-   * @param attachment Optional attachment data.
-   * @return A CompletableDeferred containing the decoded text.
-   */
-  @OptIn(ExperimentalEncodingApi::class)
-  private fun getAllText(
-      messagePart: MessagePart,
-      attachment: ByteArray? = null
-  ): CompletableDeferred<String?> {
-    val getAllText = CompletableDeferred<String?>()
-    CoroutineScope(Dispatchers.IO).launch {
-      // Check if the MIME type of the message part is text
-      if (messagePart.mimeType?.substringBefore("/") == "text") {
-        val att = attachment ?: Base64.UrlSafe.decode(messagePart.body?.data!!)
-        getAllText.complete(String(att))
-      } else getAllText.complete(null)
-    }
-    return getAllText
-  }
-
-  /**
-   * Retrieves and decodes PDF attachments from email message parts.
-   *
-   * @param context The context.
-   * @param messagePart The message part.
-   * @param attachment Optional attachment data.
-   * @return A CompletableDeferred containing the decoded PDF file.
-   */
-  @OptIn(ExperimentalEncodingApi::class)
-  private fun getAllPdf(
-      context: Context,
-      messagePart: MessagePart,
-      attachment: ByteArray? = null
-  ): CompletableDeferred<File?> {
-    val getAllPdf = CompletableDeferred<File?>()
-    CoroutineScope(Dispatchers.IO).launch {
-      // Check if the MIME type of the message part is a PDF
-      if (messagePart.mimeType == "application/pdf") {
-        val att = attachment ?: Base64.UrlSafe.decode(messagePart.body?.data!!)
-        val filePDF = File(context.filesDir, messagePart.body?.attachmentId + ".pdf")
-        val pdfOutputStream = FileOutputStream(filePDF, false)
-        pdfOutputStream.write(att)
-        pdfOutputStream.flush()
-        pdfOutputStream.close()
-        getAllPdf.complete(filePDF)
-      } else getAllPdf.complete(null)
-    }
-    return getAllPdf
+    return sortAttachment
   }
 
   /**
