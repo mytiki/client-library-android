@@ -9,4 +9,8 @@ class OfferService {
   fun accept(context: Context, offer: Offer) {
     MainScope().async { TikiClient.license.create(context, offer.use, offer.tags) }
   }
+
+  fun decline(context: Context, offer: Offer) {
+    MainScope().async { TikiClient.license.create(context, null, offer.tags) }
+  }
 }
