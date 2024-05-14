@@ -17,9 +17,6 @@ concurrency:
 jobs:
   docs:
     if: startsWith(github.head_ref, 'release/')
-    environment:
-      name: Production
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout TIKI Publish Client
