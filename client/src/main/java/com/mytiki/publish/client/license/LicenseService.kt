@@ -25,7 +25,7 @@ class LicenseService {
    * @throws Exception if there is an error creating the license. The exception message contains
    *   details about the error.
    */
-  suspend fun create(context: Context, use: Use, tags: List<Tag>) =
+  suspend fun create(context: Context, use: Use?, tags: List<Tag>) =
       manageLicense(context, use, tags)
 
   /**

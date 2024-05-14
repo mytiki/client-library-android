@@ -324,9 +324,7 @@ object TikiClient {
     MainScope().async {
       val license =
           license.create(
-              context,
-              Use(listOf(Usecase(UsecaseCommon.ATTRIBUTION)), listOf("*")),
-              arrayOf(Tag(TagCommon.PURCHASE_HISTORY)))
+              context, Use(listOf(Usecase.ATTRIBUTION), listOf("*")), listOf(Tag.PURCHASE_HISTORY))
       isLicenseCreated.complete(license)
     }
     return isLicenseCreated
