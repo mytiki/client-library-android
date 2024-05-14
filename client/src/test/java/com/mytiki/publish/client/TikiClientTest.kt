@@ -1,12 +1,12 @@
 package com.mytiki.publish.client
 
 import android.content.Context
-import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
 import com.mytiki.publish.client.config.Config
+import com.mytiki.publish.client.email.Attachment
 import io.mockk.*
-import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.fail
+import java.io.File
+import junit.framework.TestCase.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -47,7 +47,7 @@ class TikiClientTest {
           tosUrl = "validTosUrl",
           privacyUrl = "validPrivacyUrl")
   private val mockActivity = mockk<ComponentActivity>()
-  private val mockBitmap = mockk<Bitmap>()
+  private val mockAttachmentArray = arrayOf(mockk<Attachment>())
   private val mockContext = mockk<Context>()
   private val userID = "validUserID"
 
@@ -106,45 +106,17 @@ class TikiClientTest {
     }
   }
 
+  @OptIn(ExperimentalCoroutinesApi::class)
   @Test
-  fun publishSingleBitmapSuccessfully() {
+  fun publishWithAttachmentArray() {
     TikiClient.configure(mockConfig)
     clearAllMocks()
+
+    every { mockk<Attachment>().toPdf(mockActivity) } returns mockk<File>()
+
     mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.initialize(userID) }
-
-    mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.publish(mockBitmap) }
-  }
-
-  @Test
-  fun publishSingleBitmapWithoutInitialization() {
-    try {
-      TikiClient.configure(mockConfig)
-      mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.publish(mockBitmap) }
-    } catch (e: Exception) {
-      assertEquals(
-          "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID.",
-          e.message)
-    }
-  }
-
-  @Test
-  fun publishArrayOfBitmapsSuccessfully() {
-    TikiClient.configure(mockConfig)
-    clearAllMocks()
-    mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.initialize(userID) }
-    mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.publish(mockBitmap) }
-  }
-
-  @Test
-  fun publishArrayOfBitmapsWithoutInitialization() {
-    try {
-      clearAllMocks()
-      TikiClient.configure(mockConfig)
-      mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.publish(mockBitmap) }
-    } catch (e: Exception) {
-      assertEquals(
-          "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID.",
-          e.message)
+    mainCoroutineRule.dispatcher.runBlockingTest {
+      TikiClient.publish(mockActivity, mockAttachmentArray)
     }
   }
 

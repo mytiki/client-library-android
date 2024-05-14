@@ -7,6 +7,7 @@ import com.mytiki.publish.client.auth.AuthService
 import com.mytiki.publish.client.capture.CaptureService
 import com.mytiki.publish.client.capture.ReceiptResponse
 import com.mytiki.publish.client.config.Config
+import com.mytiki.publish.client.email.Attachment
 import com.mytiki.publish.client.email.EmailKeys
 import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.email.EmailService
@@ -62,6 +63,16 @@ object TikiClient {
       return field
     }
 
+  /**
+   * PermissionService instance for handling permissions.
+   *
+   * This property is a getter that returns an instance of PermissionService. It checks if the
+   * client is properly configured and the user ID is set before returning the PermissionService
+   * instance.
+   *
+   * @return An instance of PermissionService.
+   * @throws Exception if the client is not configured or the user ID is not set.
+   */
   val permission = PermissionService()
     get() {
       check()
@@ -116,6 +127,12 @@ object TikiClient {
   var config: Config? = null
     internal set
 
+  /**
+   * Email keys for the client.
+   *
+   * This property is a lateinit variable that holds the email keys for the client. It is private
+   * and can only be set within the TikiClient object.
+   */
   var emailKeys: EmailKeys? = null
     internal set
 
@@ -151,6 +168,16 @@ object TikiClient {
     }
   }
 
+  /**
+   * Configures the email keys for the TikiClient.
+   *
+   * This function is used to set the email keys for the TikiClient. The email keys include the
+   * client ID, client secret, and redirect URI.
+   *
+   * @param clientID The client ID for the email service.
+   * @param clientSecret The client secret for the email service.
+   * @param redirectURI The redirect URI for the email service.
+   */
   fun emailConfig(clientID: String, clientSecret: String, redirectURI: String) {
     if (clientID.isEmpty())
         throw Exception(
@@ -180,7 +207,7 @@ object TikiClient {
     if (config == null)
         throw Exception(
             "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration.")
-    else if (userID.isNullOrEmpty())
+    else if (userID.isEmpty())
         throw Exception(
             "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID.")
     else {
@@ -210,17 +237,20 @@ object TikiClient {
   }
 
   /**
-   * Publishes a single bitmap image for receipt data extraction.
+   * Publishes an array of attachments for receipt data extraction.
    *
-   * This function publishes a single bitmap image for receipt data extraction. The provided bitmap
-   * image data is sent to the capture service for processing. The function is asynchronous and
+   * This function publishes an array of attachments for receipt data extraction. The provided
+   * attachments are sent to the capture service for processing. The function is asynchronous and
    * returns a CompletableDeferred object that will be completed when the data has been published.
    *
-   * @param data The bitmap image data to be published.
+   * @param context The Context instance. This is typically the current activity or application
+   *   context from which this function is called. It is used to provide context for the publishing
+   *   process.
+   * @param attachments The array of Attachment objects to be published.
    * @return A CompletableDeferred object that will be completed when the data has been published.
    */
-  fun publish(data: Bitmap): CompletableDeferred<Unit> {
-    return capture.publish(data)
+  fun publish(context: Context, attachments: Array<Attachment>): CompletableDeferred<Unit> {
+    return capture.publish(context, attachments)
   }
 
   /**
@@ -229,7 +259,7 @@ object TikiClient {
    * This method fetches the result of the receipt image processing from the server.
    *
    * @param receiptId The unique identifier for the receipt obtained from the publish method.
-   * @param onResult A callback functions that revceives the array of ReceiptResponse objects, each
+   * @param onResult A callback functions that receives the array of ReceiptResponse objects, each
    *   containing the structured data extracted from an image of the receipt, or null if the
    *   retrieval fails.
    */
@@ -296,6 +326,7 @@ object TikiClient {
     }
     return isLicenseCreated
   }
+
   /**
    * Retrieves the terms of the license.
    *
