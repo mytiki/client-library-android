@@ -1,13 +1,17 @@
 package com.mytiki.publish.client.offer
 
-sealed class Tag private constructor(value: String) {
-  data object TAG1 : Tag("TAG1")
+class Tag private constructor(val value: String) {
+  constructor(tag: TagCommon) : this(tag.value)
 
-  data object TAG2 : Tag("TAG2")
+  companion object {
+    fun custom(tag: String): Tag {
+      return Tag("custom:$tag")
+    }
 
-  data object TAG3 : Tag("TAG3")
-
-  data object TAG4 : Tag("TAG4")
-
-  data class CustomTag(val value: String) : Tag(value)
+    fun from(tag: String): Tag {
+      val common: TagCommon? = TagCommon.from(tag)
+      return if (common != null) Tag(common)
+      else if (tag.startsWith("custom:")) Tag(tag) else custom(tag)
+    }
+  }
 }
