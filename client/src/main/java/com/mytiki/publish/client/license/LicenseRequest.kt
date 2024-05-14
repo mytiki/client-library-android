@@ -3,6 +3,8 @@ package com.mytiki.publish.client.license
 import android.content.Context
 import android.util.Base64
 import com.mytiki.publish.client.TikiClient
+import com.mytiki.publish.client.offer.Tag
+import com.mytiki.publish.client.offer.Use
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -15,18 +17,22 @@ class LicenseRequest {
     userSignature = address?.let { TikiClient.auth.signMessage(it, keys.private) }
   }
 
-  fun toJSON(context: Context): JSONObject {
+  fun toJSON(context: Context, use: Use?, tag: List<Tag>?): JSONObject {
+    val usecaseJson = JSONArray().apply { use?.usecases?.forEach { put(it) } }
+    val destinationJson = JSONArray().apply { use?.destinations?.forEach { put(it) } }
+    val tagsJson = JSONArray().apply { tag?.forEach { put(it.value) } }
+
     val jsonBody =
         JSONObject()
             .put("ptr", TikiClient.userID)
-            .put("tags", JSONArray().put("purchase_history"))
+            .put("tags", tagsJson)
             .put(
                 "uses",
                 JSONArray()
                     .put(
                         JSONObject().apply {
-                          put("usecases", JSONArray().put("attribution"))
-                          put("destinations", JSONArray().put("*"))
+                          put("usecases", usecaseJson)
+                          put("destinations", destinationJson)
                         }))
             .put("description", "")
             .put("origin", context.packageName)

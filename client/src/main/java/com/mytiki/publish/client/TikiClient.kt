@@ -12,6 +12,7 @@ import com.mytiki.publish.client.email.EmailKeys
 import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.email.EmailService
 import com.mytiki.publish.client.license.LicenseService
+import com.mytiki.publish.client.offer.*
 import com.mytiki.publish.client.permission.Permission
 import com.mytiki.publish.client.permission.PermissionService
 import kotlinx.coroutines.CompletableDeferred
@@ -321,8 +322,12 @@ object TikiClient {
   fun createLicense(context: Context): CompletableDeferred<Boolean> {
     val isLicenseCreated = CompletableDeferred<Boolean>()
     MainScope().async {
-      license.create(context)
-      isLicenseCreated.complete(license.create(context))
+      val license =
+          license.create(
+              context,
+              Use(listOf(Usecase(UsecaseCommon.ATTRIBUTION)), listOf("*")),
+              arrayOf(Tag(TagCommon.PURCHASE_HISTORY)))
+      isLicenseCreated.complete(license)
     }
     return isLicenseCreated
   }
