@@ -17,6 +17,19 @@ private constructor(
   var active: Boolean = false
     private set
 
+  constructor(
+      description: String,
+      rewards: List<Reward>,
+      use: Use,
+      tags: List<Tag>,
+      ptr: String,
+      permissions: List<Permission>? = null,
+      mutable: Boolean = true,
+      active: Boolean = false
+  ) : this(description, rewards, use, tags, ptr, permissions, mutable) {
+    this.active = active
+  }
+
   companion object {
     fun fromJson(json: JSONObject, ptr: String): Offer {
       val rewards = json.getJSONArray("rewards")
