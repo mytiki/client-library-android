@@ -17,6 +17,8 @@ private constructor(
   var active: Boolean = false
     private set
 
+  private var isFirstChange = true
+
   constructor(
       description: String,
       rewards: List<Reward>,
@@ -64,13 +66,27 @@ private constructor(
         .put("active", active)
   }
 
-  fun activate(): Offer {
-    active = true
+  internal fun activate(): Offer {
+    if (mutable) {
+      active = true
+    } else {
+      if (isFirstChange) {
+        active = true
+        isFirstChange = false
+      }
+    }
     return this
   }
 
-  fun deactivate(): Offer {
-    active = false
+  internal fun deactivate(): Offer {
+    if (mutable) {
+      active = false
+    } else {
+      if (isFirstChange) {
+        active = false
+        isFirstChange = false
+      }
+    }
     return this
   }
 }
