@@ -4,7 +4,8 @@ import com.mytiki.publish.client.permission.Permission
 import org.json.JSONArray
 import org.json.JSONObject
 
-class Offer(
+class Offer
+private constructor(
     val description: String,
     val rewards: List<Reward>,
     val use: Use,
@@ -12,8 +13,10 @@ class Offer(
     val ptr: String,
     val permissions: List<Permission>? = null,
     val mutable: Boolean = true,
-    val active: Boolean = false
 ) {
+  var active: Boolean = false
+    private set
+
   companion object {
     fun fromJson(json: JSONObject, ptr: String): Offer {
       val rewards = json.getJSONArray("rewards")
@@ -46,5 +49,15 @@ class Offer(
         .put("permissions", JSONArray(permissions?.map { it.toJson() }))
         .put("mutable", mutable)
         .put("active", active)
+  }
+
+  fun activate(): Offer {
+    active = true
+    return this
+  }
+
+  fun deactivate(): Offer {
+    active = false
+    return this
   }
 }

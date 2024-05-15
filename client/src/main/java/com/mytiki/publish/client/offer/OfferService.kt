@@ -6,21 +6,14 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
 
 class OfferService {
-  val repository = OfferRepository()
 
-  fun accept(context: Context, offer: Offer) {
+  fun accept(context: Context, offer: Offer): Offer {
     MainScope().async { TikiClient.license.create(context, offer.use, offer.tags) }
+    return offer.activate()
   }
 
-  fun decline(context: Context, offer: Offer) {
+  fun decline(context: Context, offer: Offer): Offer {
     MainScope().async { TikiClient.license.create(context, null, offer.tags) }
-  }
-
-  fun get(context: Context, ptr: String): Offer? {
-    return repository.get(context, ptr)
-  }
-
-  fun getAll(context: Context): List<Offer> {
-    return repository.getAll(context)
+    return offer.deactivate()
   }
 }
