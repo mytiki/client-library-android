@@ -41,4 +41,17 @@ milestones:
       Adds support for intelligent email scraping of e-receipts. Emails are fetched using a pre-qualified list
       of known receipt senders and parsed locally to the mobile device to protect privacy. Emails are eagerly fetched
       starting with the most recent and working progressively in reverse chronological order when time-permitted.
+    state: closed
+
+  - title: 0.4.0
+    description: |
+      Implements the services for "Improve OptIn rates" feature. The Improve OptIn feature provides a 
+      structured approach to create compelling ffers, present them to users, and manage user decisions
+      efficiently.
+    state: open
+  
+  - title: 0.5.0
+    description: |
+      Implements the UIs for "Improve OptIn rates" feature. Adds pre-built UIs that can be customized 
+      to match the app's visual identity.
     state: open
