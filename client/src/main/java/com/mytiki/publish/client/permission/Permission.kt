@@ -7,6 +7,7 @@ package com.mytiki.publish.client.permission
 import android.Manifest
 import android.os.Build
 import java.io.Serializable
+import org.json.JSONObject
 
 enum class Permission(val code: Int, private val permission: String? = null) : Serializable {
   CAMERA(100, Manifest.permission.CAMERA),
@@ -35,6 +36,10 @@ enum class Permission(val code: Int, private val permission: String? = null) : S
   companion object {
     fun fromString(value: String): Permission? {
       return Permission.entries.firstOrNull() { it.name == value }
+    }
+
+    fun fromJson(json: JSONObject): Permission? {
+      return Permission.entries.firstOrNull() { it.permission() == json.getString("permission") }
     }
   }
 
@@ -67,4 +72,8 @@ enum class Permission(val code: Int, private val permission: String? = null) : S
   }
 
   override fun toString(): String = this.name
+
+  fun toJson(): JSONObject {
+    return JSONObject().put("permission", this.permission())
+  }
 }

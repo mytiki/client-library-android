@@ -8,4 +8,16 @@ sealed class RewardType private constructor(val value: String) {
   data object UPGRADES : RewardType("UPGRADES")
 
   data class Custom(val type: String) : RewardType("custom:$type")
+
+  companion object {
+    fun from(type: String): RewardType {
+      return when {
+        type == "VIRTUAL_CURENCY" -> VIRTUAL_CURENCY
+        type == "EXCLUSIVE_ACCESS" -> EXCLUSIVE_ACCESS
+        type == "UPGRADES" -> UPGRADES
+        "custom:" in type -> Custom(type.removePrefix("custom:"))
+        else -> Custom(type)
+      }
+    }
+  }
 }
