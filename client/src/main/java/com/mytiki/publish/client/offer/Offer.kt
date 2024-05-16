@@ -14,32 +14,9 @@ private constructor(
     val ptr: String,
     val permissions: List<Permission>? = null,
     val mutable: Boolean = true,
-    active: Boolean = false,
 ) {
-  var active: Boolean = active
-    private set
-
-  private var isFirstChange = true
 
   var id = UUID.randomUUID().toString()
-    private set
-
-  private constructor(
-      description: String,
-      rewards: List<Reward>,
-      use: Use,
-      tags: List<Tag>,
-      ptr: String,
-      permissions: List<Permission>? = null,
-      mutable: Boolean = true,
-      active: Boolean = false,
-      isFirstChange: Boolean = true,
-      id: String = UUID.randomUUID().toString()
-  ) : this(description, rewards, use, tags, ptr, permissions, mutable) {
-    this.active = active
-    this.isFirstChange = isFirstChange
-    this.id = id
-  }
 
   class Builder {
     private var description: String = ""
@@ -49,8 +26,6 @@ private constructor(
     private var ptr: String = ""
     private var permissions: List<Permission>? = null
     private var mutable: Boolean = true
-    private var active: Boolean = false
-    private var isFirstChange: Boolean = true
     private var id: String = UUID.randomUUID().toString()
 
     fun description(description: String) = apply { this.description = description }
@@ -119,27 +94,4 @@ private constructor(
         .put("ptr", ptr)
   }
 
-  internal fun activate(): Offer {
-    if (mutable) {
-      active = true
-    } else {
-      if (isFirstChange) {
-        active = true
-        isFirstChange = false
-      }
-    }
-    return this
-  }
-
-  internal fun deactivate(): Offer {
-    if (mutable) {
-      active = false
-    } else {
-      if (isFirstChange) {
-        active = false
-        isFirstChange = false
-      }
-    }
-    return this
-  }
 }

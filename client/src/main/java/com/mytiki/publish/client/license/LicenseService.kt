@@ -25,7 +25,7 @@ class LicenseService {
    * @throws Exception if there is an error creating the license. The exception message contains
    *   details about the error.
    */
-  suspend fun create(context: Context, use: Use?, tags: List<Tag>) =
+  suspend fun create(context: Context, ptr: String, use: List<Use>, tags: List<Tag>) =
       manageLicense(context, use, tags)
 
   /**
@@ -37,7 +37,7 @@ class LicenseService {
    * @throws Exception if there is an error revoking the license. The exception message contains
    *   details about the error.
    */
-  suspend fun revoke(context: Context) = manageLicense(context, null, null)
+  suspend fun revoke(context: Context, prt: String, tags: List<Tag>) = manageLicense(context, null, null)
 
   /**
    * Manages the license for the user. This is a private function used by the create and revoke
@@ -79,7 +79,7 @@ class LicenseService {
    * @return Boolean indicating whether the license is valid.
    * @throws Exception if there is an error verifying the license.
    */
-  suspend fun verify(): Boolean {
+  suspend fun verify(ptr: String): Boolean {
     val response =
         ApiService.post(
                 header =

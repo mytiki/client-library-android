@@ -10,12 +10,21 @@ import org.json.JSONObject
 
 class LicenseRequest {
   private val userSignature: ByteArray?
-
+// TODO add parameters
+//    ptr
+//    tags
+//    uses
+//    description
+//    origin
+//    expiry
+//    terms
   init {
     val keys = TikiClient.auth.getKey()
     val address = TikiClient.auth.address(keys)
     userSignature = address?.let { TikiClient.auth.signMessage(it, keys.private) }
   }
+
+  // TODO create a constructor for License Request
 
   fun toJSON(context: Context, use: Use?, tag: List<Tag>?): JSONObject {
     val usecaseJson = JSONArray().apply { use?.usecases?.forEach { put(it) } }
@@ -24,7 +33,7 @@ class LicenseRequest {
 
     val jsonBody =
         JSONObject()
-            .put("ptr", TikiClient.userID)
+            .put("ptr", TikiClient.userID) // TODO use PTR as parameter
             .put("tags", tagsJson)
             .put(
                 "uses",
@@ -34,10 +43,10 @@ class LicenseRequest {
                           put("usecases", usecaseJson)
                           put("destinations", destinationJson)
                         }))
-            .put("description", "")
+            .put("description", "") // TODO use description as parameter
             .put("origin", context.packageName)
-            .put("expiry", JSONObject.NULL)
-            .put("terms", TikiClient.license.terms(context))
+            .put("expiry", JSONObject.NULL) // TODO use expiry as parameter
+            .put("terms", TikiClient.license.terms(context)) // TODO use terms as parameter
 
     val privateKey = TikiClient.auth.getKey().private ?: throw Exception("Private key not found")
 
