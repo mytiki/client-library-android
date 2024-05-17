@@ -27,6 +27,7 @@ sealed class Usecase private constructor(val value: String) {
         usecase == "distribution" -> DISTRIBUTION
         usecase == "analytics" -> ANALYTICS
         usecase == "support" -> SUPPORT
+        "custom:" in usecase -> Custom(usecase.removePrefix("custom:"))
         else -> Custom(usecase)
       }
     }
