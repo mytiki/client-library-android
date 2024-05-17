@@ -9,6 +9,7 @@ sealed class RewardType private constructor(val value: String) {
 
   data class Custom(val type: String) : RewardType("custom:$type")
 
+
   companion object {
     fun from(type: String): RewardType {
       return when {
