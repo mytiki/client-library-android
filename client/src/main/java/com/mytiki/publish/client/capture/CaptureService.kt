@@ -32,11 +32,19 @@ class CaptureService {
   }
 
   /**
-   * Uploads a bitmap image for receipt data extraction.
+   * Publishes an attachment based on its type.
    *
-   * @param data The bitmap image data.
-   * @return A CompletableDeferred object that will resolve when the data has been published.
-   * @throws Exception if there is an error during the process.
+   * This function publishes an attachment. It uses the provided Context instance, a string pointer,
+   * and an Attachment object. The function calls the appropriate publish method based on the type
+   * of the attachment (IMAGE, PDF, TEXT).
+   *
+   * @param context The Context instance. This is typically the current activity or application
+   *   context from which this function is called. It is used to provide context for the publishing
+   *   process.
+   * @param attachment The Attachment object containing the details of the attachment to be
+   *   published.
+   * @return A CompletableDeferred object that will be completed when the attachment has been
+   *   published.
    */
   fun publish(context: Context, attachment: Attachment): CompletableDeferred<Unit> {
     return when (attachment.type) {
@@ -47,10 +55,19 @@ class CaptureService {
   }
 
   /**
-   * Uploads an array of bitmap images for receipt data extraction.
+   * Publishes an array of attachments.
    *
-   * @param data The array of bitmap image data.
-   * @return A CompletableDeferred object that will resolve when all the data has been published.
+   * This function publishes an array of attachments. It uses the provided Context instance, a
+   * string pointer, and an array of Attachment objects. The function calls the publish method for
+   * each attachment in the array.
+   *
+   * @param context The Context instance. This is typically the current activity or application
+   *   context from which this function is called. It is used to provide context for the publishing
+   *   process.
+   * @param attachmentList The array of Attachment objects containing the details of the attachments
+   *   to be published.
+   * @return A CompletableDeferred object that will be completed when all the attachments have been
+   *   published.
    */
   fun publish(context: Context, attachmentList: Array<Attachment>): CompletableDeferred<Unit> {
     val isPublished = CompletableDeferred<Unit>()
@@ -64,11 +81,14 @@ class CaptureService {
   }
 
   /**
-   * Uploads a bitmap image for receipt data extraction.
+   * Publishes an image attachment.
    *
-   * @param data The bitmap image data.
-   * @return A CompletableDeferred object that will resolve when the data has been published.
-   * @throws Exception if there is an error during the process.
+   * This function publishes an image attachment. It uses a string pointer and an Attachment object.
+   * The function calls the post method of the ApiService instance to publish the image.
+   *
+   * @param attachment The Attachment object containing the details of the image to be published.
+   * @return A CompletableDeferred object that will be completed when the image has been published.
+   * @throws Exception if there is an error during the publishing process.
    */
   private fun publishImage(attachment: Attachment): CompletableDeferred<Unit> {
     val isPublished = CompletableDeferred<Unit>()
@@ -97,6 +117,20 @@ class CaptureService {
     return isPublished
   }
 
+  /**
+   * Publishes a PDF attachment.
+   *
+   * This function publishes a PDF attachment. It uses the provided Context instance, a string
+   * pointer, and an Attachment object. The function calls the post method of the ApiService
+   * instance to publish the PDF.
+   *
+   * @param context The Context instance. This is typically the current activity or application
+   *   context from which this function is called. It is used to provide context for the publishing
+   *   process.
+   * @param attachment The Attachment object containing the details of the PDF to be published.
+   * @return A CompletableDeferred object that will be completed when the PDF has been published.
+   * @throws Exception if there is an error during the publishing process.
+   */
   private fun publishPdf(context: Context, attachment: Attachment): CompletableDeferred<Unit> {
     val isPublished = CompletableDeferred<Unit>()
     CoroutineScope(Dispatchers.IO).launch {
@@ -128,11 +162,14 @@ class CaptureService {
   }
 
   /**
-   * Uploads a bitmap image for receipt data extraction.
+   * Publishes a text attachment.
    *
-   * @param data The bitmap image data.
-   * @return A CompletableDeferred object that will resolve when the data has been published.
-   * @throws Exception if there is an error during the process.
+   * This function publishes a text attachment. It uses a string pointer and an Attachment object.
+   * The function completes the CompletableDeferred object immediately as there is no actual
+   * publishing process for text attachments.
+   *
+   * @param attachment The Attachment object containing the details of the text to be published.
+   * @return A CompletableDeferred object that will be completed immediately.
    */
   private fun publishText(attachment: Attachment): CompletableDeferred<Unit> {
     val isPublished = CompletableDeferred<Unit>()

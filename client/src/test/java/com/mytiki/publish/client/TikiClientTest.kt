@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.activity.ComponentActivity
 import com.mytiki.publish.client.config.Config
 import com.mytiki.publish.client.email.Attachment
+import com.mytiki.publish.client.offer.*
+import com.mytiki.publish.client.permission.Permission
 import io.mockk.*
 import java.io.File
 import junit.framework.TestCase.*
@@ -50,6 +52,18 @@ class TikiClientTest {
   private val mockAttachmentArray = arrayOf(mockk<Attachment>())
   private val mockContext = mockk<Context>()
   private val userID = "validUserID"
+  private val offer =
+      Offer.Builder()
+          .description("description")
+          .rewards(
+              listOf(
+                  Reward("description", mockk<RewardType>(), "amount"),
+              ))
+          .use(listOf(Use(listOf(Usecase.ATTRIBUTION), listOf("*"))))
+          .tags(listOf(Tag.PURCHASE_HISTORY))
+          .ptr("ptr")
+          .permissions(listOf(Permission.CAMERA))
+          .build()
 
   @After
   fun teardown() {
@@ -126,19 +140,37 @@ class TikiClientTest {
     clearAllMocks()
     mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.initialize(userID) }
 
-    mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.createLicense(mockActivity) }
+    mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.createLicense(mockActivity, offer) }
   }
 
   @Test
   fun createLicenseWithoutInitialization() {
     try {
       TikiClient.configure(mockConfig)
-      mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.createLicense(mockActivity) }
+      mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.createLicense(mockActivity, offer) }
     } catch (e: Exception) {
       assertEquals(
           "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID.",
           e.message)
     }
+  }
+
+  @Test
+  fun acceptOfferSuccessfully() {
+    TikiClient.configure(mockConfig)
+    clearAllMocks()
+    mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.initialize(userID) }
+
+    mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.acceptOffer(mockActivity, offer) }
+  }
+
+  @Test
+  fun declineOfferSuccessfully() {
+    TikiClient.configure(mockConfig)
+    clearAllMocks()
+    mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.initialize(userID) }
+
+    mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.declineOffer(mockActivity, offer) }
   }
 
   @Test

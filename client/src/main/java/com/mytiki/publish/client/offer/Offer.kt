@@ -9,19 +9,18 @@ class Offer
 private constructor(
     val description: String,
     val rewards: List<Reward>,
-    val use: Use,
+    val uses: List<Use>,
     val tags: List<Tag>,
     val ptr: String,
-    val permissions: List<Permission>? = null,
-    val mutable: Boolean = true,
+    val permissions: List<Permission>?,
+    val mutable: Boolean,
+    var id: String,
 ) {
-
-  var id = UUID.randomUUID().toString()
 
   class Builder {
     private var description: String = ""
     private var rewards: List<Reward> = emptyList()
-    private var use: Use = Use(emptyList())
+    private var use: List<Use> = emptyList()
     private var tags: List<Tag> = emptyList()
     private var ptr: String = ""
     private var permissions: List<Permission>? = null
@@ -32,7 +31,7 @@ private constructor(
 
     fun rewards(rewards: List<Reward>) = apply { this.rewards = rewards }
 
-    fun use(use: Use) = apply { this.use = use }
+    fun use(use: List<Use>) = apply { this.use = use }
 
     fun tags(tags: List<Tag>) = apply { this.tags = tags }
 
@@ -42,29 +41,30 @@ private constructor(
 
     fun mutable(mutable: Boolean) = apply { this.mutable = mutable }
 
-    fun active(active: Boolean) = apply { this.active = active }
+    fun id(id: String) = apply { this.id = id }
 
     fun build(): Offer {
+      if (id.isEmpty()) id = UUID.randomUUID().toString()
       require(description.isNotEmpty()) { "Description cannot be empty" }
       require(rewards.isNotEmpty()) { "Rewards cannot be empty" }
-      require(use.usecases.isNotEmpty()) { "Use cases cannot be empty" }
+      require(use.isNotEmpty()) { "Use cases cannot be empty" }
       require(tags.isNotEmpty()) { "Tags cannot be empty" }
       require(ptr.isNotEmpty()) { "Ptr cannot be empty" }
 
-      return Offer(description, rewards, use, tags, ptr, permissions, mutable, active)
+      return Offer(description, rewards, use, tags, ptr, permissions, mutable, id)
     }
   }
 
   companion object {
     fun fromJson(json: JSONObject, id: String): Offer {
       val rewards = json.getJSONArray("rewards")
-      val use = json.getJSONObject("use")
+      val use = json.getJSONArray("uses")
       val tags = json.getJSONArray("tags")
       val permissions = json.optJSONArray("permissions")
       return Offer(
           description = json.getString("description"),
           rewards = (0 until rewards.length()).map { Reward.fromJson(rewards.getJSONObject(it)) },
-          use = Use.from(use),
+          uses = (0 until use.length()).map { Use.from(use.getJSONObject(it)) },
           tags = (0 until tags.length()).map { Tag.from(tags.getString(it)) },
           ptr = json.getString("ptr"),
           permissions =
@@ -74,8 +74,6 @@ private constructor(
                   }
               else null,
           mutable = json.optBoolean("mutable", true),
-          active = json.optBoolean("active", false),
-          isFirstChange = json.optBoolean("isFirstChange", true),
           id = id,
       )
     }
@@ -85,13 +83,10 @@ private constructor(
     return JSONObject()
         .put("description", description)
         .put("rewards", JSONArray(rewards.map { it.toJson() }))
-        .put("use", use.toJson())
+        .put("uses", JSONArray(uses.map { it.toJson() }))
         .put("tags", JSONArray(tags.map { it.value }))
         .put("permissions", JSONArray(permissions?.map { it.toJson() }))
         .put("mutable", mutable)
-        .put("active", active)
-        .put("isFirstChange", isFirstChange)
         .put("ptr", ptr)
   }
-
 }

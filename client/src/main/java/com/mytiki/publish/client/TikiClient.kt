@@ -111,6 +111,21 @@ object TikiClient {
     }
 
   /**
+   * OfferService instance for managing offers.
+   *
+   * This property is a getter that returns an instance of OfferService. It checks if the client is
+   * properly configured and the user ID is set before returning the OfferService instance.
+   *
+   * @return An instance of OfferService.
+   * @throws Exception if the client is not configured or the user ID is not set.
+   */
+  val offer = OfferService()
+    get() {
+      check()
+      return field
+    }
+
+  /**
    * User ID for the client.
    *
    * This property is a lateinit variable that holds the user ID for the client. It is private and
@@ -319,15 +334,38 @@ object TikiClient {
    *   creation process.
    * @return The result of the license creation process.
    */
-  fun createLicense(context: Context): CompletableDeferred<Boolean> {
+  fun createLicense(context: Context, offer: Offer): CompletableDeferred<Boolean> {
     val isLicenseCreated = CompletableDeferred<Boolean>()
     MainScope().async {
-      val license =
-          license.create(
-              context, Use(listOf(Usecase.ATTRIBUTION), listOf("*")), listOf(Tag.PURCHASE_HISTORY))
+      val license = license.create(context, offer)
       isLicenseCreated.complete(license)
     }
     return isLicenseCreated
+  }
+
+  /**
+   * Initiates the process of revoking a license.
+   *
+   * This function initiates the process of revoking a license. It uses the provided Context
+   * instance and an Offer object to start the license revocation process. The function is
+   * asynchronous and returns a CompletableDeferred object that will be completed when the license
+   * has been revoked.
+   *
+   * @param context The Context instance. This is typically the current activity or application
+   *   context from which this function is called. It is used to provide context for the license
+   *   revocation process.
+   * @param offer The Offer object containing the details of the license to be revoked.
+   * @return A CompletableDeferred object that will be completed when the license has been revoked.
+   *   The CompletableDeferred object contains a Boolean indicating the success of the license
+   *   revocation process. It returns true if the license was successfully revoked, false otherwise.
+   */
+  fun revokeLicense(context: Context, offer: Offer): CompletableDeferred<Boolean> {
+    val isLicenseRevoked = CompletableDeferred<Boolean>()
+    MainScope().async {
+      val license = license.revoke(context, offer)
+      isLicenseRevoked.complete(license)
+    }
+    return isLicenseRevoked
   }
 
   /**
@@ -412,6 +450,36 @@ object TikiClient {
   fun scrape(context: Context, email: String) {
     checkEmail()
     this.email.scrape(context, email)
+  }
+
+  /**
+   * Accepts an offer.
+   *
+   * This function accepts an offer. It uses the provided Context instance and an Offer object. The
+   * function calls the accept method of the OfferService instance.
+   *
+   * @param context The Context instance. This is typically the current activity or application
+   *   context from which this function is called. It is used to provide context for the offer
+   *   acceptance process.
+   * @param offer The Offer object containing the details of the offer to be accepted.
+   */
+  fun acceptOffer(context: Context, offer: Offer): CompletableDeferred<Boolean> {
+    return this.offer.accept(context, offer)
+  }
+
+  /**
+   * Declines an offer.
+   *
+   * This function declines an offer. It uses the provided Context instance and an Offer object. The
+   * function calls the decline method of the OfferService instance.
+   *
+   * @param context The Context instance. This is typically the current activity or application
+   *   context from which this function is called. It is used to provide context for the offer
+   *   decline process.
+   * @param offer The Offer object containing the details of the offer to be declined.
+   */
+  fun declineOffer(context: Context, offer: Offer): CompletableDeferred<Boolean> {
+    return this.offer.decline(context, offer)
   }
 
   /**

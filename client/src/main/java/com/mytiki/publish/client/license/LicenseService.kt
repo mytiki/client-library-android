@@ -18,15 +18,33 @@ class LicenseService {
    * Creates a new license for the user.
    *
    * @param context The context. This is typically the application context or the current activity.
-   * @param use The use case for which the license is being created.
+   * @param uses An array of uses for which the license is being created.
    * @param tags An array of tags associated with the license.
    * @return Boolean indicating the success of the license creation. Returns true if the license was
    *   successfully created, false otherwise.
    * @throws Exception if there is an error creating the license. The exception message contains
    *   details about the error.
    */
-  suspend fun create(context: Context, ptr: String, use: List<Use>, tags: List<Tag>) =
-      manageLicense(context, use, tags)
+  suspend fun create(
+      context: Context,
+      ptr: String,
+      description: String,
+      uses: List<Use>,
+      tags: List<Tag>
+  ) = manageLicense(context, ptr, description, uses, tags)
+
+  /**
+   * Creates a new license for the user using an Offer object.
+   *
+   * @param context The context. This is typically the application context or the current activity.
+   * @param offer The Offer object containing the details of the license to be created.
+   * @return Boolean indicating the success of the license creation. Returns true if the license was
+   *   successfully created, false otherwise.
+   * @throws Exception if there is an error creating the license. The exception message contains
+   *   details about the error.
+   */
+  suspend fun create(context: Context, offer: Offer) =
+      manageLicense(context, offer.ptr, offer.description, offer.uses, offer.tags)
 
   /**
    * Revokes the license for the user.
@@ -37,15 +55,29 @@ class LicenseService {
    * @throws Exception if there is an error revoking the license. The exception message contains
    *   details about the error.
    */
-  suspend fun revoke(context: Context, prt: String, tags: List<Tag>) = manageLicense(context, null, null)
+  suspend fun revoke(context: Context, ptr: String, description: String, tags: List<Tag>) =
+      manageLicense(context, ptr, description, emptyList(), tags)
+
+  /**
+   * Revokes the license for the user using an Offer object.
+   *
+   * @param context The context. This is typically the application context or the current activity.
+   * @param offer The Offer object containing the details of the license to be revoked.
+   * @return Boolean indicating the success of the license revocation. Returns true if the license
+   *   was successfully revoked, false otherwise.
+   * @throws Exception if there is an error revoking the license. The exception message contains
+   *   details about the error.
+   */
+  suspend fun revoke(context: Context, offer: Offer) =
+      manageLicense(context, offer.ptr, offer.description, emptyList(), offer.tags)
 
   /**
    * Manages the license for the user. This is a private function used by the create and revoke
    * functions.
    *
    * @param context The context. This is typically the application context or the current activity.
-   * @param use The use case for which the license is being managed. This is null when revoking the
-   *   license.
+   * @param uses An array of uses for which the license is being managed. This is null when revoking
+   *   the license.
    * @param tags An array of tags associated with the license. This is null when revoking the
    *   license.
    * @return Boolean indicating the success of the license management. Returns true if the license
@@ -53,9 +85,22 @@ class LicenseService {
    * @throws Exception if there is an error managing the license. The exception message contains
    *   details about the error.
    */
-  private suspend fun manageLicense(context: Context, use: Use?, tags: List<Tag>?): Boolean {
-    val licenseRequest = LicenseRequest()
-    val jsonBody = licenseRequest.toJSON(context, use, tags)
+  private suspend fun manageLicense(
+      context: Context,
+      prt: String,
+      description: String,
+      uses: List<Use>,
+      tags: List<Tag>
+  ): Boolean {
+    val licenseRequest =
+        LicenseRequest(
+            ptr = prt,
+            tags = tags,
+            uses = uses,
+            description = description,
+            expiry = null,
+            terms = terms(context))
+    val jsonBody = licenseRequest.toJSON(context)
     val body = jsonBody.toString().toRequestBody("application/json".toMediaType())
     val addressToken = TikiClient.auth.addressToken().await()
     val response =
@@ -74,12 +119,18 @@ class LicenseService {
   }
 
   /**
-   * Verifies the validity of the user's license.
+   * Verifies the validity of a user's license.
    *
-   * @return Boolean indicating whether the license is valid.
-   * @throws Exception if there is an error verifying the license.
+   * This function sends a POST request to the license verification endpoint of the server. The
+   * server responds with the verification status of the license.
+   *
+   * @return A Boolean indicating the verification status of the license. It returns true if the
+   *   license is valid, false otherwise.
+   * @throws Exception if there is an error during the verification process. The exception message
+   *   contains details about the error. For example, it throws an exception if the server response
+   *   is null.
    */
-  suspend fun verify(ptr: String): Boolean {
+  suspend fun verify(): Boolean {
     val response =
         ApiService.post(
                 header =
@@ -88,7 +139,8 @@ class LicenseService {
                         "Content-Type" to "application/json",
                     ),
                 endPoint = "$baseUrl/license/verify",
-                onError = Exception("error on creating license"))
+                onError = Exception("error on creating license"),
+            )
             .await()
     if (response == null) throw Exception("error on verify license")
     return RspVerify.fromJson(JSONObject(response.string())).verified

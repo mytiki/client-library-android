@@ -21,6 +21,10 @@ import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.config.Config
 import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.example_app.theme.TikiClientTheme
+import com.mytiki.publish.client.offer.Offer
+import com.mytiki.publish.client.offer.Tag
+import com.mytiki.publish.client.offer.Use
+import com.mytiki.publish.client.offer.Usecase
 import com.mytiki.publish.client.permission.Permission
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -55,6 +59,15 @@ class MainActivity : AppCompatActivity() {
     setContent {
       var loginOutput by remember { mutableStateOf("") }
       var image by remember { mutableStateOf<Bitmap?>(null) }
+      val offer =
+          Offer.Builder()
+              .description("")
+              .rewards(emptyList())
+              .use(listOf(Use(listOf(Usecase.ATTRIBUTION), listOf("*"))))
+              .tags(listOf(Tag.PURCHASE_HISTORY))
+              .ptr("ptr")
+              .permissions(listOf(Permission.CAMERA))
+              .build()
 
       TikiClientTheme {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
@@ -73,9 +86,10 @@ class MainActivity : AppCompatActivity() {
 
                 Spacer(modifier = Modifier.height(30.dp))
                 Spacer(modifier = Modifier.height(30.dp))
-                MainButton(text = "Creatre License") {
+                MainButton(text = "Accept Offer") {
                   MainScope().async {
-                    loginOutput = TikiClient.createLicense(this@MainActivity).await().toString()
+                    loginOutput =
+                        TikiClient.acceptOffer(this@MainActivity, offer).await().toString()
                   }
                 }
                 Spacer(modifier = Modifier.height(30.dp))
