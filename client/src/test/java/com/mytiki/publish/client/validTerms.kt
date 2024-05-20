@@ -8,7 +8,7 @@ const val terms = "# User Data License Agreement\n" +
         "\n" +
         "Your participation in this data licensing program is voluntary and will not affect your rights as a consumer or customer of our products and services in any way.\n" +
         "\n" +
-        "## 1. Data Use\n" +
+        "## 1. Data OfferUse\n" +
         "\n" +
         "By participating in the Company's data licensing program, you, the User, are granting us, the Company, the right to use and share certain data about you (*\"Shared Information\"*) with the carefully selected partners and customers as described in this Section. In exchange for you granting us this right, we agree to compensate you as described in Section 3.\n" +
         "\n" +
@@ -16,18 +16,18 @@ const val terms = "# User Data License Agreement\n" +
         "\n" +
         "### A. Shared Information\n" +
         "\n" +
-        "The following details the types of data collected (*\"Collected Data\"*), the purposes for which the data may be utilized (*\"Use Cases\"*), and optionally where the data may be stored or processed (*\"Destinations\"*). In aggregate, this data is the Shared Information.\n" +
+        "The following details the types of data collected (*\"Collected Data\"*), the purposes for which the data may be utilized (*\"OfferUse Cases\"*), and optionally where the data may be stored or processed (*\"Destinations\"*). In aggregate, this data is the Shared Information.\n" +
         "\n" +
         "#### Collected Data\n" +
         "* *User ID* - Such as screen name, handle, account ID, assigned user ID, customer number, or other user- or account-level ID that can be used to identify a particular user or account.\n" +
         "* *Purchase History* - An account’s or individual’s purchases or purchase tendencies.\n" +
         "\n" +
-        "#### Use Cases\n" +
+        "#### OfferUse Cases\n" +
         "* *AI training* - train machine learning models with user data.\n" +
         "* *Analytics* - extract insights and signals from user data.\n" +
         "* *Attribution* - determine the actions that led to an outcome.\n" +
         "* *Distribution* - distribute/re-license raw data, insights, signals, etc., to 3rd-parties.\n" +
-        "* *Evaluation* - market test new potential uses cases and compensation opportunities.\n" +
+        "* *Evaluation* - market test new potential offerUses cases and compensation opportunities.\n" +
         "* *Personalization* - tailor messaging, offers, features, etc., to an individual.\n" +
         "* *Retargeting* - advertise to and reach users, often on other platforms.\n" +
         "* *Support* - add user data into customer support processes.\n" +
@@ -54,7 +54,7 @@ const val terms = "# User Data License Agreement\n" +
         "\n" +
         "### B. Termination\n" +
         "\n" +
-        "If an opt-out or termination occurs, no new Shared Information will be exchanged for rewards. Pre-existing earned rewards will not be affected. Refer to Section 5 for additional termination details.\n" +
+        "If an opt-out or termination occurs, no new Shared Information will be exchanged for offerRewards. Pre-existing earned offerRewards will not be affected. Refer to Section 5 for additional termination details.\n" +
         "\n" +
         "### C. Requirements\n" +
         "\n" +

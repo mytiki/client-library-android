@@ -1,13 +1,13 @@
 # TIKI Client Library - Android Usage Guide
 
-The TIKI Client Library for Android provides a set of APIs that developers can use to publish data to TIKI. This library
+The TIKI Client Library for Android provides a set of APIs that developers can offerUse to publish data to TIKI. This library
 simplifies the process of integrating your Android application with TIKI by providing convenient methods for
 authorization, licensing, capture, and upload.
 
 ## Getting Started
 
 To get started, visit mytiki.com and apply for beta access. Our team will then set up the provider ID and public key for
-your project, which you'll use to configure the client.
+your project, which you'll offerUse to configure the client.
 
 ## Installation
 
@@ -82,7 +82,7 @@ This method authenticates with the TIKI API and registers the user's device to p
 method due to the necessary API calls.
 
 The user ID can be any arbitrary string that identifies the user in the application using the client library. It is not
-recommended to use personally identifiable information, such as emails. If necessary, use a hashed version of it.
+recommended to offerUse personally identifiable information, such as emails. If necessary, offerUse a hashed version of it.
 
 ```kotlin
 TikiClient.initialize("<the-client-user-id>")
@@ -125,7 +125,7 @@ The Client Library offers an optional method for scanning physical receipts via 
 Use the `TikiClient.scan()` method to initiate the receipt scanning process. This method does not directly return the
 scanned receipt data. Instead, it provides the data through a callback function that you supply.
 
-Here's an example of how to use it:
+Here's an example of how to offerUse it:
 
 ```kotlin
 TikiClient.scan(activity) { image: Bitmap ->
@@ -134,7 +134,7 @@ TikiClient.scan(activity) { image: Bitmap ->
 ```
 
 In this example, `image` is the scanned receipt, and the code inside the callback function (
-i.e., `// Handle the scanned bitmap here`) is where you can process or use the scanned data.
+i.e., `// Handle the scanned bitmap here`) is where you can process or offerUse the scanned data.
 
 #### Data Upload
 
@@ -177,10 +177,10 @@ process of requesting and checking permissions.
 
 #### Requesting Permissions
 
-To request permissions, use the `TikiClient.permissions` method. This method accepts a `ComponentActivity` instance, a
+To request permissions, offerUse the `TikiClient.permissions` method. This method accepts a `ComponentActivity` instance, a
 list of permissions to request, and a callback function to handle the result of the permissions request.
 
-Here's an example of how to use it:
+Here's an example of how to offerUse it:
 
 ```kotlin
 TikiClient.permissions(
@@ -200,10 +200,10 @@ granted. This map is passed to the callback function where you can handle the re
 
 #### Checking Permissions
 
-To check if a specific permission is authorized, use the `TikiClient.isPermissionAuthorized` method. This method accepts
+To check if a specific permission is authorized, offerUse the `TikiClient.isPermissionAuthorized` method. This method accepts
 a `Context` instance and a `Permission` instance representing the permission to check.
 
-Here's an example of how to use it:
+Here's an example of how to offerUse it:
 
 ```kotlin
 val isCameraAuthorized = TikiClient.isPermissionAuthorized(context, Permission.CAMERA)

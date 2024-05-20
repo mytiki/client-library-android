@@ -1,6 +1,6 @@
 # User Data License Agreement
 
-This is an agreement between **you, the *"User",*** and **{{{COMPANY}}}, the *"Company"***, the licensor. The agreement, the User Data License Agreement (*"UDLA"*), sets out both parties rights and obligations in respect to the licensing and use of the data referred to within.
+This is an agreement between **you, the *"User",*** and **{{{COMPANY}}}, the *"Company"***, the licensor. The agreement, the User Data License Agreement (*"UDLA"*), sets out both parties rights and obligations in respect to the licensing and offerUse of the data referred to within.
 
 The terms of the UDLA are relevant for and apply only to those Users and licensors who have elected to participate in the data licensing program detailed within this agreement. The terms and conditions of this agreement are to be read as a whole, and each clause is deemed essential to the agreement.
 
@@ -8,9 +8,9 @@ Your participation in this data licensing program is voluntary and will not affe
 
 ## 1. Data Use
 
-By participating in the Company's data licensing program, you, the User, are granting us, the Company, the right to use and share certain data about you (*"Shared Information"*) with the carefully selected partners and customers as described in this Section. In exchange for you granting us this right, we agree to compensate you as described in Section 3.
+By participating in the Company's data licensing program, you, the User, are granting us, the Company, the right to offerUse and share certain data about you (*"Shared Information"*) with the carefully selected partners and customers as described in this Section. In exchange for you granting us this right, we agree to compensate you as described in Section 3.
 
-In addition, we contractually require any selected partners and customers receiving your Shared Information to not further share, disclose, or use it for any other purpose than the purposes described in this Section.
+In addition, we contractually require any selected partners and customers receiving your Shared Information to not further share, disclose, or offerUse it for any other purpose than the purposes described in this Section.
 
 ### A. Shared Information
 
@@ -25,7 +25,7 @@ The following details the types of data collected (*"Collected Data"*), the purp
 * *Analytics* - extract insights and signals from user data.
 * *Attribution* - determine the actions that led to an outcome.
 * *Distribution* - distribute/re-license raw data, insights, signals, etc., to 3rd-parties.
-* *Evaluation* - market test new potential uses cases and compensation opportunities.
+* *Evaluation* - market test new potential offerUses cases and compensation opportunities.
 * *Personalization* - tailor messaging, offers, features, etc., to an individual.
 * *Retargeting* - advertise to and reach users, often on other platforms.
 * *Support* - add user data into customer support processes.
@@ -35,13 +35,13 @@ The following details the types of data collected (*"Collected Data"*), the purp
 
 ## 2. Compensation
 
-We, the Company, agree to compensate you, the User, with the compensation described below for granting us a license to use your Shared Information listed in Section 1.A.
+We, the Company, agree to compensate you, the User, with the compensation described below for granting us a license to offerUse your Shared Information listed in Section 1.A.
 
 Any changes in compensation require a new agreement. This will have the effect of cancelling and voiding this and any earlier agreements or licenses.
 
 ### A. Program
 
-We, the Company, agree to compensate you, the User, for granting us a license to use your Shared Information in exchange for **$1 USD per month**, available for withdrawal at the end of each month period, contingent upon the following criteria:
+We, the Company, agree to compensate you, the User, for granting us a license to offerUse your Shared Information in exchange for **$1 USD per month**, available for withdrawal at the end of each month period, contingent upon the following criteria:
 
 * A Gmail account you own, connected to the app, for the duration of the period. Gmail connectivity status is available in-app. 
 * A Retailer account you own, connected to the app, for the duration of the period. See app for the complete list of supported Retailer accounts and connectivity status. 
@@ -52,11 +52,11 @@ Cash withdrawal may be subject to minimum balance thresholds, participation dura
 
 ### B. Termination
 
-If an opt-out or termination occurs, no new Shared Information will be exchanged for rewards. Pre-existing earned rewards will not be affected. Refer to Section 5 for additional termination details.
+If an opt-out or termination occurs, no new Shared Information will be exchanged for offerRewards. Pre-existing earned offerRewards will not be affected. Refer to Section 5 for additional termination details.
 
 ### C. Requirements
 
-This offer is contingent upon you the User, providing reasonable access to the Shared Information through the use of one or more of our products and services. Failure to do so, or attempts to mask, obfuscate, or manipulate the Shared Information may terminate this agreement.
+This offer is contingent upon you the User, providing reasonable access to the Shared Information through the offerUse of one or more of our products and services. Failure to do so, or attempts to mask, obfuscate, or manipulate the Shared Information may terminate this agreement.
 
 ## 3. Privacy and Confidentiality
 
@@ -80,7 +80,7 @@ The Company may decide to terminate the agreement at any time, for any reason, b
 
 You, the User, may choose to opt out of this program at any time, by disconnecting any accounts you've connected within the application. The choice to do so will have no impact on any other services the Company provide you, and the Company will not hold it against you in any way.
 
-Upon receiving your opt-out notice, the Company will stop all future collection of Shared Information as described in Section 1.A as soon as possible. The Company may continue to use Shared Information licensed prior to the opt-out.
+Upon receiving your opt-out notice, the Company will stop all future collection of Shared Information as described in Section 1.A as soon as possible. The Company may continue to offerUse Shared Information licensed prior to the opt-out.
 
 ## 6. Governing Law
 

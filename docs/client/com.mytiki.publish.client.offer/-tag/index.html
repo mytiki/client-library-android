@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>Tag</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+</head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+            <a href="../../../index.html">
+                    <span>client</span>
+            </a>
+    </div>
+    <div>
+    </div>
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":client:dokkaHtml/release">androidJvm</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageIds="client::com.mytiki.publish.client.offer/Tag///PointingToDeclaration//-634080579">
+  <div class="breadcrumbs"><a href="../../../index.html">client</a><span class="delimiter">/</span><a href="../index.html">com.mytiki.publish.client.offer</a><span class="delimiter">/</span><span class="current">Tag</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Tag</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="index.html">Tag</a></div><h4 class="">Inheritors</h4><div class="table"><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-e-m-a-i-l_-a-d-d-r-e-s-s/index.html">EMAIL_ADDRESS</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-p-h-o-n-e_-n-u-m-b-e-r/index.html">PHONE_NUMBER</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-p-h-y-s-i-c-a-l_-a-d-d-r-e-s-s/index.html">PHYSICAL_ADDRESS</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-c-o-n-t-a-c-t_-i-n-f-o/index.html">CONTACT_INFO</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-h-e-a-l-t-h/index.html">HEALTH</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-f-i-t-n-e-s-s/index.html">FITNESS</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-p-a-y-m-e-n-t_-i-n-f-o/index.html">PAYMENT_INFO</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-c-r-e-d-i-t_-i-n-f-o/index.html">CREDIT_INFO</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-f-i-n-a-n-c-i-a-l_-i-n-f-o/index.html">FINANCIAL_INFO</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-p-r-e-c-i-s-e_-l-o-c-a-t-i-o-n/index.html">PRECISE_LOCATION</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-c-o-a-r-s-e_-l-o-c-a-t-i-o-n/index.html">COARSE_LOCATION</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-s-e-n-s-i-t-i-v-e_-i-n-f-o/index.html">SENSITIVE_INFO</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-c-o-n-t-a-c-t-s/index.html">CONTACTS</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-m-e-s-s-a-g-e-s/index.html">MESSAGES</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-p-h-o-t-o_-v-i-d-e-o/index.html">PHOTO_VIDEO</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-a-u-d-i-o/index.html">AUDIO</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-g-a-m-e-p-l-a-y_-c-o-n-t-e-n-t/index.html">GAMEPLAY_CONTENT</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-c-u-s-t-o-m-e-r_-s-u-p-p-o-r-t/index.html">CUSTOMER_SUPPORT</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-u-s-e-r_-c-o-n-t-e-n-t/index.html">USER_CONTENT</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-b-r-o-w-s-i-n-g_-h-i-s-t-o-r-y/index.html">BROWSING_HISTORY</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-s-e-a-r-c-h_-h-i-s-t-o-r-y/index.html">SEARCH_HISTORY</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-u-s-e-r_-i-d/index.html">USER_ID</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-d-e-v-i-c-e_-i-d/index.html">DEVICE_ID</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-p-u-r-c-h-a-s-e_-h-i-s-t-o-r-y/index.html">PURCHASE_HISTORY</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-p-r-o-d-u-c-t_-i-n-t-e-r-a-c-t-i-o-n/index.html">PRODUCT_INTERACTION</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-a-d-v-e-r-t-i-s-i-n-g_-d-a-t-a/index.html">ADVERTISING_DATA</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-u-s-a-g-e_-d-a-t-a/index.html">USAGE_DATA</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-c-r-a-s-h_-d-a-t-a/index.html">CRASH_DATA</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-p-e-r-f-o-r-m-a-n-c-e_-d-a-t-a/index.html">PERFORMANCE_DATA</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-d-i-a-g-n-o-s-t-i-c_-d-a-t-a/index.html">DIAGNOSTIC_DATA</a></div></span></div><div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="-custom/index.html">Custom</a></div></span></div><div></div></div></div></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="2126354787%2FClasslikes%2F-634080579" anchor-label="ADVERTISING_DATA" id="2126354787%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-a-d-v-e-r-t-i-s-i-n-g_-d-a-t-a/index.html"><span><span>ADVERTISING_DATA</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2126354787%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-a-d-v-e-r-t-i-s-i-n-g_-d-a-t-a/index.html">ADVERTISING_DATA</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="65497092%2FClasslikes%2F-634080579" anchor-label="AUDIO" id="65497092%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-a-u-d-i-o/index.html"><span><span>AUDIO</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="65497092%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-a-u-d-i-o/index.html">AUDIO</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1664832436%2FClasslikes%2F-634080579" anchor-label="BROWSING_HISTORY" id="-1664832436%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-b-r-o-w-s-i-n-g_-h-i-s-t-o-r-y/index.html"><span><span>BROWSING_HISTORY</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1664832436%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-b-r-o-w-s-i-n-g_-h-i-s-t-o-r-y/index.html">BROWSING_HISTORY</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1826776555%2FClasslikes%2F-634080579" anchor-label="COARSE_LOCATION" id="-1826776555%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-c-o-a-r-s-e_-l-o-c-a-t-i-o-n/index.html"><span><span>COARSE_LOCATION</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1826776555%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-c-o-a-r-s-e_-l-o-c-a-t-i-o-n/index.html">COARSE_LOCATION</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="833217806%2FClasslikes%2F-634080579" anchor-label="Companion" id="833217806%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-companion/index.html"><span><span>Companion</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="833217806%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">object </span><a href="-companion/index.html">Companion</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2088314789%2FClasslikes%2F-634080579" anchor-label="CONTACT_INFO" id="-2088314789%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-c-o-n-t-a-c-t_-i-n-f-o/index.html"><span><span>CONTACT_INFO</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2088314789%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-c-o-n-t-a-c-t_-i-n-f-o/index.html">CONTACT_INFO</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1705075755%2FClasslikes%2F-634080579" anchor-label="CONTACTS" id="-1705075755%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-c-o-n-t-a-c-t-s/index.html"><span><span>CONTACTS</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1705075755%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-c-o-n-t-a-c-t-s/index.html">CONTACTS</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2114629658%2FClasslikes%2F-634080579" anchor-label="CRASH_DATA" id="-2114629658%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-c-r-a-s-h_-d-a-t-a/index.html"><span><span>CRASH_DATA</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2114629658%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-c-r-a-s-h_-d-a-t-a/index.html">CRASH_DATA</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2101456762%2FClasslikes%2F-634080579" anchor-label="CREDIT_INFO" id="-2101456762%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-c-r-e-d-i-t_-i-n-f-o/index.html"><span><span>CREDIT_INFO</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2101456762%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-c-r-e-d-i-t_-i-n-f-o/index.html">CREDIT_INFO</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-613928937%2FClasslikes%2F-634080579" anchor-label="Custom" id="-613928937%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-custom/index.html"><span><span>Custom</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-613928937%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-custom/index.html">Custom</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>tag<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-664870598%2FClasslikes%2F-634080579" anchor-label="CUSTOMER_SUPPORT" id="-664870598%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-c-u-s-t-o-m-e-r_-s-u-p-p-o-r-t/index.html"><span><span>CUSTOMER_SUPPORT</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-664870598%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-c-u-s-t-o-m-e-r_-s-u-p-p-o-r-t/index.html">CUSTOMER_SUPPORT</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1941336918%2FClasslikes%2F-634080579" anchor-label="DEVICE_ID" id="1941336918%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-d-e-v-i-c-e_-i-d/index.html"><span><span>DEVICE_ID</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1941336918%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-d-e-v-i-c-e_-i-d/index.html">DEVICE_ID</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-90443592%2FClasslikes%2F-634080579" anchor-label="DIAGNOSTIC_DATA" id="-90443592%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-d-i-a-g-n-o-s-t-i-c_-d-a-t-a/index.html"><span><span>DIAGNOSTIC_DATA</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-90443592%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-d-i-a-g-n-o-s-t-i-c_-d-a-t-a/index.html">DIAGNOSTIC_DATA</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1605691127%2FClasslikes%2F-634080579" anchor-label="EMAIL_ADDRESS" id="-1605691127%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-e-m-a-i-l_-a-d-d-r-e-s-s/index.html"><span><span>EMAIL_ADDRESS</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1605691127%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-e-m-a-i-l_-a-d-d-r-e-s-s/index.html">EMAIL_ADDRESS</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-277754556%2FClasslikes%2F-634080579" anchor-label="FINANCIAL_INFO" id="-277754556%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-f-i-n-a-n-c-i-a-l_-i-n-f-o/index.html"><span><span>FINANCIAL_INFO</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-277754556%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-f-i-n-a-n-c-i-a-l_-i-n-f-o/index.html">FINANCIAL_INFO</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-958372878%2FClasslikes%2F-634080579" anchor-label="FITNESS" id="-958372878%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-f-i-t-n-e-s-s/index.html"><span><span>FITNESS</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-958372878%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-f-i-t-n-e-s-s/index.html">FITNESS</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-661734776%2FClasslikes%2F-634080579" anchor-label="GAMEPLAY_CONTENT" id="-661734776%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-g-a-m-e-p-l-a-y_-c-o-n-t-e-n-t/index.html"><span><span>GAMEPLAY_CONTENT</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-661734776%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-g-a-m-e-p-l-a-y_-c-o-n-t-e-n-t/index.html">GAMEPLAY_CONTENT</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="559569836%2FClasslikes%2F-634080579" anchor-label="HEALTH" id="559569836%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-h-e-a-l-t-h/index.html"><span><span>HEALTH</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="559569836%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-h-e-a-l-t-h/index.html">HEALTH</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="38589692%2FClasslikes%2F-634080579" anchor-label="MESSAGES" id="38589692%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-m-e-s-s-a-g-e-s/index.html"><span><span>MESSAGES</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="38589692%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-m-e-s-s-a-g-e-s/index.html">MESSAGES</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1199894591%2FClasslikes%2F-634080579" anchor-label="PAYMENT_INFO" id="-1199894591%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-p-a-y-m-e-n-t_-i-n-f-o/index.html"><span><span>PAYMENT_INFO</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1199894591%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-p-a-y-m-e-n-t_-i-n-f-o/index.html">PAYMENT_INFO</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-309299857%2FClasslikes%2F-634080579" anchor-label="PERFORMANCE_DATA" id="-309299857%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-p-e-r-f-o-r-m-a-n-c-e_-d-a-t-a/index.html"><span><span>PERFORMANCE_DATA</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-309299857%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-p-e-r-f-o-r-m-a-n-c-e_-d-a-t-a/index.html">PERFORMANCE_DATA</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-846406866%2FClasslikes%2F-634080579" anchor-label="PHONE_NUMBER" id="-846406866%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-p-h-o-n-e_-n-u-m-b-e-r/index.html"><span><span>PHONE_NUMBER</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-846406866%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-p-h-o-n-e_-n-u-m-b-e-r/index.html">PHONE_NUMBER</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="365613068%2FClasslikes%2F-634080579" anchor-label="PHOTO_VIDEO" id="365613068%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-p-h-o-t-o_-v-i-d-e-o/index.html"><span><span>PHOTO_VIDEO</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="365613068%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-p-h-o-t-o_-v-i-d-e-o/index.html">PHOTO_VIDEO</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-48125220%2FClasslikes%2F-634080579" anchor-label="PHYSICAL_ADDRESS" id="-48125220%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-p-h-y-s-i-c-a-l_-a-d-d-r-e-s-s/index.html"><span><span>PHYSICAL_ADDRESS</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-48125220%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-p-h-y-s-i-c-a-l_-a-d-d-r-e-s-s/index.html">PHYSICAL_ADDRESS</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="802475695%2FClasslikes%2F-634080579" anchor-label="PRECISE_LOCATION" id="802475695%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-p-r-e-c-i-s-e_-l-o-c-a-t-i-o-n/index.html"><span><span>PRECISE_LOCATION</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="802475695%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-p-r-e-c-i-s-e_-l-o-c-a-t-i-o-n/index.html">PRECISE_LOCATION</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="556079864%2FClasslikes%2F-634080579" anchor-label="PRODUCT_INTERACTION" id="556079864%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-p-r-o-d-u-c-t_-i-n-t-e-r-a-c-t-i-o-n/index.html"><span><span>PRODUCT_INTERACTION</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="556079864%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-p-r-o-d-u-c-t_-i-n-t-e-r-a-c-t-i-o-n/index.html">PRODUCT_INTERACTION</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="557571922%2FClasslikes%2F-634080579" anchor-label="PURCHASE_HISTORY" id="557571922%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-p-u-r-c-h-a-s-e_-h-i-s-t-o-r-y/index.html"><span><span>PURCHASE_HISTORY</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="557571922%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-p-u-r-c-h-a-s-e_-h-i-s-t-o-r-y/index.html">PURCHASE_HISTORY</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-624761525%2FClasslikes%2F-634080579" anchor-label="SEARCH_HISTORY" id="-624761525%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-e-a-r-c-h_-h-i-s-t-o-r-y/index.html"><span><span>SEARCH_HISTORY</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-624761525%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-s-e-a-r-c-h_-h-i-s-t-o-r-y/index.html">SEARCH_HISTORY</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1914563217%2FClasslikes%2F-634080579" anchor-label="SENSITIVE_INFO" id="1914563217%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-s-e-n-s-i-t-i-v-e_-i-n-f-o/index.html"><span><span>SENSITIVE_INFO</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1914563217%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-s-e-n-s-i-t-i-v-e_-i-n-f-o/index.html">SENSITIVE_INFO</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1498757216%2FClasslikes%2F-634080579" anchor-label="USAGE_DATA" id="1498757216%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-u-s-a-g-e_-d-a-t-a/index.html"><span><span>USAGE_DATA</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1498757216%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-u-s-a-g-e_-d-a-t-a/index.html">USAGE_DATA</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="211009795%2FClasslikes%2F-634080579" anchor-label="USER_CONTENT" id="211009795%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-u-s-e-r_-c-o-n-t-e-n-t/index.html"><span><span>USER_CONTENT</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="211009795%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-u-s-e-r_-c-o-n-t-e-n-t/index.html">USER_CONTENT</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1245819275%2FClasslikes%2F-634080579" anchor-label="USER_ID" id="1245819275%2FClasslikes%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-u-s-e-r_-i-d/index.html"><span><span>USER_ID</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1245819275%2FClasslikes%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">object </span><a href="-u-s-e-r_-i-d/index.html">USER_ID</a> : <a href="index.html">Tag</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="-8329098%2FProperties%2F-634080579" anchor-label="value" id="-8329098%2FProperties%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
+          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="value.html"><span><span>value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-8329098%2FProperties%2F-634080579"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="value.html">value</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>

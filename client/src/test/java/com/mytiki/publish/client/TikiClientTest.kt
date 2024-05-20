@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.activity.ComponentActivity
 import com.mytiki.publish.client.config.Config
 import com.mytiki.publish.client.email.Attachment
+import com.mytiki.publish.client.offer.*
+import com.mytiki.publish.client.permission.Permission
 import io.mockk.*
 import java.io.File
 import junit.framework.TestCase.*
@@ -50,6 +52,18 @@ class TikiClientTest {
   private val mockAttachmentArray = arrayOf(mockk<Attachment>())
   private val mockContext = mockk<Context>()
   private val userID = "validUserID"
+  private val offer =
+      Offer.Builder()
+          .description("description")
+          .rewards(
+              listOf(
+                  OfferReward("description", mockk<OfferRewardType>(), "amount"),
+              ))
+          .use(listOf(OfferUse(listOf(OfferUsecase.ATTRIBUTION), listOf("*"))))
+          .tags(listOf(OfferTag.PURCHASE_HISTORY))
+          .ptr("ptr")
+          .permissions(listOf(Permission.CAMERA))
+          .build()
 
   @After
   fun teardown() {
@@ -76,7 +90,7 @@ class TikiClientTest {
       fail("Expected an Exception to be thrown")
     } catch (e: Exception) {
       assertEquals(
-          "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration.",
+          "TIKI Client is not configured. OfferUse the TikiClient.configure method to add a configuration.",
           e.message)
     }
   }
@@ -101,7 +115,7 @@ class TikiClientTest {
       fail("Expected an Exception to be thrown")
     } catch (e: Exception) {
       assertEquals(
-          "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID.",
+          "User ID cannot be empty. OfferUse the TikiClient.initialize method to set the user ID.",
           e.message)
     }
   }
@@ -126,19 +140,37 @@ class TikiClientTest {
     clearAllMocks()
     mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.initialize(userID) }
 
-    mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.createLicense(mockActivity) }
+    mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.createLicense(mockActivity, offer) }
   }
 
   @Test
   fun createLicenseWithoutInitialization() {
     try {
       TikiClient.configure(mockConfig)
-      mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.createLicense(mockActivity) }
+      mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.createLicense(mockActivity, offer) }
     } catch (e: Exception) {
       assertEquals(
-          "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID.",
+          "User ID cannot be empty. OfferUse the TikiClient.initialize method to set the user ID.",
           e.message)
     }
+  }
+
+  @Test
+  fun acceptOfferSuccessfully() {
+    TikiClient.configure(mockConfig)
+    clearAllMocks()
+    mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.initialize(userID) }
+
+    mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.acceptOffer(mockActivity, offer) }
+  }
+
+  @Test
+  fun declineOfferSuccessfully() {
+    TikiClient.configure(mockConfig)
+    clearAllMocks()
+    mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.initialize(userID) }
+
+    mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.declineOffer(mockActivity, offer) }
   }
 
   @Test
@@ -148,7 +180,7 @@ class TikiClientTest {
       TikiClient.terms(mockContext)
     } catch (e: Exception) {
       assertEquals(
-          "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID.",
+          "User ID cannot be empty. OfferUse the TikiClient.initialize method to set the user ID.",
           e.message)
     }
   }

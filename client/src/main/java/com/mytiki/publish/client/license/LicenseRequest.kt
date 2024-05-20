@@ -3,12 +3,20 @@ package com.mytiki.publish.client.license
 import android.content.Context
 import android.util.Base64
 import com.mytiki.publish.client.TikiClient
-import com.mytiki.publish.client.offer.Tag
-import com.mytiki.publish.client.offer.Use
+import com.mytiki.publish.client.offer.OfferTag
+import com.mytiki.publish.client.offer.OfferUse
+import java.time.LocalDateTime
 import org.json.JSONArray
 import org.json.JSONObject
 
-class LicenseRequest {
+class LicenseRequest(
+    val ptr: String,
+    val offerTags: List<OfferTag>,
+    val offerUses: List<OfferUse>,
+    val description: String,
+    val expiry: LocalDateTime?,
+    val terms: String
+) {
   private val userSignature: ByteArray?
 
   init {
@@ -17,27 +25,19 @@ class LicenseRequest {
     userSignature = address?.let { TikiClient.auth.signMessage(it, keys.private) }
   }
 
-  fun toJSON(context: Context, use: Use?, tag: List<Tag>?): JSONObject {
-    val usecaseJson = JSONArray().apply { use?.usecases?.forEach { put(it) } }
-    val destinationJson = JSONArray().apply { use?.destinations?.forEach { put(it) } }
-    val tagsJson = JSONArray().apply { tag?.forEach { put(it.value) } }
+  fun toJSON(context: Context): JSONObject {
+    val usesJson = JSONArray().apply { offerUses.forEach { put(it.toJson()) } }
+    val tagsJson = JSONArray().apply { offerTags.forEach { put(it.value) } }
 
     val jsonBody =
         JSONObject()
-            .put("ptr", TikiClient.userID)
-            .put("tags", tagsJson)
-            .put(
-                "uses",
-                JSONArray()
-                    .put(
-                        JSONObject().apply {
-                          put("usecases", usecaseJson)
-                          put("destinations", destinationJson)
-                        }))
-            .put("description", "")
+            .put("ptr", ptr)
+            .put("offerTags", tagsJson)
+            .put("offerUses", usesJson)
+            .put("description", description)
             .put("origin", context.packageName)
-            .put("expiry", JSONObject.NULL)
-            .put("terms", TikiClient.license.terms(context))
+            .put("expiry", expiry?.toString())
+            .put("terms", terms)
 
     val privateKey = TikiClient.auth.getKey().private ?: throw Exception("Private key not found")
 
