@@ -22,9 +22,9 @@ import com.mytiki.publish.client.config.Config
 import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.example_app.theme.TikiClientTheme
 import com.mytiki.publish.client.offer.Offer
-import com.mytiki.publish.client.offer.Tag
-import com.mytiki.publish.client.offer.Use
-import com.mytiki.publish.client.offer.Usecase
+import com.mytiki.publish.client.offer.OfferTag
+import com.mytiki.publish.client.offer.OfferUse
+import com.mytiki.publish.client.offer.OfferUsecase
 import com.mytiki.publish.client.permission.Permission
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -63,8 +63,8 @@ class MainActivity : AppCompatActivity() {
           Offer.Builder()
               .description("")
               .rewards(emptyList())
-              .use(listOf(Use(listOf(Usecase.ATTRIBUTION), listOf("*"))))
-              .tags(listOf(Tag.PURCHASE_HISTORY))
+              .use(listOf(OfferUse(listOf(OfferUsecase.ATTRIBUTION), listOf("*"))))
+              .tags(listOf(OfferTag.PURCHASE_HISTORY))
               .ptr("ptr")
               .permissions(listOf(Permission.CAMERA))
               .build()

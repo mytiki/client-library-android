@@ -3,16 +3,16 @@ package com.mytiki.publish.client.license
 import android.content.Context
 import android.util.Base64
 import com.mytiki.publish.client.TikiClient
-import com.mytiki.publish.client.offer.Tag
-import com.mytiki.publish.client.offer.Use
+import com.mytiki.publish.client.offer.OfferTag
+import com.mytiki.publish.client.offer.OfferUse
 import java.time.LocalDateTime
 import org.json.JSONArray
 import org.json.JSONObject
 
 class LicenseRequest(
     val ptr: String,
-    val tags: List<Tag>,
-    val uses: List<Use>,
+    val offerTags: List<OfferTag>,
+    val offerUses: List<OfferUse>,
     val description: String,
     val expiry: LocalDateTime?,
     val terms: String
@@ -26,14 +26,14 @@ class LicenseRequest(
   }
 
   fun toJSON(context: Context): JSONObject {
-    val usesJson = JSONArray().apply { uses.forEach { put(it.toJson()) } }
-    val tagsJson = JSONArray().apply { tags.forEach { put(it.value) } }
+    val usesJson = JSONArray().apply { offerUses.forEach { put(it.toJson()) } }
+    val tagsJson = JSONArray().apply { offerTags.forEach { put(it.value) } }
 
     val jsonBody =
         JSONObject()
             .put("ptr", ptr)
-            .put("tags", tagsJson)
-            .put("uses", usesJson)
+            .put("offerTags", tagsJson)
+            .put("offerUses", usesJson)
             .put("description", description)
             .put("origin", context.packageName)
             .put("expiry", expiry?.toString())

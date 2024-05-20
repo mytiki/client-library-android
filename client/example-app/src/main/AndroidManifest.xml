@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-feature android:name="android.hardware.camera" android:required="false"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <offerUses-feature android:name="android.hardware.camera" android:required="false"/>
+    <offerUses-permission android:name="android.permission.CAMERA"/>
+    <offerUses-permission android:name="android.permission.INTERNET"/>
 
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
-    <uses-permission android:name="android.permission.READ_CALENDAR"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.BODY_SENSORS"/>
-    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
+    <offerUses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <offerUses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <offerUses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <offerUses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
+    <offerUses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
+    <offerUses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <offerUses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <offerUses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <offerUses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <offerUses-permission android:name="android.permission.READ_CALENDAR"/>
+    <offerUses-permission android:name="android.permission.READ_CONTACTS"/>
+    <offerUses-permission android:name="android.permission.BODY_SENSORS"/>
+    <offerUses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
+    <offerUses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
 
 
     <application

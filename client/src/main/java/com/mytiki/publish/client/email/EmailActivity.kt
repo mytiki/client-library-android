@@ -7,7 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.auth.AuthToken
-import com.mytiki.publish.client.auth.TokenProviderEnum
+import com.mytiki.publish.client.auth.AuthProviderEnum
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -58,7 +58,7 @@ class EmailActivity : AppCompatActivity() {
                                 LocalDateTime.ofInstant(
                                     Instant.ofEpochMilli(authResponse.accessTokenExpirationTime!!),
                                     ZoneId.systemDefault()),
-                                TokenProviderEnum.fromString(provider.toString())
+                                AuthProviderEnum.fromString(provider.toString())
                                     ?: throw Exception("Invalid provider"))
                         val authResp =
                             TikiClient.auth.repository.save(this@EmailActivity, authToken)

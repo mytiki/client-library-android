@@ -604,7 +604,7 @@ class Sender private constructor(private val company: String, private val email:
             Sender("Kroger", "support@caperlab.com"),
             Sender("Kroger.com", "email@e.krogermail.com"),
             Sender("Kroger.com", "email@e.krogermail.com"),
-            Sender("KumandGo.com", "rewards@email.kumandgo.com"),
+            Sender("KumandGo.com", "offerRewards@email.kumandgo.com"),
             Sender("KuraUSA.com", "receipt@kurausa.com"),
             Sender("LAFitness.com", "lafitnessmembershipservices@lafitness.com"),
             Sender("LaMarcaProsecco.com", "sparklesociety@email.lamarcaprosecco.com"),
@@ -764,7 +764,7 @@ class Sender private constructor(private val company: String, private val email:
             Sender(
                 "PalaceEntertainment.com", "kennywoodconfirmation-noreply@palaceentertainment.com"),
             Sender("PamperedChef.com", "donotreply@email.pamperedchef.com"),
-            Sender("Pampers.com", "info-na@email.rewards.pampers.com"),
+            Sender("Pampers.com", "info-na@email.offerRewards.pampers.com"),
             Sender("PandaExpress.com", "noreply@pandaexpress.com"),
             Sender("PaneraBread.com", "no-reply@panerabread.com"),
             Sender("PaneraBread.com", "no-reply@panerabread.com"),

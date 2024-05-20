@@ -34,7 +34,7 @@ class CaptureService {
   /**
    * Publishes an attachment based on its type.
    *
-   * This function publishes an attachment. It uses the provided Context instance, a string pointer,
+   * This function publishes an attachment. It offerUses the provided Context instance, a string pointer,
    * and an Attachment object. The function calls the appropriate publish method based on the type
    * of the attachment (IMAGE, PDF, TEXT).
    *
@@ -57,7 +57,7 @@ class CaptureService {
   /**
    * Publishes an array of attachments.
    *
-   * This function publishes an array of attachments. It uses the provided Context instance, a
+   * This function publishes an array of attachments. It offerUses the provided Context instance, a
    * string pointer, and an array of Attachment objects. The function calls the publish method for
    * each attachment in the array.
    *
@@ -83,7 +83,7 @@ class CaptureService {
   /**
    * Publishes an image attachment.
    *
-   * This function publishes an image attachment. It uses a string pointer and an Attachment object.
+   * This function publishes an image attachment. It offerUses a string pointer and an Attachment object.
    * The function calls the post method of the ApiService instance to publish the image.
    *
    * @param attachment The Attachment object containing the details of the image to be published.
@@ -95,7 +95,7 @@ class CaptureService {
     CoroutineScope(Dispatchers.IO).launch {
       if (!TikiClient.license.verify())
           throw Exception(
-              "The License is invalid. Use the TikiClient.license method to issue a new License.")
+              "The License is invalid. OfferUse the TikiClient.license method to issue a new License.")
       val auth = TikiClient.auth.addressToken().await()
       val image = attachment.toImage()
       val id = UUID.randomUUID()
@@ -120,7 +120,7 @@ class CaptureService {
   /**
    * Publishes a PDF attachment.
    *
-   * This function publishes a PDF attachment. It uses the provided Context instance, a string
+   * This function publishes a PDF attachment. It offerUses the provided Context instance, a string
    * pointer, and an Attachment object. The function calls the post method of the ApiService
    * instance to publish the PDF.
    *
@@ -136,7 +136,7 @@ class CaptureService {
     CoroutineScope(Dispatchers.IO).launch {
       if (!TikiClient.license.verify())
           throw Exception(
-              "The License is invalid. Use the TikiClient.license method to issue a new License.")
+              "The License is invalid. OfferUse the TikiClient.license method to issue a new License.")
       val auth = TikiClient.auth.addressToken().await()
 
       val id = UUID.randomUUID()
@@ -164,7 +164,7 @@ class CaptureService {
   /**
    * Publishes a text attachment.
    *
-   * This function publishes a text attachment. It uses a string pointer and an Attachment object.
+   * This function publishes a text attachment. It offerUses a string pointer and an Attachment object.
    * The function completes the CompletableDeferred object immediately as there is no actual
    * publishing process for text attachments.
    *
@@ -184,14 +184,14 @@ class CaptureService {
    *
    * @param receiptId The unique identifier for the receipt obtained from the publish method.
    * @param token The address token to connect with TIKI API.
-   * @param onResult A callback functions that revceives the array of ReceiptResponse objects, each
+   * @param onResult A callback functions that revceives the array of CaptureReceiptRsp objects, each
    *   containing the structured data extracted from an image of the receipt, or null if the
    *   retrieval fails.
    */
   suspend fun receipt(
       receiptId: String,
       token: String,
-      onResult: (Array<ReceiptResponse?>) -> Unit
+      onResult: (Array<CaptureReceiptRsp?>) -> Unit
   ) {
     val response =
         ApiService.get(
@@ -200,6 +200,6 @@ class CaptureService {
                 onError = Exception("error uploading image"),
             )
             .await()
-    onResult(listOf(ReceiptResponse.from(response!!)).toTypedArray())
+    onResult(listOf(CaptureReceiptRsp.from(response!!)).toTypedArray())
   }
 }

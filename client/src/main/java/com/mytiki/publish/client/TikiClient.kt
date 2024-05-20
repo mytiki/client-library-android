@@ -5,7 +5,7 @@ import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
 import com.mytiki.publish.client.auth.AuthService
 import com.mytiki.publish.client.capture.CaptureService
-import com.mytiki.publish.client.capture.ReceiptResponse
+import com.mytiki.publish.client.capture.CaptureReceiptRsp
 import com.mytiki.publish.client.config.Config
 import com.mytiki.publish.client.email.Attachment
 import com.mytiki.publish.client.email.EmailKeys
@@ -25,7 +25,7 @@ import kotlinx.coroutines.async
  * The TIKI APIs comprise a set of HTTP REST APIs designed for seamless integration with any
  * standard HTTP client. The Client Libraries serve as a user-friendly layer around the TIKI APIs,
  * introducing methods for common operations such as authorization, licensing, capture, card-linked
- * offers, and rewards. It is a collection of pre-existing code with minimal dependencies, offering
+ * offers, and offerRewards. It is a collection of pre-existing code with minimal dependencies, offering
  * a streamlined integration process with TIKI Rest APIs, which reduces the amount of code necessary
  * for integration.
  *
@@ -163,22 +163,22 @@ object TikiClient {
   fun configure(config: Config) {
     if (config.tosUrl.isEmpty())
         throw Exception(
-            "tosUrl property cannot be empty. Use the TikiClient.configure method to add a configuration.")
+            "tosUrl property cannot be empty. OfferUse the TikiClient.configure method to add a configuration.")
     else if (config.privacyUrl.isEmpty())
         throw Exception(
-            "privacyUrl property cannot be empty. Use the TikiClient.configure method to add a configuration.")
+            "privacyUrl property cannot be empty. OfferUse the TikiClient.configure method to add a configuration.")
     else if (config.companyJurisdiction.isEmpty())
         throw Exception(
-            "companyJurisdiction property cannot be empty. Use the TikiClient.configure method to add a configuration.")
+            "companyJurisdiction property cannot be empty. OfferUse the TikiClient.configure method to add a configuration.")
     else if (config.companyName.isEmpty())
         throw Exception(
-            "companyName property cannot be empty. Use the TikiClient.configure method to add a configuration.")
+            "companyName property cannot be empty. OfferUse the TikiClient.configure method to add a configuration.")
     else if (config.publicKey.isEmpty())
         throw Exception(
-            "publicKey property cannot be empty. Use the TikiClient.configure method to add a configuration.")
+            "publicKey property cannot be empty. OfferUse the TikiClient.configure method to add a configuration.")
     else if (config.providerId.isEmpty())
         throw Exception(
-            "providerId property cannot be empty. Use the TikiClient.configure method to add a configuration.")
+            "providerId property cannot be empty. OfferUse the TikiClient.configure method to add a configuration.")
     else {
       this.config = config
     }
@@ -197,10 +197,10 @@ object TikiClient {
   fun emailConfig(clientID: String, clientSecret: String, redirectURI: String) {
     if (clientID.isEmpty())
         throw Exception(
-            "clientID property cannot be empty. Use the TikiClient.emailConfig method to add a emailConfig.")
+            "clientID property cannot be empty. OfferUse the TikiClient.emailConfig method to add a emailConfig.")
     else if (redirectURI.isEmpty())
         throw Exception(
-            "redirectURI property cannot be empty. Use the TikiClient.emailConfig method to add a redirectURI.")
+            "redirectURI property cannot be empty. OfferUse the TikiClient.emailConfig method to add a redirectURI.")
     else {
       this.emailKeys = EmailKeys(clientID, clientSecret, redirectURI)
     }
@@ -222,10 +222,10 @@ object TikiClient {
   fun initialize(userID: String): CompletableDeferred<Unit> {
     if (config == null)
         throw Exception(
-            "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration.")
+            "TIKI Client is not configured. OfferUse the TikiClient.configure method to add a configuration.")
     else if (userID.isEmpty())
         throw Exception(
-            "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID.")
+            "User ID cannot be empty. OfferUse the TikiClient.initialize method to set the user ID.")
     else {
       val isInitialized = CompletableDeferred<Unit>()
       MainScope().async {
@@ -239,7 +239,7 @@ object TikiClient {
   /**
    * Initiates the process of scanning a physical receipt and returns the receipt ID.
    *
-   * This function initiates the process of scanning a physical receipt. It uses the provided
+   * This function initiates the process of scanning a physical receipt. It offerUses the provided
    * ComponentActivity instance to start the scanning process. The result of the scanning process is
    * returned through the provided callback function.
    *
@@ -275,11 +275,11 @@ object TikiClient {
    * This method fetches the result of the receipt image processing from the server.
    *
    * @param receiptId The unique identifier for the receipt obtained from the publish method.
-   * @param onResult A callback functions that receives the array of ReceiptResponse objects, each
+   * @param onResult A callback functions that receives the array of CaptureReceiptRsp objects, each
    *   containing the structured data extracted from an image of the receipt, or null if the
    *   retrieval fails.
    */
-  suspend fun receipt(receiptId: String, onResult: (Array<ReceiptResponse?>) -> Unit) {
+  suspend fun receipt(receiptId: String, onResult: (Array<CaptureReceiptRsp?>) -> Unit) {
     val token = auth.addressToken().await()
     return capture.receipt(receiptId, token, onResult)
   }
@@ -287,7 +287,7 @@ object TikiClient {
   /**
    * Requests the specified permissions.
    *
-   * This function uses the PermissionService to request the specified permissions. The result of
+   * This function offerUses the PermissionService to request the specified permissions. The result of
    * the permissions request is returned through the provided callback function.
    *
    * @param activity The ComponentActivity instance. This is typically the current activity from
@@ -308,7 +308,7 @@ object TikiClient {
   /**
    * Checks if a specific permission is authorized.
    *
-   * This function uses the PermissionService to check if a specific permission is authorized. It
+   * This function offerUses the PermissionService to check if a specific permission is authorized. It
    * returns a Boolean indicating whether the permission is granted.
    *
    * @param context The Context instance. This is typically the current activity or application
@@ -324,7 +324,7 @@ object TikiClient {
   /**
    * Initiates the process of creating a license.
    *
-   * This function initiates the process of creating a license. It uses the provided Context
+   * This function initiates the process of creating a license. It offerUses the provided Context
    * instance to start the license creation process. The function is a suspending function, meaning
    * it can be paused and resumed, allowing it to perform long running operations like network
    * requests without blocking the main thread.
@@ -346,7 +346,7 @@ object TikiClient {
   /**
    * Initiates the process of revoking a license.
    *
-   * This function initiates the process of revoking a license. It uses the provided Context
+   * This function initiates the process of revoking a license. It offerUses the provided Context
    * instance and an Offer object to start the license revocation process. The function is
    * asynchronous and returns a CompletableDeferred object that will be completed when the license
    * has been revoked.
@@ -371,7 +371,7 @@ object TikiClient {
   /**
    * Retrieves the terms of the license.
    *
-   * This function retrieves the terms of the license from the LicenseService. It uses the provided
+   * This function retrieves the terms of the license from the LicenseService. It offerUses the provided
    * Context instance to get the resources necessary for retrieving the terms. The function is
    * synchronous and returns a String containing the terms of the license.
    *
@@ -385,7 +385,7 @@ object TikiClient {
   /**
    * Initiates the login process for a user.
    *
-   * This function initiates the login process for a user. It uses the provided Context instance,
+   * This function initiates the login process for a user. It offerUses the provided Context instance,
    * EmailProviderEnum instance, and a callback function. The function checks if the email keys are
    * set before starting the login process.
    *
@@ -405,7 +405,7 @@ object TikiClient {
   /**
    * Initiates the logout process for a user.
    *
-   * This function initiates the logout process for a user. It uses the provided Context instance
+   * This function initiates the logout process for a user. It offerUses the provided Context instance
    * and a string representing the email of the user. The function checks if the email keys are set
    * before starting the logout process.
    *
@@ -422,7 +422,7 @@ object TikiClient {
   /**
    * Retrieves the list of accounts for a user.
    *
-   * This function retrieves the list of accounts for a user. It uses the provided Context instance.
+   * This function retrieves the list of accounts for a user. It offerUses the provided Context instance.
    * The function checks if the email keys are set before retrieving the accounts.
    *
    * @param context The Context instance. This is typically the current activity or application
@@ -438,7 +438,7 @@ object TikiClient {
   /**
    * Initiates the process of scraping emails for a user.
    *
-   * This function initiates the process of scraping emails for a user. It uses the provided Context
+   * This function initiates the process of scraping emails for a user. It offerUses the provided Context
    * instance and a string representing the email of the user. The function checks if the email keys
    * are set before starting the scraping process.
    *
@@ -455,7 +455,7 @@ object TikiClient {
   /**
    * Accepts an offer.
    *
-   * This function accepts an offer. It uses the provided Context instance and an Offer object. The
+   * This function accepts an offer. It offerUses the provided Context instance and an Offer object. The
    * function calls the accept method of the OfferService instance.
    *
    * @param context The Context instance. This is typically the current activity or application
@@ -470,7 +470,7 @@ object TikiClient {
   /**
    * Declines an offer.
    *
-   * This function declines an offer. It uses the provided Context instance and an Offer object. The
+   * This function declines an offer. It offerUses the provided Context instance and an Offer object. The
    * function calls the decline method of the OfferService instance.
    *
    * @param context The Context instance. This is typically the current activity or application
@@ -494,10 +494,10 @@ object TikiClient {
   private fun check(): Boolean {
     if (config == null)
         throw Exception(
-            "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration.")
+            "TIKI Client is not configured. OfferUse the TikiClient.configure method to add a configuration.")
     else if (userID.isNullOrEmpty())
         throw Exception(
-            "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID.")
+            "User ID cannot be empty. OfferUse the TikiClient.initialize method to set the user ID.")
     else return true
   }
 
@@ -519,7 +519,7 @@ object TikiClient {
     check()
     if (emailKeys == null)
         throw Exception(
-            "Email is not configured. Use the TikiClient.emailConfig method to add clientID and clientSecret.")
+            "Email is not configured. OfferUse the TikiClient.emailConfig method to add clientID and clientSecret.")
     else return true
   }
 }

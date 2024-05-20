@@ -18,8 +18,8 @@ class LicenseService {
    * Creates a new license for the user.
    *
    * @param context The context. This is typically the application context or the current activity.
-   * @param uses An array of uses for which the license is being created.
-   * @param tags An array of tags associated with the license.
+   * @param offerUses An array of offerUses for which the license is being created.
+   * @param offerTags An array of offerTags associated with the license.
    * @return Boolean indicating the success of the license creation. Returns true if the license was
    *   successfully created, false otherwise.
    * @throws Exception if there is an error creating the license. The exception message contains
@@ -29,9 +29,9 @@ class LicenseService {
       context: Context,
       ptr: String,
       description: String,
-      uses: List<Use>,
-      tags: List<Tag>
-  ) = manageLicense(context, ptr, description, uses, tags)
+      offerUses: List<OfferUse>,
+      offerTags: List<OfferTag>
+  ) = manageLicense(context, ptr, description, offerUses, offerTags)
 
   /**
    * Creates a new license for the user using an Offer object.
@@ -44,7 +44,7 @@ class LicenseService {
    *   details about the error.
    */
   suspend fun create(context: Context, offer: Offer) =
-      manageLicense(context, offer.ptr, offer.description, offer.uses, offer.tags)
+      manageLicense(context, offer.ptr, offer.description, offer.offerUses, offer.offerTags)
 
   /**
    * Revokes the license for the user.
@@ -55,8 +55,8 @@ class LicenseService {
    * @throws Exception if there is an error revoking the license. The exception message contains
    *   details about the error.
    */
-  suspend fun revoke(context: Context, ptr: String, description: String, tags: List<Tag>) =
-      manageLicense(context, ptr, description, emptyList(), tags)
+  suspend fun revoke(context: Context, ptr: String, description: String, offerTags: List<OfferTag>) =
+      manageLicense(context, ptr, description, emptyList(), offerTags)
 
   /**
    * Revokes the license for the user using an Offer object.
@@ -69,16 +69,16 @@ class LicenseService {
    *   details about the error.
    */
   suspend fun revoke(context: Context, offer: Offer) =
-      manageLicense(context, offer.ptr, offer.description, emptyList(), offer.tags)
+      manageLicense(context, offer.ptr, offer.description, emptyList(), offer.offerTags)
 
   /**
    * Manages the license for the user. This is a private function used by the create and revoke
    * functions.
    *
    * @param context The context. This is typically the application context or the current activity.
-   * @param uses An array of uses for which the license is being managed. This is null when revoking
+   * @param offerUses An array of offerUses for which the license is being managed. This is null when revoking
    *   the license.
-   * @param tags An array of tags associated with the license. This is null when revoking the
+   * @param offerTags An array of offerTags associated with the license. This is null when revoking the
    *   license.
    * @return Boolean indicating the success of the license management. Returns true if the license
    *   was successfully managed, false otherwise.
@@ -89,14 +89,14 @@ class LicenseService {
       context: Context,
       prt: String,
       description: String,
-      uses: List<Use>,
-      tags: List<Tag>
+      offerUses: List<OfferUse>,
+      offerTags: List<OfferTag>
   ): Boolean {
     val licenseRequest =
         LicenseRequest(
             ptr = prt,
-            tags = tags,
-            uses = uses,
+            offerTags = offerTags,
+            offerUses = offerUses,
             description = description,
             expiry = null,
             terms = terms(context))

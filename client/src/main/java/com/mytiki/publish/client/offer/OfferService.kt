@@ -12,7 +12,7 @@ class OfferService {
   /**
    * Accepts an offer.
    *
-   * This function accepts an offer. It uses the provided Context instance and an Offer object. The
+   * This function accepts an offer. It offerUses the provided Context instance and an Offer object. The
    * function calls the create method of the TikiClient's license instance asynchronously and
    * completes the CompletableDeferred object with the result.
    *
@@ -33,7 +33,7 @@ class OfferService {
   /**
    * Declines an offer.
    *
-   * This function declines an offer. It uses the provided Context instance and an Offer object. The
+   * This function declines an offer. It offerUses the provided Context instance and an Offer object. The
    * function calls the revoke method of the TikiClient's license instance asynchronously and
    * completes the CompletableDeferred object with the result.
    *
@@ -54,7 +54,7 @@ class OfferService {
   /**
    * Checks if an offer is accepted.
    *
-   * This function checks if an offer is accepted. It uses the provided string pointer which
+   * This function checks if an offer is accepted. It offerUses the provided string pointer which
    * represents the license record. The function calls the verify method of the TikiClient's license
    * instance asynchronously and completes the CompletableDeferred object with the result.
    *

@@ -9,7 +9,7 @@ class AuthToken(
     val auth: String,
     val refresh: String,
     val expiration: LocalDateTime,
-    val provider: TokenProviderEnum
+    val provider: AuthProviderEnum
 ) {
   companion object {
     fun fromString(data: String, key: String): AuthToken {
@@ -19,7 +19,7 @@ class AuthToken(
           json.getString("auth"),
           json.getString("refresh"),
           LocalDateTime.parse(json.getString("expiration")),
-          TokenProviderEnum.fromString(json.getString("provider"))
+          AuthProviderEnum.fromString(json.getString("provider"))
               ?: throw Exception("Invalid provider in AuthToken"))
     }
   }

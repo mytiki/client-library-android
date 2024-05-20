@@ -8,9 +8,9 @@ import org.json.JSONObject
 class Offer
 private constructor(
     val description: String,
-    val rewards: List<Reward>,
-    val uses: List<Use>,
-    val tags: List<Tag>,
+    val offerRewards: List<OfferReward>,
+    val offerUses: List<OfferUse>,
+    val offerTags: List<OfferTag>,
     val ptr: String,
     val permissions: List<Permission>?,
     val mutable: Boolean,
@@ -19,9 +19,9 @@ private constructor(
 
   class Builder {
     private var description: String = ""
-    private var rewards: List<Reward> = emptyList()
-    private var use: List<Use> = emptyList()
-    private var tags: List<Tag> = emptyList()
+    private var offerRewards: List<OfferReward> = emptyList()
+    private var offerUse: List<OfferUse> = emptyList()
+    private var offerTags: List<OfferTag> = emptyList()
     private var ptr: String = ""
     private var permissions: List<Permission>? = null
     private var mutable: Boolean = true
@@ -29,11 +29,11 @@ private constructor(
 
     fun description(description: String) = apply { this.description = description }
 
-    fun rewards(rewards: List<Reward>) = apply { this.rewards = rewards }
+    fun rewards(offerRewards: List<OfferReward>) = apply { this.offerRewards = offerRewards }
 
-    fun use(use: List<Use>) = apply { this.use = use }
+    fun use(offerUse: List<OfferUse>) = apply { this.offerUse = offerUse }
 
-    fun tags(tags: List<Tag>) = apply { this.tags = tags }
+    fun tags(offerTags: List<OfferTag>) = apply { this.offerTags = offerTags }
 
     fun ptr(ptr: String) = apply { this.ptr = ptr }
 
@@ -46,26 +46,26 @@ private constructor(
     fun build(): Offer {
       if (id.isEmpty()) id = UUID.randomUUID().toString()
       require(description.isNotEmpty()) { "Description cannot be empty" }
-      require(rewards.isNotEmpty()) { "Rewards cannot be empty" }
-      require(use.isNotEmpty()) { "Use cases cannot be empty" }
-      require(tags.isNotEmpty()) { "Tags cannot be empty" }
+      require(offerRewards.isNotEmpty()) { "Rewards cannot be empty" }
+      require(offerUse.isNotEmpty()) { "OfferUse cases cannot be empty" }
+      require(offerTags.isNotEmpty()) { "Tags cannot be empty" }
       require(ptr.isNotEmpty()) { "Ptr cannot be empty" }
 
-      return Offer(description, rewards, use, tags, ptr, permissions, mutable, id)
+      return Offer(description, offerRewards, offerUse, offerTags, ptr, permissions, mutable, id)
     }
   }
 
   companion object {
     fun fromJson(json: JSONObject, id: String): Offer {
-      val rewards = json.getJSONArray("rewards")
-      val use = json.getJSONArray("uses")
-      val tags = json.getJSONArray("tags")
+      val rewards = json.getJSONArray("offerRewards")
+      val use = json.getJSONArray("offerUses")
+      val tags = json.getJSONArray("offerTags")
       val permissions = json.optJSONArray("permissions")
       return Offer(
           description = json.getString("description"),
-          rewards = (0 until rewards.length()).map { Reward.fromJson(rewards.getJSONObject(it)) },
-          uses = (0 until use.length()).map { Use.from(use.getJSONObject(it)) },
-          tags = (0 until tags.length()).map { Tag.from(tags.getString(it)) },
+          offerRewards = (0 until rewards.length()).map { OfferReward.fromJson(rewards.getJSONObject(it)) },
+          offerUses = (0 until use.length()).map { OfferUse.from(use.getJSONObject(it)) },
+          offerTags = (0 until tags.length()).map { OfferTag.from(tags.getString(it)) },
           ptr = json.getString("ptr"),
           permissions =
               if (permissions != null)
@@ -82,9 +82,9 @@ private constructor(
   fun toJson(): JSONObject {
     return JSONObject()
         .put("description", description)
-        .put("rewards", JSONArray(rewards.map { it.toJson() }))
-        .put("uses", JSONArray(uses.map { it.toJson() }))
-        .put("tags", JSONArray(tags.map { it.value }))
+        .put("offerRewards", JSONArray(offerRewards.map { it.toJson() }))
+        .put("offerUses", JSONArray(offerUses.map { it.toJson() }))
+        .put("offerTags", JSONArray(offerTags.map { it.value }))
         .put("permissions", JSONArray(permissions?.map { it.toJson() }))
         .put("mutable", mutable)
         .put("ptr", ptr)

@@ -2,15 +2,15 @@ package com.mytiki.publish.client.capture
 
 import okhttp3.ResponseBody
 
-data class ReceiptResponse(
+data class CaptureReceiptRsp(
     val documentMetadata: DocumentMetadata,
     val expenseDocuments: Array<ExpenseDocument>
 ){
     companion object {
-        fun from(response: ResponseBody): ReceiptResponse {
+        fun from(response: ResponseBody): CaptureReceiptRsp {
             val dummyDocumentMetadata = DocumentMetadata(0)
             val dummyExpenseDocuments = arrayOf<ExpenseDocument>()
-            return ReceiptResponse(dummyDocumentMetadata, dummyExpenseDocuments)
+            return CaptureReceiptRsp(dummyDocumentMetadata, dummyExpenseDocuments)
         }
     }
 }

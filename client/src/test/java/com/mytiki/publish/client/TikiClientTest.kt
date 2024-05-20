@@ -57,10 +57,10 @@ class TikiClientTest {
           .description("description")
           .rewards(
               listOf(
-                  Reward("description", mockk<RewardType>(), "amount"),
+                  OfferReward("description", mockk<OfferRewardType>(), "amount"),
               ))
-          .use(listOf(Use(listOf(Usecase.ATTRIBUTION), listOf("*"))))
-          .tags(listOf(Tag.PURCHASE_HISTORY))
+          .use(listOf(OfferUse(listOf(OfferUsecase.ATTRIBUTION), listOf("*"))))
+          .tags(listOf(OfferTag.PURCHASE_HISTORY))
           .ptr("ptr")
           .permissions(listOf(Permission.CAMERA))
           .build()
@@ -90,7 +90,7 @@ class TikiClientTest {
       fail("Expected an Exception to be thrown")
     } catch (e: Exception) {
       assertEquals(
-          "TIKI Client is not configured. Use the TikiClient.configure method to add a configuration.",
+          "TIKI Client is not configured. OfferUse the TikiClient.configure method to add a configuration.",
           e.message)
     }
   }
@@ -115,7 +115,7 @@ class TikiClientTest {
       fail("Expected an Exception to be thrown")
     } catch (e: Exception) {
       assertEquals(
-          "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID.",
+          "User ID cannot be empty. OfferUse the TikiClient.initialize method to set the user ID.",
           e.message)
     }
   }
@@ -150,7 +150,7 @@ class TikiClientTest {
       mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.createLicense(mockActivity, offer) }
     } catch (e: Exception) {
       assertEquals(
-          "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID.",
+          "User ID cannot be empty. OfferUse the TikiClient.initialize method to set the user ID.",
           e.message)
     }
   }
@@ -180,7 +180,7 @@ class TikiClientTest {
       TikiClient.terms(mockContext)
     } catch (e: Exception) {
       assertEquals(
-          "User ID cannot be empty. Use the TikiClient.initialize method to set the user ID.",
+          "User ID cannot be empty. OfferUse the TikiClient.initialize method to set the user ID.",
           e.message)
     }
   }

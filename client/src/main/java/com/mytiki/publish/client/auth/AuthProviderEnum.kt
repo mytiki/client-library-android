@@ -2,7 +2,7 @@ package com.mytiki.publish.client.auth
 
 import java.io.Serializable
 
-enum class TokenProviderEnum : Serializable {
+enum class AuthProviderEnum : Serializable {
   GOOGLE,
   TIKI;
 
