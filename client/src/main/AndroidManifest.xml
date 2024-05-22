@@ -3,9 +3,11 @@
 
     <application>
         <activity
+                android:name=".OptInActivity"
+                android:exported="false"/>
+        <activity
                 android:name=".email.EmailActivity"
-                android:exported="false"
-        />
+                android:exported="false"/>
         <activity
                 android:name=".capture.CaptureActivity"
                 android:exported="false"/>
@@ -13,4 +15,5 @@
                 android:name=".permission.PermissionActivity"
                 android:exported="false"/>
     </application>
+
 </manifest>
