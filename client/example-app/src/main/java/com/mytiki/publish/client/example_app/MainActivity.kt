@@ -21,10 +21,7 @@ import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.config.Config
 import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.example_app.theme.TikiClientTheme
-import com.mytiki.publish.client.offer.Offer
-import com.mytiki.publish.client.offer.OfferTag
-import com.mytiki.publish.client.offer.OfferUse
-import com.mytiki.publish.client.offer.OfferUsecase
+import com.mytiki.publish.client.offer.*
 import com.mytiki.publish.client.permission.Permission
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -61,8 +58,8 @@ class MainActivity : AppCompatActivity() {
       var image by remember { mutableStateOf<Bitmap?>(null) }
       val offer =
           Offer.Builder()
-              .description("")
-              .rewards(emptyList())
+              .description("description")
+              .rewards(listOf(OfferReward("description", OfferRewardType.VIRTUAL_CURENCY, "100")))
               .use(listOf(OfferUse(listOf(OfferUsecase.ATTRIBUTION), listOf("*"))))
               .tags(listOf(OfferTag.PURCHASE_HISTORY))
               .ptr("ptr")
@@ -85,6 +82,9 @@ class MainActivity : AppCompatActivity() {
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))
+                Spacer(modifier = Modifier.height(30.dp))
+                MainButton(text = "OptIn") { TikiClient.optIn.show(this@MainActivity, offer) }
+
                 Spacer(modifier = Modifier.height(30.dp))
                 MainButton(text = "Accept Offer") {
                   MainScope().async {

@@ -4,8 +4,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
 import com.mytiki.publish.client.auth.AuthService
-import com.mytiki.publish.client.capture.CaptureService
 import com.mytiki.publish.client.capture.CaptureReceiptRsp
+import com.mytiki.publish.client.capture.CaptureService
 import com.mytiki.publish.client.config.Config
 import com.mytiki.publish.client.email.Attachment
 import com.mytiki.publish.client.email.EmailKeys
@@ -13,6 +13,7 @@ import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.email.EmailService
 import com.mytiki.publish.client.license.LicenseService
 import com.mytiki.publish.client.offer.*
+import com.mytiki.publish.client.optIn.OptInService
 import com.mytiki.publish.client.permission.Permission
 import com.mytiki.publish.client.permission.PermissionService
 import kotlinx.coroutines.CompletableDeferred
@@ -25,9 +26,9 @@ import kotlinx.coroutines.async
  * The TIKI APIs comprise a set of HTTP REST APIs designed for seamless integration with any
  * standard HTTP client. The Client Libraries serve as a user-friendly layer around the TIKI APIs,
  * introducing methods for common operations such as authorization, licensing, capture, card-linked
- * offers, and offerRewards. It is a collection of pre-existing code with minimal dependencies, offering
- * a streamlined integration process with TIKI Rest APIs, which reduces the amount of code necessary
- * for integration.
+ * offers, and offerRewards. It is a collection of pre-existing code with minimal dependencies,
+ * offering a streamlined integration process with TIKI Rest APIs, which reduces the amount of code
+ * necessary for integration.
  *
  * TikiClient is the top-level entry point for of the TIKI Client Library. It offers simple methods
  * that calls the underlying libraries to perform common operations. Programmers can use it to
@@ -120,6 +121,21 @@ object TikiClient {
    * @throws Exception if the client is not configured or the user ID is not set.
    */
   val offer = OfferService()
+    get() {
+      check()
+      return field
+    }
+
+  /**
+ * OptInService instance for managing opt-in operations.
+ *
+ * This property is a getter that returns an instance of OptInService. It checks if the client is
+ * properly configured and the user ID is set before returning the OptInService instance.
+ *
+ * @return An instance of OptInService.
+ * @throws Exception if the client is not configured or the user ID is not set.
+ */
+val optIn = OptInService()
     get() {
       check()
       return field
@@ -287,8 +303,8 @@ object TikiClient {
   /**
    * Requests the specified permissions.
    *
-   * This function offerUses the PermissionService to request the specified permissions. The result of
-   * the permissions request is returned through the provided callback function.
+   * This function offerUses the PermissionService to request the specified permissions. The result
+   * of the permissions request is returned through the provided callback function.
    *
    * @param activity The ComponentActivity instance. This is typically the current activity from
    *   which this function is called. It is used to provide context for the permissions request.
@@ -308,8 +324,8 @@ object TikiClient {
   /**
    * Checks if a specific permission is authorized.
    *
-   * This function offerUses the PermissionService to check if a specific permission is authorized. It
-   * returns a Boolean indicating whether the permission is granted.
+   * This function offerUses the PermissionService to check if a specific permission is authorized.
+   * It returns a Boolean indicating whether the permission is granted.
    *
    * @param context The Context instance. This is typically the current activity or application
    *   context from which this function is called. It is used to provide context for the permission
@@ -371,9 +387,9 @@ object TikiClient {
   /**
    * Retrieves the terms of the license.
    *
-   * This function retrieves the terms of the license from the LicenseService. It offerUses the provided
-   * Context instance to get the resources necessary for retrieving the terms. The function is
-   * synchronous and returns a String containing the terms of the license.
+   * This function retrieves the terms of the license from the LicenseService. It offerUses the
+   * provided Context instance to get the resources necessary for retrieving the terms. The function
+   * is synchronous and returns a String containing the terms of the license.
    *
    * @param context The Context instance. This is typically the current activity or application
    *   context from which this function is called. It is used to provide context for retrieving the
@@ -385,9 +401,9 @@ object TikiClient {
   /**
    * Initiates the login process for a user.
    *
-   * This function initiates the login process for a user. It offerUses the provided Context instance,
-   * EmailProviderEnum instance, and a callback function. The function checks if the email keys are
-   * set before starting the login process.
+   * This function initiates the login process for a user. It offerUses the provided Context
+   * instance, EmailProviderEnum instance, and a callback function. The function checks if the email
+   * keys are set before starting the login process.
    *
    * @param context The Context instance. This is typically the current activity or application
    *   context from which this function is called. It is used to provide context for the login
@@ -405,9 +421,9 @@ object TikiClient {
   /**
    * Initiates the logout process for a user.
    *
-   * This function initiates the logout process for a user. It offerUses the provided Context instance
-   * and a string representing the email of the user. The function checks if the email keys are set
-   * before starting the logout process.
+   * This function initiates the logout process for a user. It offerUses the provided Context
+   * instance and a string representing the email of the user. The function checks if the email keys
+   * are set before starting the logout process.
    *
    * @param context The Context instance. This is typically the current activity or application
    *   context from which this function is called. It is used to provide context for the logout
@@ -422,8 +438,8 @@ object TikiClient {
   /**
    * Retrieves the list of accounts for a user.
    *
-   * This function retrieves the list of accounts for a user. It offerUses the provided Context instance.
-   * The function checks if the email keys are set before retrieving the accounts.
+   * This function retrieves the list of accounts for a user. It offerUses the provided Context
+   * instance. The function checks if the email keys are set before retrieving the accounts.
    *
    * @param context The Context instance. This is typically the current activity or application
    *   context from which this function is called. It is used to provide context for retrieving the
@@ -438,9 +454,9 @@ object TikiClient {
   /**
    * Initiates the process of scraping emails for a user.
    *
-   * This function initiates the process of scraping emails for a user. It offerUses the provided Context
-   * instance and a string representing the email of the user. The function checks if the email keys
-   * are set before starting the scraping process.
+   * This function initiates the process of scraping emails for a user. It offerUses the provided
+   * Context instance and a string representing the email of the user. The function checks if the
+   * email keys are set before starting the scraping process.
    *
    * @param context The Context instance. This is typically the current activity or application
    *   context from which this function is called. It is used to provide context for the scraping
@@ -455,8 +471,8 @@ object TikiClient {
   /**
    * Accepts an offer.
    *
-   * This function accepts an offer. It offerUses the provided Context instance and an Offer object. The
-   * function calls the accept method of the OfferService instance.
+   * This function accepts an offer. It offerUses the provided Context instance and an Offer object.
+   * The function calls the accept method of the OfferService instance.
    *
    * @param context The Context instance. This is typically the current activity or application
    *   context from which this function is called. It is used to provide context for the offer
@@ -470,8 +486,8 @@ object TikiClient {
   /**
    * Declines an offer.
    *
-   * This function declines an offer. It offerUses the provided Context instance and an Offer object. The
-   * function calls the decline method of the OfferService instance.
+   * This function declines an offer. It offerUses the provided Context instance and an Offer
+   * object. The function calls the decline method of the OfferService instance.
    *
    * @param context The Context instance. This is typically the current activity or application
    *   context from which this function is called. It is used to provide context for the offer

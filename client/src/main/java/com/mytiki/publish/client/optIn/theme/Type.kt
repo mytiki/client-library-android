@@ -7,96 +7,47 @@ package com.mytiki.publish.client.optIn.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.mytiki.publish.client.optIn.OptInService
+import com.mytiki.publish.client.R
 
-// Set of Material typography styles to start with
+val SfCompactDisplay =
+    FontFamily(
+        Font(R.font.sf_compact_display_medium, FontWeight.Medium),
+    )
 
 val Typography =
     Typography(
         displayLarge =
             TextStyle(
-                fontFamily = OptInService.theme.fontFamily,
-                fontWeight = FontWeight.Bold,
-                fontSize = 42.sp,
-                color = OptInService.theme.colorScheme.primary),
+                fontFamily = SfCompactDisplay,
+                fontWeight = FontWeight.Medium,
+                fontSize = 29.sp,
+                color = Colors().primary),
         displayMedium =
             TextStyle(
-                fontFamily = OptInService.theme.fontFamily,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-            ),
+                fontFamily = SfCompactDisplay,
+                fontWeight = FontWeight.Medium,
+                fontSize = 21.sp,
+                color = Colors().primary),
         displaySmall =
             TextStyle(
-                fontFamily = OptInService.theme.fontFamily,
-                fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
-                color = OptInService.theme.colorScheme.primary),
-        headlineLarge =
-            TextStyle(
-                fontFamily = OptInService.theme.fontFamily,
-                fontWeight = FontWeight.Bold,
-                fontSize = 28.sp,
-                color = OptInService.theme.colorScheme.outline),
-        headlineMedium =
-            TextStyle(
-                fontFamily = OptInService.theme.fontFamily,
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp,
-                color = OptInService.theme.colorScheme.outline),
-        headlineSmall =
-            TextStyle(
-                fontFamily = OptInService.theme.fontFamily,
-                fontWeight = FontWeight.Bold,
-                fontSize = 22.sp,
-                color = OptInService.theme.colorScheme.outline),
+                fontFamily = SfCompactDisplay,
+                fontWeight = FontWeight.Medium,
+                fontSize = 19.36.sp,
+                color = Colors().primary),
         titleLarge =
             TextStyle(
-                fontFamily = OptInService.theme.fontFamily,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                color = OptInService.theme.colorScheme.outline),
-        titleMedium =
-            TextStyle(
-                fontFamily = OptInService.theme.fontFamily,
+                fontFamily = SfCompactDisplay,
                 fontWeight = FontWeight.Medium,
-                fontSize = 16.sp,
-                color = OptInService.theme.colorScheme.outlineVariant),
+                fontSize = 47.86.sp,
+                color = Colors().primary),
         titleSmall =
             TextStyle(
-                fontFamily = OptInService.theme.fontFamily,
+                fontFamily = SfCompactDisplay,
                 fontWeight = FontWeight.Medium,
-                fontSize = 14.sp,
-                color = OptInService.theme.colorScheme.outline),
-        bodyLarge =
-            TextStyle(
-                fontFamily = OptInService.theme.fontFamily,
-                fontWeight = FontWeight.Medium,
-                fontSize = 20.sp,
-                color = OptInService.theme.colorScheme.outline),
-        bodyMedium =
-            TextStyle(
-                fontFamily = OptInService.theme.fontFamily,
-                fontWeight = FontWeight.Normal,
-                fontSize = 16.sp,
-                color = OptInService.theme.colorScheme.outline),
-        labelLarge =
-            TextStyle(
-                fontFamily = OptInService.theme.fontFamily,
-                fontWeight = FontWeight.Medium,
-                fontSize = 16.sp,
-                color = OptInService.theme.colorScheme.outlineVariant),
-        labelMedium =
-            TextStyle(
-                fontFamily = OptInService.theme.fontFamily,
-                fontWeight = FontWeight.Medium,
-                fontSize = 14.sp,
-                color = OptInService.theme.colorScheme.outlineVariant),
-        labelSmall =
-            TextStyle(
-                fontFamily = OptInService.theme.fontFamily,
-                fontWeight = FontWeight.Medium,
-                fontSize = 12.sp,
-                color = OptInService.theme.colorScheme.outlineVariant),
+                fontSize = 14.9.sp,
+                color = Colors().primary),
     )

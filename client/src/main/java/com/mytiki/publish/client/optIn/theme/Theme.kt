@@ -13,8 +13,7 @@ import androidx.compose.runtime.Composable
 fun OptInTheme(content: @Composable () -> Unit) {
   val colorScheme =
       lightColorScheme(
-          primary = Colors().green,
-          background = Colors().white,
+          primary = Colors().primary,
       )
   MaterialTheme(
       colorScheme = colorScheme, typography = Typography, shapes = Shapes, content = content)
