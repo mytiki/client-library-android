@@ -21,15 +21,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mytiki.publish.client.TikiClient
-import com.mytiki.publish.client.offer.Offer
 import com.mytiki.publish.client.optIn.navigation.NavigationRoute
 import com.mytiki.publish.client.optIn.offers.OffersScreen
 import com.mytiki.publish.client.optIn.permissions.PermissionsScreen
+import com.mytiki.publish.client.optIn.settings.SettingsScreen
 
 @Composable
 fun NavigationHost(
     activity: ComponentActivity,
-    offer: Offer,
     navController: NavHostController = rememberNavController(),
     close: () -> Unit
 ) {
@@ -39,42 +38,58 @@ fun NavigationHost(
     if (finish) (context as Activity).finish()
   }
 
-  var initialRoute = NavigationRoute.OFFERS.name
-
-  offer.permissions?.forEach { permission ->
-    if (!TikiClient.permission.isAuthorized(activity, permission)) {
-      initialRoute = NavigationRoute.PERMISSIONS.name
+  TikiClient.optIn.initialRoute?.name?.let {
+    NavHost(navController, it) {
+      composable(
+          NavigationRoute.OFFERS.name,
+          enterTransition = {
+            slideInVertically(animationSpec = tween(700), initialOffsetY = { it })
+          },
+          exitTransition = {
+            slideOutVertically(animationSpec = tween(700), targetOffsetY = { it })
+          },
+          popEnterTransition = {
+            slideInVertically(animationSpec = tween(700), initialOffsetY = { it })
+          },
+          popExitTransition = {
+            slideOutVertically(animationSpec = tween(700), targetOffsetY = { it })
+          }) {
+            TikiClient.optIn.offer?.let { offer -> OffersScreen(offer, close) }
+          }
+      composable(
+          NavigationRoute.PERMISSIONS.name,
+          enterTransition = {
+            slideInVertically(animationSpec = tween(700), initialOffsetY = { it })
+          },
+          exitTransition = {
+            slideOutVertically(animationSpec = tween(700), targetOffsetY = { it })
+          },
+          popEnterTransition = {
+            slideInVertically(animationSpec = tween(700), initialOffsetY = { it })
+          },
+          popExitTransition = {
+            slideOutVertically(animationSpec = tween(700), targetOffsetY = { it })
+          }) {
+            TikiClient.optIn.offer?.let { offer ->
+              PermissionsScreen(activity, offer, navController, close)
+            }
+          }
+      composable(
+          NavigationRoute.SETTINGS.name,
+          enterTransition = {
+            slideInVertically(animationSpec = tween(700), initialOffsetY = { it })
+          },
+          exitTransition = {
+            slideOutVertically(animationSpec = tween(700), targetOffsetY = { it })
+          },
+          popEnterTransition = {
+            slideInVertically(animationSpec = tween(700), initialOffsetY = { it })
+          },
+          popExitTransition = {
+            slideOutVertically(animationSpec = tween(700), targetOffsetY = { it })
+          }) {
+            TikiClient.optIn.offerList?.let { offerList -> SettingsScreen(offerList, close) }
+          }
     }
-  }
-
-  NavHost(navController, initialRoute) {
-    composable(
-        NavigationRoute.OFFERS.name,
-        enterTransition = {
-          slideInVertically(animationSpec = tween(700), initialOffsetY = { it })
-        },
-        exitTransition = { slideOutVertically(animationSpec = tween(700), targetOffsetY = { it }) },
-        popEnterTransition = {
-          slideInVertically(animationSpec = tween(700), initialOffsetY = { it })
-        },
-        popExitTransition = {
-          slideOutVertically(animationSpec = tween(700), targetOffsetY = { it })
-        }) {
-          OffersScreen(offer, close)
-        }
-    composable(
-        NavigationRoute.PERMISSIONS.name,
-        enterTransition = {
-          slideInVertically(animationSpec = tween(700), initialOffsetY = { it })
-        },
-        exitTransition = { slideOutVertically(animationSpec = tween(700), targetOffsetY = { it }) },
-        popEnterTransition = {
-          slideInVertically(animationSpec = tween(700), initialOffsetY = { it })
-        },
-        popExitTransition = {
-          slideOutVertically(animationSpec = tween(700), targetOffsetY = { it })
-        }) {
-          PermissionsScreen(activity, offer, navController, close)
-        }
   }
 }

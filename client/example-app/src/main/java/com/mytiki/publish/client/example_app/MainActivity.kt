@@ -83,7 +83,49 @@ class MainActivity : AppCompatActivity() {
 
                 Spacer(modifier = Modifier.height(30.dp))
                 Spacer(modifier = Modifier.height(30.dp))
-                MainButton(text = "OptIn") { TikiClient.optIn.show(this@MainActivity, offer) }
+                MainButton(text = "Show Offer") {
+                  TikiClient.optIn.showOffer(this@MainActivity, offer)
+                }
+                Spacer(modifier = Modifier.height(30.dp))
+                MainButton(text = "Offer Settings") {
+                  TikiClient.optIn.showSettings(
+                      this@MainActivity,
+                      listOf(
+                          Offer.Builder()
+                              .description("description 1")
+                              .rewards(
+                                  listOf(
+                                      OfferReward(
+                                          "description", OfferRewardType.VIRTUAL_CURENCY, "100")))
+                              .use(listOf(OfferUse(listOf(OfferUsecase.ATTRIBUTION), listOf("*"))))
+                              .tags(listOf(OfferTag.PURCHASE_HISTORY))
+                              .ptr("ptr")
+                              .permissions(listOf(Permission.CAMERA))
+                              .mutable(false)
+                              .build(),
+                          Offer.Builder()
+                              .description("description 2")
+                              .rewards(
+                                  listOf(
+                                      OfferReward(
+                                          "description", OfferRewardType.VIRTUAL_CURENCY, "200")))
+                              .use(listOf(OfferUse(listOf(OfferUsecase.ATTRIBUTION), listOf("*"))))
+                              .tags(listOf(OfferTag.PURCHASE_HISTORY))
+                              .ptr("ptr")
+                              .permissions(listOf(Permission.CAMERA))
+                              .build(),
+                          Offer.Builder()
+                              .description("description 3")
+                              .rewards(
+                                  listOf(
+                                      OfferReward(
+                                          "description", OfferRewardType.VIRTUAL_CURENCY, "300")))
+                              .use(listOf(OfferUse(listOf(OfferUsecase.ATTRIBUTION), listOf("*"))))
+                              .tags(listOf(OfferTag.PURCHASE_HISTORY))
+                              .ptr("ptr")
+                              .permissions(listOf(Permission.CAMERA))
+                              .build()))
+                }
 
                 Spacer(modifier = Modifier.height(30.dp))
                 MainButton(text = "Accept Offer") {

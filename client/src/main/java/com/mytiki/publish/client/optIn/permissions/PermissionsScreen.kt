@@ -36,8 +36,8 @@ fun PermissionsScreen(
         modifier = Modifier.fillMaxSize().background(Colors().backgroundGradient),
         contentAlignment = Alignment.TopCenter) {
           Image(
-              painter = painterResource(id = R.drawable.bg_pinaples),
-              contentDescription = "balloons",
+              painter = painterResource(id = R.drawable.bg_pineapples),
+              contentDescription = "pineapples",
               contentScale = ContentScale.Fit)
           Column(
               modifier = Modifier.fillMaxSize(),
