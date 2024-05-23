@@ -3,14 +3,25 @@
 
     <application>
         <activity
+                android:name=".optIn.OptInActivity"
+                android:exported="false"
+                android:theme="@style/Theme.AppCompat.NoActionBar"
+        />
+        <activity
                 android:name=".email.EmailActivity"
                 android:exported="false"
+                android:theme="@style/Theme.AppCompat.NoActionBar"
         />
         <activity
                 android:name=".capture.CaptureActivity"
-                android:exported="false"/>
+                android:exported="false"
+                android:theme="@style/Theme.AppCompat.NoActionBar"
+        />
         <activity
                 android:name=".permission.PermissionActivity"
-                android:exported="false"/>
+                android:exported="false"
+                android:theme="@style/Theme.AppCompat.NoActionBar"
+        />
     </application>
+
 </manifest>

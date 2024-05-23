@@ -16,6 +16,10 @@ import com.mytiki.publish.client.TikiClient
 
 class PermissionActivity : AppCompatActivity() {
 
+  //  private var _binding: ActivityPermissionBinding? = null
+  //  private val binding
+  //    get() = _binding!!
+
   private val callbackMap = mutableMapOf<Permission, Boolean>()
   private var diferentPermissions = mutableListOf<Permission>()
   private var normalPermissions = mutableListOf<Permission>()
@@ -25,10 +29,15 @@ class PermissionActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    val permissionsWrapper: PermissionWrapper = when {
-      Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> intent.extras?.getSerializable("permissionsWrapper", PermissionWrapper::class.java)
-      else -> @Suppress("DEPRECATION") intent.getSerializableExtra("permissionsWrapper") as? PermissionWrapper
-    } ?: throw Exception("Permissions not found")
+
+    val permissionsWrapper: PermissionWrapper =
+        when {
+          Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ->
+              intent.extras?.getSerializable("permissionsWrapper", PermissionWrapper::class.java)
+          else ->
+              @Suppress("DEPRECATION") intent.getSerializableExtra("permissionsWrapper")
+                  as? PermissionWrapper
+        } ?: throw Exception("Permissions not found")
 
     val permissions = permissionsWrapper.permissions
 
