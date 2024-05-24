@@ -12,8 +12,8 @@ class OfferService {
   /**
    * Accepts an offer.
    *
-   * This function accepts an offer. It offerUses the provided Context instance and an Offer object. The
-   * function calls the create method of the TikiClient's license instance asynchronously and
+   * This function accepts an offer. It offerUses the provided Context instance and an Offer object.
+   * The function calls the create method of the TikiClient's license instance asynchronously and
    * completes the CompletableDeferred object with the result.
    *
    * @param context The Context instance. This is typically the current activity or application
@@ -33,9 +33,9 @@ class OfferService {
   /**
    * Declines an offer.
    *
-   * This function declines an offer. It offerUses the provided Context instance and an Offer object. The
-   * function calls the revoke method of the TikiClient's license instance asynchronously and
-   * completes the CompletableDeferred object with the result.
+   * This function declines an offer. It offerUses the provided Context instance and an Offer
+   * object. The function calls the revoke method of the TikiClient's license instance
+   * asynchronously and completes the CompletableDeferred object with the result.
    *
    * @param context The Context instance. This is typically the current activity or application
    *   context from which this function is called. It is used to provide context for the offer
@@ -67,5 +67,31 @@ class OfferService {
     val isAccepted = CompletableDeferred<Boolean>()
     MainScope().async { isAccepted.complete(TikiClient.license.verify()) }
     return isAccepted
+  }
+
+  /**
+   * Checks for permissions related to an offer.
+   *
+   * This function checks if the user has the necessary permissions for an offer. It iterates over
+   * the permissions of the offer and checks if the user is authorized for each permission. If the
+   * user is not authorized for a permission, the function declines the offer and sets the response
+   * to false.
+   *
+   * @param context The Context instance. This is typically the current activity or application
+   *   context from which this function is called. It is used to provide context for the permission
+   *   check process.
+   * @param offer The Offer object containing the details of the offer and its permissions.
+   * @return A Boolean indicating the result of the permission check. It returns true if the user is
+   *   authorized for all permissions of the offer, false otherwise.
+   */
+  fun checkForPermissions(context: Context, offer: Offer): Boolean {
+    var resp = true
+    offer.permissions?.forEach { permission ->
+      if (!TikiClient.permission.isAuthorized(context, permission)) {
+        decline(context, offer)
+        resp = false
+      }
+    }
+    return resp
   }
 }
