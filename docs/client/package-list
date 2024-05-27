@@ -318,6 +318,7 @@ $dokka.location:com.mytiki.publish.client.offer/OfferRewardType/value/#/Pointing
 $dokka.location:com.mytiki.publish.client.offer/OfferService///PointingToDeclaration/client/com.mytiki.publish.client.offer/-offer-service/index.html
 $dokka.location:com.mytiki.publish.client.offer/OfferService/OfferService/#/PointingToDeclaration/client/com.mytiki.publish.client.offer/-offer-service/-offer-service.html
 $dokka.location:com.mytiki.publish.client.offer/OfferService/accept/#android.content.Context#com.mytiki.publish.client.offer.Offer/PointingToDeclaration/client/com.mytiki.publish.client.offer/-offer-service/accept.html
+$dokka.location:com.mytiki.publish.client.offer/OfferService/checkForPermissions/#android.content.Context#com.mytiki.publish.client.offer.Offer/PointingToDeclaration/client/com.mytiki.publish.client.offer/-offer-service/check-for-permissions.html
 $dokka.location:com.mytiki.publish.client.offer/OfferService/decline/#android.content.Context#com.mytiki.publish.client.offer.Offer/PointingToDeclaration/client/com.mytiki.publish.client.offer/-offer-service/decline.html
 $dokka.location:com.mytiki.publish.client.offer/OfferService/isAccepted/#kotlin.String/PointingToDeclaration/client/com.mytiki.publish.client.offer/-offer-service/is-accepted.html
 $dokka.location:com.mytiki.publish.client.offer/OfferTag.ADVERTISING_DATA///PointingToDeclaration/client/com.mytiki.publish.client.offer/-offer-tag/-a-d-v-e-r-t-i-s-i-n-g_-d-a-t-a/index.html
@@ -378,6 +379,41 @@ $dokka.location:com.mytiki.publish.client.offer/OfferUsecase.RETARGETING///Point
 $dokka.location:com.mytiki.publish.client.offer/OfferUsecase.SUPPORT///PointingToDeclaration/client/com.mytiki.publish.client.offer/-offer-usecase/-s-u-p-p-o-r-t/index.html
 $dokka.location:com.mytiki.publish.client.offer/OfferUsecase///PointingToDeclaration/client/com.mytiki.publish.client.offer/-offer-usecase/index.html
 $dokka.location:com.mytiki.publish.client.offer/OfferUsecase/value/#/PointingToDeclaration/client/com.mytiki.publish.client.offer/-offer-usecase/value.html
+$dokka.location:com.mytiki.publish.client.optIn.components////PointingToDeclaration/client/com.mytiki.publish.client.optIn.components/index.html
+$dokka.location:com.mytiki.publish.client.optIn.components//Button/#kotlin.String#kotlin.Boolean#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/client/com.mytiki.publish.client.optIn.components/-button.html
+$dokka.location:com.mytiki.publish.client.optIn.navigation.ui////PointingToDeclaration/client/com.mytiki.publish.client.optIn.navigation.ui/index.html
+$dokka.location:com.mytiki.publish.client.optIn.navigation.ui//NavigationHost/#androidx.activity.ComponentActivity#androidx.navigation.NavHostController#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/client/com.mytiki.publish.client.optIn.navigation.ui/-navigation-host.html
+$dokka.location:com.mytiki.publish.client.optIn.navigation////PointingToDeclaration/client/com.mytiki.publish.client.optIn.navigation/index.html
+$dokka.location:com.mytiki.publish.client.optIn.navigation/NavigationRoute.OFFERS///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}client/com.mytiki.publish.client.optIn.navigation/-navigation-route/-o-f-f-e-r-s/index.html
+$dokka.location:com.mytiki.publish.client.optIn.navigation/NavigationRoute.PERMISSIONS///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}client/com.mytiki.publish.client.optIn.navigation/-navigation-route/-p-e-r-m-i-s-s-i-o-n-s/index.html
+$dokka.location:com.mytiki.publish.client.optIn.navigation/NavigationRoute.SETTINGS///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}client/com.mytiki.publish.client.optIn.navigation/-navigation-route/-s-e-t-t-i-n-g-s/index.html
+$dokka.location:com.mytiki.publish.client.optIn.navigation/NavigationRoute///PointingToDeclaration/client/com.mytiki.publish.client.optIn.navigation/-navigation-route/index.html
+$dokka.location:com.mytiki.publish.client.optIn.navigation/NavigationRoute/valueOf/#kotlin.String/PointingToDeclaration/client/com.mytiki.publish.client.optIn.navigation/-navigation-route/value-of.html
+$dokka.location:com.mytiki.publish.client.optIn.navigation/NavigationRoute/values/#/PointingToDeclaration/client/com.mytiki.publish.client.optIn.navigation/-navigation-route/values.html
+$dokka.location:com.mytiki.publish.client.optIn.offers////PointingToDeclaration/client/com.mytiki.publish.client.optIn.offers/index.html
+$dokka.location:com.mytiki.publish.client.optIn.offers//OffersScreen/#com.mytiki.publish.client.offer.Offer#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/client/com.mytiki.publish.client.optIn.offers/-offers-screen.html
+$dokka.location:com.mytiki.publish.client.optIn.offers//RewardAmount/#com.mytiki.publish.client.offer.OfferReward/PointingToDeclaration/client/com.mytiki.publish.client.optIn.offers/-reward-amount.html
+$dokka.location:com.mytiki.publish.client.optIn.permissions////PointingToDeclaration/client/com.mytiki.publish.client.optIn.permissions/index.html
+$dokka.location:com.mytiki.publish.client.optIn.permissions//PermissionsScreen/#androidx.activity.ComponentActivity#com.mytiki.publish.client.offer.Offer#androidx.navigation.NavHostController#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/client/com.mytiki.publish.client.optIn.permissions/-permissions-screen.html
+$dokka.location:com.mytiki.publish.client.optIn.settings////PointingToDeclaration/client/com.mytiki.publish.client.optIn.settings/index.html
+$dokka.location:com.mytiki.publish.client.optIn.settings//OfferSettings/#com.mytiki.publish.client.offer.Offer/PointingToDeclaration/client/com.mytiki.publish.client.optIn.settings/-offer-settings.html
+$dokka.location:com.mytiki.publish.client.optIn.settings//SettingsScreen/#kotlin.collections.List[com.mytiki.publish.client.offer.Offer]#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/client/com.mytiki.publish.client.optIn.settings/-settings-screen.html
+$dokka.location:com.mytiki.publish.client.optIn.theme////PointingToDeclaration/client/com.mytiki.publish.client.optIn.theme/index.html
+$dokka.location:com.mytiki.publish.client.optIn.theme//OptInTheme/#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/client/com.mytiki.publish.client.optIn.theme/-opt-in-theme.html
+$dokka.location:com.mytiki.publish.client.optIn.theme//SfCompactDisplay/#/PointingToDeclaration/client/com.mytiki.publish.client.optIn.theme/-sf-compact-display.html
+$dokka.location:com.mytiki.publish.client.optIn.theme//Shapes/#/PointingToDeclaration/client/com.mytiki.publish.client.optIn.theme/-shapes.html
+$dokka.location:com.mytiki.publish.client.optIn.theme//Typography/#/PointingToDeclaration/client/com.mytiki.publish.client.optIn.theme/-typography.html
+$dokka.location:com.mytiki.publish.client.optIn.theme/Colors///PointingToDeclaration/client/com.mytiki.publish.client.optIn.theme/-colors/index.html
+$dokka.location:com.mytiki.publish.client.optIn.theme/Colors/Colors/#/PointingToDeclaration/client/com.mytiki.publish.client.optIn.theme/-colors/-colors.html
+$dokka.location:com.mytiki.publish.client.optIn.theme/Colors/backgroundGradient/#/PointingToDeclaration/client/com.mytiki.publish.client.optIn.theme/-colors/background-gradient.html
+$dokka.location:com.mytiki.publish.client.optIn.theme/Colors/primary/#/PointingToDeclaration/client/com.mytiki.publish.client.optIn.theme/-colors/primary.html
+$dokka.location:com.mytiki.publish.client.optIn////PointingToDeclaration/client/com.mytiki.publish.client.optIn/index.html
+$dokka.location:com.mytiki.publish.client.optIn/OptInActivity///PointingToDeclaration/client/com.mytiki.publish.client.optIn/-opt-in-activity/index.html
+$dokka.location:com.mytiki.publish.client.optIn/OptInActivity/OptInActivity/#/PointingToDeclaration/client/com.mytiki.publish.client.optIn/-opt-in-activity/-opt-in-activity.html
+$dokka.location:com.mytiki.publish.client.optIn/OptInService///PointingToDeclaration/client/com.mytiki.publish.client.optIn/-opt-in-service/index.html
+$dokka.location:com.mytiki.publish.client.optIn/OptInService/OptInService/#/PointingToDeclaration/client/com.mytiki.publish.client.optIn/-opt-in-service/-opt-in-service.html
+$dokka.location:com.mytiki.publish.client.optIn/OptInService/showOffer/#android.content.Context#com.mytiki.publish.client.offer.Offer/PointingToDeclaration/client/com.mytiki.publish.client.optIn/-opt-in-service/show-offer.html
+$dokka.location:com.mytiki.publish.client.optIn/OptInService/showSettings/#android.content.Context#kotlin.collections.List[com.mytiki.publish.client.offer.Offer]/PointingToDeclaration/client/com.mytiki.publish.client.optIn/-opt-in-service/show-settings.html
 $dokka.location:com.mytiki.publish.client.permission////PointingToDeclaration/client/com.mytiki.publish.client.permission/index.html
 $dokka.location:com.mytiki.publish.client.permission/Permission.AUDIO_LIBRARY///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}client/com.mytiki.publish.client.permission/-permission/-a-u-d-i-o_-l-i-b-r-a-r-y/index.html
 $dokka.location:com.mytiki.publish.client.permission/Permission.BACKGROUND_LOCATION///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}client/com.mytiki.publish.client.permission/-permission/-b-a-c-k-g-r-o-u-n-d_-l-o-c-a-t-i-o-n/index.html
@@ -441,6 +477,7 @@ $dokka.location:com.mytiki.publish.client/TikiClient/license/#/PointingToDeclara
 $dokka.location:com.mytiki.publish.client/TikiClient/login/#android.content.Context#com.mytiki.publish.client.email.EmailProviderEnum#kotlin.Function1[kotlin.String,kotlin.Unit]/PointingToDeclaration/client/com.mytiki.publish.client/-tiki-client/login.html
 $dokka.location:com.mytiki.publish.client/TikiClient/logout/#android.content.Context#kotlin.String/PointingToDeclaration/client/com.mytiki.publish.client/-tiki-client/logout.html
 $dokka.location:com.mytiki.publish.client/TikiClient/offer/#/PointingToDeclaration/client/com.mytiki.publish.client/-tiki-client/offer.html
+$dokka.location:com.mytiki.publish.client/TikiClient/optIn/#/PointingToDeclaration/client/com.mytiki.publish.client/-tiki-client/opt-in.html
 $dokka.location:com.mytiki.publish.client/TikiClient/permission/#/PointingToDeclaration/client/com.mytiki.publish.client/-tiki-client/permission.html
 $dokka.location:com.mytiki.publish.client/TikiClient/permissions/#androidx.activity.ComponentActivity#kotlin.collections.List[com.mytiki.publish.client.permission.Permission]#kotlin.Function1[kotlin.collections.Map[com.mytiki.publish.client.permission.Permission,kotlin.Boolean],kotlin.Unit]/PointingToDeclaration/client/com.mytiki.publish.client/-tiki-client/permissions.html
 $dokka.location:com.mytiki.publish.client/TikiClient/publish/#android.content.Context#kotlin.Array[com.mytiki.publish.client.email.Attachment]/PointingToDeclaration/client/com.mytiki.publish.client/-tiki-client/publish.html
@@ -459,6 +496,14 @@ com.mytiki.publish.client.email.messageResponse
 com.mytiki.publish.client.license
 com.mytiki.publish.client.license.rsp
 com.mytiki.publish.client.offer
+com.mytiki.publish.client.optIn
+com.mytiki.publish.client.optIn.components
+com.mytiki.publish.client.optIn.navigation
+com.mytiki.publish.client.optIn.navigation.ui
+com.mytiki.publish.client.optIn.offers
+com.mytiki.publish.client.optIn.permissions
+com.mytiki.publish.client.optIn.settings
+com.mytiki.publish.client.optIn.theme
 com.mytiki.publish.client.permission
 com.mytiki.publish.client.utils.apiService
 
