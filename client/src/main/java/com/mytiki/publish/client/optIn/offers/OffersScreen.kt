@@ -20,7 +20,7 @@ import com.mytiki.publish.client.optIn.components.Button
 import com.mytiki.publish.client.optIn.theme.Colors
 
 @Composable
-fun OffersScreen(offer: Offer, close: () -> Unit) {
+fun OffersScreen(offer: Offer, close: () -> Unit, callbackOffer: (Map<Offer, Boolean>) -> Unit) {
   val context = LocalContext.current
 
   Surface(modifier = Modifier.fillMaxSize()) {
@@ -88,11 +88,13 @@ fun OffersScreen(offer: Offer, close: () -> Unit) {
                 horizontalAlignment = Alignment.Start) {
                   Button("Link Card") {
                     TikiClient.offer.accept(context, offer)
+                    callbackOffer(mapOf(offer to true))
                     close()
                   }
                   Spacer(modifier = Modifier.size(14.dp))
                   Button("No Thanks", true) {
                     TikiClient.offer.decline(context, offer)
+                    callbackOffer(mapOf(offer to true))
                     close()
                   }
                 }

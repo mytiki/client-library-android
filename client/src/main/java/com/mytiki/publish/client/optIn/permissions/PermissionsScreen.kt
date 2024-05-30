@@ -27,7 +27,8 @@ fun PermissionsScreen(
     activity: ComponentActivity,
     offer: Offer,
     navController: NavHostController,
-    close: () -> Unit
+    close: () -> Unit,
+    callbackOffer: (Map<Offer, Boolean>) -> Unit
 ) {
   val context = LocalContext.current
 
@@ -101,6 +102,7 @@ fun PermissionsScreen(
                           TikiClient.permission.requestPermissions(activity, it) { map ->
                             map.forEach { (_, granted) ->
                               if (!granted) {
+                                callbackOffer(mapOf(offer to false))
                                 close()
                               }
                             }

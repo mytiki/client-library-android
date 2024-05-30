@@ -127,15 +127,15 @@ object TikiClient {
     }
 
   /**
- * OptInService instance for managing opt-in operations.
- *
- * This property is a getter that returns an instance of OptInService. It checks if the client is
- * properly configured and the user ID is set before returning the OptInService instance.
- *
- * @return An instance of OptInService.
- * @throws Exception if the client is not configured or the user ID is not set.
- */
-val optIn = OptInService()
+   * OptInService instance for managing opt-in operations.
+   *
+   * This property is a getter that returns an instance of OptInService. It checks if the client is
+   * properly configured and the user ID is set before returning the OptInService instance.
+   *
+   * @return An instance of OptInService.
+   * @throws Exception if the client is not configured or the user ID is not set.
+   */
+  val optIn = OptInService()
     get() {
       check()
       return field
@@ -496,6 +496,40 @@ val optIn = OptInService()
    */
   fun declineOffer(context: Context, offer: Offer): CompletableDeferred<Boolean> {
     return this.offer.decline(context, offer)
+  }
+
+  /**
+   * This function is used to display a specific offer to the user.
+   *
+   * @param context This is typically the current activity or application context from which this
+   *   function is called.
+   * @param offer The Offer object containing the details of the offer to be shown.
+   * @param callback A callback function that will be called with the result of the offer display
+   *   process. The result is a map where the keys are the displayed offers and the values are
+   *   Booleans indicating whether each offer was accepted.
+   * @throws Exception if the client is not configured or the user ID is not set.
+   */
+  fun showOffer(context: Context, offer: Offer, callback: (Map<Offer, Boolean>) -> Unit) {
+    optIn.showOffer(context, offer, callback)
+  }
+
+  /**
+   * This function is used to display the settings to the user.
+   *
+   * @param context This is typically the current activity or application context from which this
+   *   function is called.
+   * @param offerList The list of Offer objects to be shown in the settings.
+   * @param callback A callback function that will be called with the result of the settings display
+   *   process. The result is a map where the keys are the displayed offers and the values are
+   *   Booleans indicating whether each offer was accepted.
+   * @throws Exception if the client is not configured or the user ID is not set.
+   */
+  fun showSettings(
+      context: Context,
+      offerList: List<Offer>,
+      callback: (Map<Offer, Boolean>) -> Unit
+  ) {
+    optIn.showSettings(context, offerList, callback)
   }
 
   /**
