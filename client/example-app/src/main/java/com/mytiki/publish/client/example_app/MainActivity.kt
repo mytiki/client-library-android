@@ -84,11 +84,11 @@ class MainActivity : AppCompatActivity() {
                 Spacer(modifier = Modifier.height(30.dp))
                 Spacer(modifier = Modifier.height(30.dp))
                 MainButton(text = "Show Offer") {
-                  TikiClient.optIn.showOffer(this@MainActivity, offer)
+                  TikiClient.showOffer(this@MainActivity, offer) {}
                 }
                 Spacer(modifier = Modifier.height(30.dp))
                 MainButton(text = "Offer Settings") {
-                  TikiClient.optIn.showSettings(
+                  TikiClient.showSettings(
                       this@MainActivity,
                       listOf(
                           Offer.Builder()
@@ -124,7 +124,7 @@ class MainActivity : AppCompatActivity() {
                               .tags(listOf(OfferTag.PURCHASE_HISTORY))
                               .ptr("ptr")
                               .permissions(listOf(Permission.CAMERA))
-                              .build()))
+                              .build())) {}
                 }
 
                 Spacer(modifier = Modifier.height(30.dp))

@@ -5,7 +5,6 @@
 
 package com.mytiki.publish.client.optIn.navigation.ui
 
-import android.app.Activity
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
@@ -21,6 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mytiki.publish.client.TikiClient
+import com.mytiki.publish.client.offer.Offer
 import com.mytiki.publish.client.optIn.navigation.NavigationRoute
 import com.mytiki.publish.client.optIn.offers.OffersScreen
 import com.mytiki.publish.client.optIn.permissions.PermissionsScreen
@@ -32,12 +32,7 @@ fun NavigationHost(
     navController: NavHostController = rememberNavController(),
     close: () -> Unit
 ) {
-  var finish by remember { mutableStateOf(false) }
-  val context = LocalContext.current
-  navController.addOnDestinationChangedListener { _, _, _ ->
-    if (finish) (context as Activity).finish()
-  }
-
+  navController.addOnDestinationChangedListener { _, _, _ -> }
   TikiClient.optIn.initialRoute?.name?.let {
     NavHost(navController, it) {
       composable(
@@ -54,7 +49,11 @@ fun NavigationHost(
           popExitTransition = {
             slideOutVertically(animationSpec = tween(700), targetOffsetY = { it })
           }) {
-            TikiClient.optIn.offer?.let { offer -> OffersScreen(offer, close) }
+            TikiClient.optIn.offer?.let { offer ->
+              OffersScreen(offer, close) { map: Map<Offer, Boolean> ->
+                TikiClient.optIn.callback?.invoke(map)
+              }
+            }
           }
       composable(
           NavigationRoute.PERMISSIONS.name,
@@ -71,7 +70,9 @@ fun NavigationHost(
             slideOutVertically(animationSpec = tween(700), targetOffsetY = { it })
           }) {
             TikiClient.optIn.offer?.let { offer ->
-              PermissionsScreen(activity, offer, navController, close)
+              PermissionsScreen(activity, offer, navController, close) { map: Map<Offer, Boolean> ->
+                TikiClient.optIn.callback?.invoke(map)
+              }
             }
           }
       composable(
@@ -88,7 +89,11 @@ fun NavigationHost(
           popExitTransition = {
             slideOutVertically(animationSpec = tween(700), targetOffsetY = { it })
           }) {
-            TikiClient.optIn.offerList?.let { offerList -> SettingsScreen(offerList, close) }
+            TikiClient.optIn.offerList?.let { offerList ->
+              SettingsScreen(offerList, close) { map: Map<Offer, Boolean> ->
+                TikiClient.optIn.callback?.invoke(map)
+              }
+            }
           }
     }
   }

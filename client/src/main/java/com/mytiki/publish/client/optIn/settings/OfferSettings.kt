@@ -18,7 +18,7 @@ import com.mytiki.publish.client.TikiClient
 import com.mytiki.publish.client.offer.Offer
 
 @Composable
-fun OfferSettings(offer: Offer) {
+fun OfferSettings(offer: Offer, callbackOffer: (Pair<Offer, Boolean>) -> Unit) {
 
   val context = LocalContext.current
   var isAccepted by remember { mutableStateOf<Boolean?>(null) }
@@ -59,6 +59,7 @@ fun OfferSettings(offer: Offer) {
                     TikiClient.offer.decline(context, offer)
                     isAccepted = false
                   }
+                  callbackOffer(offer to isAccepted!!)
                 },
                 shape = RoundedCornerShape(50),
                 border = BorderStroke(3.8.dp, MaterialTheme.colorScheme.primary),
