@@ -1,19 +1,18 @@
 package com.mytiki.publish.client.email
 
 import java.time.LocalDateTime
-import java.util.*
 import org.json.JSONObject
 
-class IndexData(
+class EmailIndexData(
     val email: String,
     val lastDate: LocalDateTime?,
     val historicDate: LocalDateTime?,
     val downloadInProgress: Boolean
 ) {
   companion object {
-    fun fromJson(data: String?, key: String): IndexData {
+    fun fromJson(data: String?, key: String): EmailIndexData {
       val json = JSONObject(data)
-      return IndexData(
+      return EmailIndexData(
           key,
           try {
             LocalDateTime.parse(json.getString("lastDate"))

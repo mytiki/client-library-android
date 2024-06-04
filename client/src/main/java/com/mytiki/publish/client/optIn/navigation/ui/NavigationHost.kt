@@ -11,10 +11,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -49,7 +46,9 @@ fun NavigationHost(
           popExitTransition = {
             slideOutVertically(animationSpec = tween(700), targetOffsetY = { it })
           }) {
-            TikiClient.optIn.offer?.let { offer ->
+            val offerNav = TikiClient.optIn.offer
+
+            offerNav?.let { offer ->
               OffersScreen(offer, close) { map: Map<Offer, Boolean> ->
                 TikiClient.optIn.callback?.invoke(map)
               }

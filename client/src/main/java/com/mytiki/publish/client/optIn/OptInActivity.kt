@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import com.mytiki.publish.client.databinding.ActivityOptInBinding
 import com.mytiki.publish.client.optIn.navigation.ui.NavigationHost
-import com.mytiki.publish.client.optIn.theme.OptInTheme
+import com.mytiki.publish.client.optIn.theme.Theme
 
 class OptInActivity : AppCompatActivity() {
 
@@ -23,9 +23,7 @@ class OptInActivity : AppCompatActivity() {
     _binding = ActivityOptInBinding.inflate(layoutInflater)
     binding.composeView.apply {
       setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-      setContent {
-        OptInTheme() { NavigationHost(this@OptInActivity) { this@OptInActivity.finish() } }
-      }
+      setContent { Theme() { NavigationHost(this@OptInActivity) { this@OptInActivity.finish() } } }
     }
     setContentView(binding.root)
   }

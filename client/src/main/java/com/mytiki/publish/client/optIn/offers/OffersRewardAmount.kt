@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.mytiki.publish.client.offer.OfferReward
 
 @Composable
-fun RewardAmount(reward: OfferReward) {
+fun OffersRewardAmount(reward: OfferReward) {
   Surface(
       modifier = Modifier.size(132.52.dp),
       shape = CircleShape,

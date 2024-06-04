@@ -100,13 +100,12 @@ fun PermissionsScreen(
                       Button("Continue") {
                         offer.permissions?.let {
                           TikiClient.permission.requestPermissions(activity, it) { map ->
-                            map.forEach { (_, granted) ->
-                              if (!granted) {
-                                callbackOffer(mapOf(offer to false))
-                                close()
-                              }
+                            if (false in map.values) {
+                              callbackOffer(mapOf(offer to false))
+                              close()
+                            } else {
+                              navController.navigate(NavigationRoute.OFFERS.name)
                             }
-                            navController.navigate(NavigationRoute.OFFERS.name)
                           }
                         }
                       }

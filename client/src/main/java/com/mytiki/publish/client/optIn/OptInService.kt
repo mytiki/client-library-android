@@ -24,27 +24,12 @@ import com.mytiki.publish.client.optIn.navigation.NavigationRoute
  */
 class OptInService() {
   internal var offer: Offer? = null
-    get() {
-      val respOffer = field
-      field = null
-      return respOffer
-    }
     private set
 
   internal var offerList: List<Offer>? = null
-    get() {
-      val respOfferList = field
-      field = null
-      return respOfferList
-    }
     private set
 
   internal var callback: ((Map<Offer, Boolean>) -> Unit)? = null
-    get() {
-      val respCallback = field
-      field = null
-      return respCallback
-    }
     private set
 
   internal var initialRoute: NavigationRoute? = null

@@ -13,37 +13,39 @@
         }
     } else {
         const savedDarkMode = JSON.parse(storage)
-        if(savedDarkMode === true) {
+        if (savedDarkMode === true) {
             document.getElementsByTagName("html")[0].classList.add("theme-dark")
         }
     }
     </script>
-<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
-<link href="../../../styles/style.css" rel="Stylesheet">
-<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
-<link href="../../../styles/main.css" rel="Stylesheet">
-<link href="../../../styles/prism.css" rel="Stylesheet">
-<link href="../../../styles/logo-styles.css" rel="Stylesheet">
-<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
-<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
-<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
-<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
-<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
-<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+    <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+    <link href="../../../styles/style.css" rel="Stylesheet">
+    <link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+    <link href="../../../styles/main.css" rel="Stylesheet">
+    <link href="../../../styles/prism.css" rel="Stylesheet">
+    <link href="../../../styles/logo-styles.css" rel="Stylesheet">
+    <script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+    <script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+    <script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+    <script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+    <script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+    <script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
 </head>
 <body>
 <div class="navigation-wrapper" id="navigation-wrapper">
     <div id="leftToggler"><span class="icon-toggler"></span></div>
     <div class="library-name">
-            <a href="../../../index.html">
-                    <span>client</span>
-            </a>
+        <a href="../../../index.html">
+            <span>client</span>
+        </a>
     </div>
     <div>
     </div>
     <div class="pull-right d-flex">
         <div class="filter-section" id="filter-section">
-                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":client:dokkaHtml/release">androidJvm</button>
+            <button class="platform-tag platform-selector jvm-like" data-active=""
+                    data-filter=":client:dokkaHtml/release">androidJvm
+            </button>
         </div>
         <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
         <div id="searchBar"></div>
@@ -54,18 +56,74 @@
         <div id="sideMenu"></div>
     </div>
     <div id="main">
-<div class="main-content" data-page-type="member" id="content" pageIds="client::com.mytiki.publish.client/TikiClient/publish/#android.content.Context#kotlin.Array[com.mytiki.publish.client.email.Attachment]/PointingToDeclaration//-634080579">
-  <div class="breadcrumbs"><a href="../../../index.html">client</a><span class="delimiter">/</span><a href="../index.html">com.mytiki.publish.client</a><span class="delimiter">/</span><a href="index.html">TikiClient</a><span class="delimiter">/</span><span class="current">publish</span></div>
-  <div class="cover ">
-    <h1 class="cover"><span><span>publish</span></span></h1>
-  </div>
-  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="publish.html"><span class="token function">publish</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">attachments<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../com.mytiki.publish.client.email/-attachment/index.html">Attachment</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/CompletableDeferred///PointingToDeclaration/">CompletableDeferred</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">&gt;</span></div><p class="paragraph">Publishes an array of attachments for receipt data extraction.</p><p class="paragraph">This function publishes an array of attachments for receipt data extraction. The provided attachments are sent to the capture service for processing. The function is asynchronous and returns a CompletableDeferred object that will be completed when the data has been published.</p><span class="kdoc-tag"><h4 class="">Return</h4><p class="paragraph">A CompletableDeferred object that will be completed when the data has been published.</p></span><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>context</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The Context instance. This is typically the current activity or application context from which this function is called. It is used to provide context for the publishing process.</p></div></div></div></div><div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>attachments</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The array of Attachment objects to be published.</p></div></div></div></div></div></div></div>
-</div>
-      <div class="footer">
-        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span
+        <div class="main-content" data-page-type="member" id="content"
+             pageIds="client::com.mytiki.publish.client/TikiClient/publish/#android.content.Context#kotlin.Array[com.mytiki.publish.client.email.EmailAttachment]/PointingToDeclaration//-634080579">
+            <div class="breadcrumbs"><a href="../../../index.html">client</a><span class="delimiter">/</span><a
+                    href="../index.html">com.mytiki.publish.client</a><span class="delimiter">/</span><a
+                    href="index.html">TikiClient</a><span class="delimiter">/</span><span class="current">publish</span>
+            </div>
+            <div class="cover ">
+                <h1 class="cover"><span><span>publish</span></span></h1>
+            </div>
+            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                <div class="content sourceset-dependent-content" data-active=""
+                     data-togglable=":client:dokkaHtml/release">
+                    <div class="symbol monospace"><span class="token keyword"></span><span
+                            class="token keyword">fun </span><a href="publish.html"><span
+                            class="token function">publish</span></a><span class="token punctuation">(</span><span
+                            class="parameters "><span class="parameter ">context<span class="token operator">: </span><a
+                            href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span
+                            class="token punctuation">, </span></span><span class="parameter ">emailAttachments<span
+                            class="token operator">: </span><a
+                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a><span
+                            class="token operator">&lt;</span><span class="token keyword"></span><a
+                            href="../../com.mytiki.publish.client.email/-emailAttachment/index.html">Attachment</a><span
+                            class="token operator">&gt;</span></span></span><span
+                            class="token punctuation">)</span><span class="token operator">: </span><span
+                            data-unresolved-link="kotlinx.coroutines/CompletableDeferred///PointingToDeclaration/">CompletableDeferred</span><span
+                            class="token operator">&lt;</span><span class="token keyword"></span><a
+                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span
+                            class="token operator">&gt;</span></div>
+                    <p class="paragraph">Publishes an array of emailAttachments for receipt data extraction.</p>
+                    <p class="paragraph">This function publishes an array of emailAttachments for receipt data
+                        extraction. The provided emailAttachments are sent to the capture service for processing. The
+                        function is asynchronous and returns a CompletableDeferred object that will be completed when
+                        the data has been published.</p><span class="kdoc-tag"><h4 class="">Return</h4><p
+                        class="paragraph">A CompletableDeferred object that will be completed when the data has been published.</p></span>
+                    <h4 class="">Parameters</h4>
+                    <div class="table">
+                        <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                             data-filterable-set=":client:dokkaHtml/release">
+                            <div class="main-subrow keyValue ">
+                                <div class=""><span class="inline-flex"><div><u><span><span>context</span></span></u></div></span>
+                                </div>
+                                <div>
+                                    <div class="title"><p class="paragraph">The Context instance. This is typically the
+                                        current activity or application context from which this function is called. It
+                                        is used to provide context for the publishing process.</p></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                             data-filterable-set=":client:dokkaHtml/release">
+                            <div class="main-subrow keyValue ">
+                                <div class=""><span class="inline-flex"><div><u><span><span>emailAttachments</span></span></u></div></span>
+                                </div>
+                                <div>
+                                    <div class="title"><p class="paragraph">The array of Attachment objects to be
+                                        published.</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span
                 class="pull-right"><span>Generated by </span><a
                 href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
-      </div>
+        </div>
     </div>
 </div>
 </body>

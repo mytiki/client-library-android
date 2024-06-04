@@ -13,37 +13,39 @@
         }
     } else {
         const savedDarkMode = JSON.parse(storage)
-        if(savedDarkMode === true) {
+        if (savedDarkMode === true) {
             document.getElementsByTagName("html")[0].classList.add("theme-dark")
         }
     }
     </script>
-<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
-<link href="../../../styles/style.css" rel="Stylesheet">
-<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
-<link href="../../../styles/main.css" rel="Stylesheet">
-<link href="../../../styles/prism.css" rel="Stylesheet">
-<link href="../../../styles/logo-styles.css" rel="Stylesheet">
-<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
-<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
-<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
-<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
-<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
-<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+    <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+    <link href="../../../styles/style.css" rel="Stylesheet">
+    <link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+    <link href="../../../styles/main.css" rel="Stylesheet">
+    <link href="../../../styles/prism.css" rel="Stylesheet">
+    <link href="../../../styles/logo-styles.css" rel="Stylesheet">
+    <script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+    <script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+    <script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+    <script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+    <script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+    <script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
 </head>
 <body>
 <div class="navigation-wrapper" id="navigation-wrapper">
     <div id="leftToggler"><span class="icon-toggler"></span></div>
     <div class="library-name">
-            <a href="../../../index.html">
-                    <span>client</span>
-            </a>
+        <a href="../../../index.html">
+            <span>client</span>
+        </a>
     </div>
     <div>
     </div>
     <div class="pull-right d-flex">
         <div class="filter-section" id="filter-section">
-                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":client:dokkaHtml/release">androidJvm</button>
+            <button class="platform-tag platform-selector jvm-like" data-active=""
+                    data-filter=":client:dokkaHtml/release">androidJvm
+            </button>
         </div>
         <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
         <div id="searchBar"></div>
@@ -54,436 +56,1106 @@
         <div id="sideMenu"></div>
     </div>
     <div id="main">
-<div class="main-content" data-page-type="classlike" id="content" pageIds="client::com.mytiki.publish.client/TikiClient///PointingToDeclaration//-634080579">
-  <div class="breadcrumbs"><a href="../../../index.html">client</a><span class="delimiter">/</span><a href="../index.html">com.mytiki.publish.client</a><span class="delimiter">/</span><span class="current">TikiClient</span></div>
-  <div class="cover ">
-    <h1 class="cover"><span>Tiki</span><wbr></wbr><span><span>Client</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">object </span><a href="index.html">TikiClient</a></div><p class="paragraph">Tiki Client Library</p><p class="paragraph">The TIKI APIs comprise a set of HTTP REST APIs designed for seamless integration with any standard HTTP client. The Client Libraries serve as a user-friendly layer around the TIKI APIs, introducing methods for common operations such as authorization, licensing, capture, card-linked offers, and offerRewards. It is a collection of pre-existing code with minimal dependencies, offering a streamlined integration process with TIKI Rest APIs, which reduces the amount of code necessary for integration.</p><p class="paragraph">TikiClient is the top-level entry point for of the TIKI Client Library. It offers simple methods that calls the underlying libraries to perform common operations. Programmers can use it to simplify the integration process or opt for individual libraries based on their specific needs.</p></div></div>
-  </div>
-  <div class="tabbedcontent">
-    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY">Members</button></div>
-    <div class="tabs-section-body">
-      <div data-togglable="FUNCTION">
-        <h2 class="">Functions</h2>
-        <div class="table"><a data-name="-1850403925%2FFunctions%2F-634080579" anchor-label="acceptOffer" id="-1850403925%2FFunctions%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+        <div class="main-content" data-page-type="classlike" id="content"
+             pageIds="client::com.mytiki.publish.client/TikiClient///PointingToDeclaration//-634080579">
+            <div class="breadcrumbs"><a href="../../../index.html">client</a><span class="delimiter">/</span><a
+                    href="../index.html">com.mytiki.publish.client</a><span class="delimiter">/</span><span
+                    class="current">TikiClient</span></div>
+            <div class="cover ">
+                <h1 class="cover"><span>Tiki</span>
+                    <wbr></wbr>
+                    <span><span>Client</span></span></h1>
+                <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                    <div class="content sourceset-dependent-content" data-active=""
+                         data-togglable=":client:dokkaHtml/release">
+                        <div class="symbol monospace"><span class="token keyword">object </span><a href="index.html">TikiClient</a>
+                        </div>
+                        <p class="paragraph">Tiki Client Library</p>
+                        <p class="paragraph">The TIKI APIs comprise a set of HTTP REST APIs designed for seamless
+                            integration with any standard HTTP client. The Client Libraries serve as a user-friendly
+                            layer around the TIKI APIs, introducing methods for common operations such as authorization,
+                            licensing, capture, card-linked offers, and offerRewards. It is a collection of pre-existing
+                            code with minimal dependencies, offering a streamlined integration process with TIKI Rest
+                            APIs, which reduces the amount of code necessary for integration.</p>
+                        <p class="paragraph">TikiClient is the top-level entry point for of the TIKI Client Library. It
+                            offers simple methods that calls the underlying libraries to perform common operations.
+                            Programmers can use it to simplify the integration process or opt for individual libraries
+                            based on their specific needs.</p></div>
+                </div>
+            </div>
+            <div class="tabbedcontent">
+                <div class="tabs-section" tabs-section="tabs-section">
+                    <button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,FUNCTION,PROPERTY">
+                        Members
+                    </button>
+                </div>
+                <div class="tabs-section-body">
+                    <div data-togglable="FUNCTION">
+                        <h2 class="">Functions</h2>
+                        <div class="table"><a data-name="-1850403925%2FFunctions%2F-634080579"
+                                              anchor-label="acceptOffer" id="-1850403925%2FFunctions%2F-634080579"
+                                              data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="accept-offer.html"><span>accept</span><wbr></wbr><span><span>Offer</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1850403925%2FFunctions%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="accept-offer.html"><span class="token function">acceptOffer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">offer<span class="token operator">: </span><a href="../../com.mytiki.publish.client.offer/-offer/index.html">Offer</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/CompletableDeferred///PointingToDeclaration/">CompletableDeferred</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Accepts an offer.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="1995308350%2FFunctions%2F-634080579" anchor-label="accounts" id="1995308350%2FFunctions%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">fun </span><a
+                                                            href="accept-offer.html"><span class="token function">acceptOffer</span></a><span
+                                                            class="token punctuation">(</span><span class="parameters "><span
+                                                            class="parameter ">context<span
+                                                            class="token operator">: </span><a
+                                                            href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span
+                                                            class="token punctuation">, </span></span><span
+                                                            class="parameter ">offer<span
+                                                            class="token operator">: </span><a
+                                                            href="../../com.mytiki.publish.client.offer/-offer/index.html">Offer</a></span></span><span
+                                                            class="token punctuation">)</span><span
+                                                            class="token operator">: </span><span
+                                                            data-unresolved-link="kotlinx.coroutines/CompletableDeferred///PointingToDeclaration/">CompletableDeferred</span><span
+                                                            class="token operator">&lt;</span><span
+                                                            class="token keyword"></span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span
+                                                            class="token operator">&gt;</span></div>
+                                                    <div class="brief "><p class="paragraph">Accepts an offer.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="1995308350%2FFunctions%2F-634080579" anchor-label="accounts"
+                               id="1995308350%2FFunctions%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="accounts.html"><span><span>accounts</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1995308350%2FFunctions%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="accounts.html"><span class="token function">accounts</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Retrieves the list of accounts for a user.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="1975373841%2FFunctions%2F-634080579" anchor-label="configure" id="1975373841%2FFunctions%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">fun </span><a
+                                                            href="accounts.html"><span
+                                                            class="token function">accounts</span></a><span
+                                                            class="token punctuation">(</span><span class="parameters "><span
+                                                            class="parameter ">context<span
+                                                            class="token operator">: </span><a
+                                                            href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a></span></span><span
+                                                            class="token punctuation">)</span><span
+                                                            class="token operator">: </span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span
+                                                            class="token operator">&lt;</span><span
+                                                            class="token keyword"></span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span
+                                                            class="token operator">&gt;</span></div>
+                                                    <div class="brief "><p class="paragraph">Retrieves the list of
+                                                        accounts for a user.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="1975373841%2FFunctions%2F-634080579" anchor-label="configure"
+                               id="1975373841%2FFunctions%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="configure.html"><span><span>configure</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1975373841%2FFunctions%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="configure.html"><span class="token function">configure</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">config<span class="token operator">: </span><a href="../../com.mytiki.publish.client.config/-config/index.html">Config</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Configures the TikiClient with the provided configuration.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-1529826852%2FFunctions%2F-634080579" anchor-label="createLicense" id="-1529826852%2FFunctions%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">fun </span><a
+                                                            href="configure.html"><span
+                                                            class="token function">configure</span></a><span
+                                                            class="token punctuation">(</span><span class="parameters "><span
+                                                            class="parameter ">config<span
+                                                            class="token operator">: </span><a
+                                                            href="../../com.mytiki.publish.client.config/-config/index.html">Config</a></span></span><span
+                                                            class="token punctuation">)</span></div>
+                                                    <div class="brief "><p class="paragraph">Configures the TikiClient
+                                                        with the provided configuration.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="-1529826852%2FFunctions%2F-634080579" anchor-label="createLicense"
+                               id="-1529826852%2FFunctions%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="create-license.html"><span>create</span><wbr></wbr><span><span>License</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1529826852%2FFunctions%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="create-license.html"><span class="token function">createLicense</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">offer<span class="token operator">: </span><a href="../../com.mytiki.publish.client.offer/-offer/index.html">Offer</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/CompletableDeferred///PointingToDeclaration/">CompletableDeferred</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Initiates the process of creating a license.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="538952857%2FFunctions%2F-634080579" anchor-label="declineOffer" id="538952857%2FFunctions%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">fun </span><a
+                                                            href="create-license.html"><span class="token function">createLicense</span></a><span
+                                                            class="token punctuation">(</span><span class="parameters "><span
+                                                            class="parameter ">context<span
+                                                            class="token operator">: </span><a
+                                                            href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span
+                                                            class="token punctuation">, </span></span><span
+                                                            class="parameter ">offer<span
+                                                            class="token operator">: </span><a
+                                                            href="../../com.mytiki.publish.client.offer/-offer/index.html">Offer</a></span></span><span
+                                                            class="token punctuation">)</span><span
+                                                            class="token operator">: </span><span
+                                                            data-unresolved-link="kotlinx.coroutines/CompletableDeferred///PointingToDeclaration/">CompletableDeferred</span><span
+                                                            class="token operator">&lt;</span><span
+                                                            class="token keyword"></span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span
+                                                            class="token operator">&gt;</span></div>
+                                                    <div class="brief "><p class="paragraph">Initiates the process of
+                                                        creating a license.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="538952857%2FFunctions%2F-634080579" anchor-label="declineOffer"
+                               id="538952857%2FFunctions%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="decline-offer.html"><span>decline</span><wbr></wbr><span><span>Offer</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="538952857%2FFunctions%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="decline-offer.html"><span class="token function">declineOffer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">offer<span class="token operator">: </span><a href="../../com.mytiki.publish.client.offer/-offer/index.html">Offer</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/CompletableDeferred///PointingToDeclaration/">CompletableDeferred</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Declines an offer.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-2025849919%2FFunctions%2F-634080579" anchor-label="emailConfig" id="-2025849919%2FFunctions%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">fun </span><a
+                                                            href="decline-offer.html"><span class="token function">declineOffer</span></a><span
+                                                            class="token punctuation">(</span><span class="parameters "><span
+                                                            class="parameter ">context<span
+                                                            class="token operator">: </span><a
+                                                            href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span
+                                                            class="token punctuation">, </span></span><span
+                                                            class="parameter ">offer<span
+                                                            class="token operator">: </span><a
+                                                            href="../../com.mytiki.publish.client.offer/-offer/index.html">Offer</a></span></span><span
+                                                            class="token punctuation">)</span><span
+                                                            class="token operator">: </span><span
+                                                            data-unresolved-link="kotlinx.coroutines/CompletableDeferred///PointingToDeclaration/">CompletableDeferred</span><span
+                                                            class="token operator">&lt;</span><span
+                                                            class="token keyword"></span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span
+                                                            class="token operator">&gt;</span></div>
+                                                    <div class="brief "><p class="paragraph">Declines an offer.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="-2025849919%2FFunctions%2F-634080579" anchor-label="emailConfig"
+                               id="-2025849919%2FFunctions%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="email-config.html"><span>email</span><wbr></wbr><span><span>Config</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2025849919%2FFunctions%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="email-config.html"><span class="token function">emailConfig</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">clientID<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">clientSecret<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">redirectURI<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Configures the email keys for the TikiClient.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-2025566619%2FFunctions%2F-634080579" anchor-label="initialize" id="-2025566619%2FFunctions%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">fun </span><a
+                                                            href="email-config.html"><span class="token function">emailConfig</span></a><span
+                                                            class="token punctuation">(</span><span class="parameters "><span
+                                                            class="parameter ">clientID<span
+                                                            class="token operator">: </span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span
+                                                            class="token punctuation">, </span></span><span
+                                                            class="parameter ">clientSecret<span class="token operator">: </span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span
+                                                            class="token punctuation">, </span></span><span
+                                                            class="parameter ">redirectURI<span
+                                                            class="token operator">: </span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span
+                                                            class="token punctuation">)</span></div>
+                                                    <div class="brief "><p class="paragraph">Configures the email keys
+                                                        for the TikiClient.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="-2025566619%2FFunctions%2F-634080579" anchor-label="initialize"
+                               id="-2025566619%2FFunctions%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="initialize.html"><span><span>initialize</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2025566619%2FFunctions%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="initialize.html"><span class="token function">initialize</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">userID<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/CompletableDeferred///PointingToDeclaration/">CompletableDeferred</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Initializes the TikiClient with the provided user ID.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-283535133%2FFunctions%2F-634080579" anchor-label="isPermissionAuthorized" id="-283535133%2FFunctions%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">fun </span><a
+                                                            href="initialize.html"><span class="token function">initialize</span></a><span
+                                                            class="token punctuation">(</span><span class="parameters "><span
+                                                            class="parameter ">userID<span
+                                                            class="token operator">: </span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span
+                                                            class="token punctuation">)</span><span
+                                                            class="token operator">: </span><span
+                                                            data-unresolved-link="kotlinx.coroutines/CompletableDeferred///PointingToDeclaration/">CompletableDeferred</span><span
+                                                            class="token operator">&lt;</span><span
+                                                            class="token keyword"></span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span
+                                                            class="token operator">&gt;</span></div>
+                                                    <div class="brief "><p class="paragraph">Initializes the TikiClient
+                                                        with the provided user ID.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="-283535133%2FFunctions%2F-634080579" anchor-label="isPermissionAuthorized"
+                               id="-283535133%2FFunctions%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="is-permission-authorized.html"><span>is</span><wbr></wbr><span>Permission</span><wbr></wbr><span><span>Authorized</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-283535133%2FFunctions%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="is-permission-authorized.html"><span class="token function">isPermissionAuthorized</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">permission<span class="token operator">: </span><a href="../../com.mytiki.publish.client.permission/-permission/index.html">Permission</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Checks if a specific permission is authorized.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-998114648%2FFunctions%2F-634080579" anchor-label="login" id="-998114648%2FFunctions%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">fun </span><a
+                                                            href="is-permission-authorized.html"><span
+                                                            class="token function">isPermissionAuthorized</span></a><span
+                                                            class="token punctuation">(</span><span class="parameters "><span
+                                                            class="parameter ">context<span
+                                                            class="token operator">: </span><a
+                                                            href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span
+                                                            class="token punctuation">, </span></span><span
+                                                            class="parameter ">permission<span
+                                                            class="token operator">: </span><a
+                                                            href="../../com.mytiki.publish.client.permission/-permission/index.html">Permission</a></span></span><span
+                                                            class="token punctuation">)</span><span
+                                                            class="token operator">: </span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a>
+                                                    </div>
+                                                    <div class="brief "><p class="paragraph">Checks if a specific
+                                                        permission is authorized.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="-998114648%2FFunctions%2F-634080579" anchor-label="login"
+                               id="-998114648%2FFunctions%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="login.html"><span><span>login</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-998114648%2FFunctions%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="login.html"><span class="token function">login</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">provider<span class="token operator">: </span><a href="../../com.mytiki.publish.client.email/-email-provider-enum/index.html">EmailProviderEnum</a><span class="token punctuation">, </span></span><span class="parameter ">loginCallback<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Initiates the login process for a user.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-1698639929%2FFunctions%2F-634080579" anchor-label="logout" id="-1698639929%2FFunctions%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">fun </span><a href="login.html"><span
+                                                            class="token function">login</span></a><span
+                                                            class="token punctuation">(</span><span class="parameters "><span
+                                                            class="parameter ">context<span
+                                                            class="token operator">: </span><a
+                                                            href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span
+                                                            class="token punctuation">, </span></span><span
+                                                            class="parameter ">provider<span
+                                                            class="token operator">: </span><a
+                                                            href="../../com.mytiki.publish.client.email/-email-provider-enum/index.html">EmailProviderEnum</a><span
+                                                            class="token punctuation">, </span></span><span
+                                                            class="parameter ">loginCallback<span
+                                                            class="token operator">: </span><span
+                                                            class="token punctuation">(</span><span
+                                                            class="token keyword"></span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span
+                                                            class="token punctuation">)</span><span
+                                                            class="token operator"> -&gt; </span><span
+                                                            class="token keyword"></span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a></span></span><span
+                                                            class="token punctuation">)</span></div>
+                                                    <div class="brief "><p class="paragraph">Initiates the login process
+                                                        for a user.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="-1698639929%2FFunctions%2F-634080579" anchor-label="logout"
+                               id="-1698639929%2FFunctions%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="logout.html"><span><span>logout</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1698639929%2FFunctions%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="logout.html"><span class="token function">logout</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">email<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Initiates the logout process for a user.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-1071175163%2FFunctions%2F-634080579" anchor-label="permissions" id="-1071175163%2FFunctions%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">fun </span><a href="logout.html"><span
+                                                            class="token function">logout</span></a><span
+                                                            class="token punctuation">(</span><span class="parameters "><span
+                                                            class="parameter ">context<span
+                                                            class="token operator">: </span><a
+                                                            href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span
+                                                            class="token punctuation">, </span></span><span
+                                                            class="parameter ">email<span
+                                                            class="token operator">: </span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span
+                                                            class="token punctuation">)</span></div>
+                                                    <div class="brief "><p class="paragraph">Initiates the logout
+                                                        process for a user.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="-1071175163%2FFunctions%2F-634080579" anchor-label="permissions"
+                               id="-1071175163%2FFunctions%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="permissions.html"><span><span>permissions</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1071175163%2FFunctions%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="permissions.html"><span class="token function">permissions</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">activity<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/activity/ComponentActivity.html">ComponentActivity</a><span class="token punctuation">, </span></span><span class="parameter ">permissions<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../com.mytiki.publish.client.permission/-permission/index.html">Permission</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">permissionCallback<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../com.mytiki.publish.client.permission/-permission/index.html">Permission</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Requests the specified permissions.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-140301763%2FFunctions%2F-634080579" anchor-label="publish" id="-140301763%2FFunctions%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">fun </span><a href="permissions.html"><span
+                                                            class="token function">permissions</span></a><span
+                                                            class="token punctuation">(</span><span class="parameters "><span
+                                                            class="parameter ">activity<span
+                                                            class="token operator">: </span><a
+                                                            href="https://developer.android.com/reference/kotlin/androidx/activity/ComponentActivity.html">ComponentActivity</a><span
+                                                            class="token punctuation">, </span></span><span
+                                                            class="parameter ">permissions<span
+                                                            class="token operator">: </span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span
+                                                            class="token operator">&lt;</span><span
+                                                            class="token keyword"></span><a
+                                                            href="../../com.mytiki.publish.client.permission/-permission/index.html">Permission</a><span
+                                                            class="token operator">&gt;</span><span
+                                                            class="token punctuation">, </span></span><span
+                                                            class="parameter ">permissionCallback<span
+                                                            class="token operator">: </span><span
+                                                            class="token punctuation">(</span><span
+                                                            class="token keyword"></span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span
+                                                            class="token operator">&lt;</span><span
+                                                            class="token keyword"></span><a
+                                                            href="../../com.mytiki.publish.client.permission/-permission/index.html">Permission</a><span
+                                                            class="token punctuation">, </span><span
+                                                            class="token keyword"></span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span
+                                                            class="token operator">&gt;</span><span
+                                                            class="token punctuation">)</span><span
+                                                            class="token operator"> -&gt; </span><span
+                                                            class="token keyword"></span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a></span></span><span
+                                                            class="token punctuation">)</span></div>
+                                                    <div class="brief "><p class="paragraph">Requests the specified
+                                                        permissions.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="-140301763%2FFunctions%2F-634080579" anchor-label="publish"
+                               id="-140301763%2FFunctions%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="publish.html"><span><span>publish</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-140301763%2FFunctions%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="publish.html"><span class="token function">publish</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">attachments<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../com.mytiki.publish.client.email/-attachment/index.html">Attachment</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/CompletableDeferred///PointingToDeclaration/">CompletableDeferred</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Publishes an array of attachments for receipt data extraction.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-305651097%2FFunctions%2F-634080579" anchor-label="receipt" id="-305651097%2FFunctions%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">fun </span><a
+                                                            href="publish.html"><span
+                                                            class="token function">publish</span></a><span
+                                                            class="token punctuation">(</span><span class="parameters "><span
+                                                            class="parameter ">context<span
+                                                            class="token operator">: </span><a
+                                                            href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span
+                                                            class="token punctuation">, </span></span><span
+                                                            class="parameter ">emailAttachments<span
+                                                            class="token operator">: </span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a><span
+                                                            class="token operator">&lt;</span><span
+                                                            class="token keyword"></span><a
+                                                            href="../../com.mytiki.publish.client.email/-emailAttachment/index.html">Attachment</a><span
+                                                            class="token operator">&gt;</span></span></span><span
+                                                            class="token punctuation">)</span><span
+                                                            class="token operator">: </span><span
+                                                            data-unresolved-link="kotlinx.coroutines/CompletableDeferred///PointingToDeclaration/">CompletableDeferred</span><span
+                                                            class="token operator">&lt;</span><span
+                                                            class="token keyword"></span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span
+                                                            class="token operator">&gt;</span></div>
+                                                    <div class="brief "><p class="paragraph">Publishes an array of
+                                                        emailAttachments for receipt data extraction.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="-305651097%2FFunctions%2F-634080579" anchor-label="receipt"
+                               id="-305651097%2FFunctions%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="receipt.html"><span><span>receipt</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-305651097%2FFunctions%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="receipt.html"><span class="token function">receipt</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">receiptId<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">onResult<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../com.mytiki.publish.client.capture/-capture-receipt-rsp/index.html">CaptureReceiptRsp</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Retrieve the structured data extracted from the processed receipt image.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="1545484434%2FFunctions%2F-634080579" anchor-label="revokeLicense" id="1545484434%2FFunctions%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword">suspend </span><span
+                                                            class="token keyword">fun </span><a
+                                                            href="receipt.html"><span
+                                                            class="token function">receipt</span></a><span
+                                                            class="token punctuation">(</span><span class="parameters "><span
+                                                            class="parameter ">receiptId<span
+                                                            class="token operator">: </span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span
+                                                            class="token punctuation">, </span></span><span
+                                                            class="parameter ">onResult<span
+                                                            class="token operator">: </span><span
+                                                            class="token punctuation">(</span><span
+                                                            class="token keyword"></span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a><span
+                                                            class="token operator">&lt;</span><span
+                                                            class="token keyword"></span><a
+                                                            href="../../com.mytiki.publish.client.capture/-capture-receipt-rsp/index.html">CaptureReceiptRsp</a><span
+                                                            class="token operator">?</span><span class="token operator">&gt;</span><span
+                                                            class="token punctuation">)</span><span
+                                                            class="token operator"> -&gt; </span><span
+                                                            class="token keyword"></span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a></span></span><span
+                                                            class="token punctuation">)</span></div>
+                                                    <div class="brief "><p class="paragraph">Retrieve the structured
+                                                        data extracted from the processed receipt image.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="1545484434%2FFunctions%2F-634080579" anchor-label="revokeLicense"
+                               id="1545484434%2FFunctions%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="revoke-license.html"><span>revoke</span><wbr></wbr><span><span>License</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1545484434%2FFunctions%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="revoke-license.html"><span class="token function">revokeLicense</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">offer<span class="token operator">: </span><a href="../../com.mytiki.publish.client.offer/-offer/index.html">Offer</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/CompletableDeferred///PointingToDeclaration/">CompletableDeferred</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Initiates the process of revoking a license.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="1113741837%2FFunctions%2F-634080579" anchor-label="scan" id="1113741837%2FFunctions%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">fun </span><a
+                                                            href="revoke-license.html"><span class="token function">revokeLicense</span></a><span
+                                                            class="token punctuation">(</span><span class="parameters "><span
+                                                            class="parameter ">context<span
+                                                            class="token operator">: </span><a
+                                                            href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span
+                                                            class="token punctuation">, </span></span><span
+                                                            class="parameter ">offer<span
+                                                            class="token operator">: </span><a
+                                                            href="../../com.mytiki.publish.client.offer/-offer/index.html">Offer</a></span></span><span
+                                                            class="token punctuation">)</span><span
+                                                            class="token operator">: </span><span
+                                                            data-unresolved-link="kotlinx.coroutines/CompletableDeferred///PointingToDeclaration/">CompletableDeferred</span><span
+                                                            class="token operator">&lt;</span><span
+                                                            class="token keyword"></span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span
+                                                            class="token operator">&gt;</span></div>
+                                                    <div class="brief "><p class="paragraph">Initiates the process of
+                                                        revoking a license.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="1113741837%2FFunctions%2F-634080579" anchor-label="scan"
+                               id="1113741837%2FFunctions%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="scan.html"><span><span>scan</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1113741837%2FFunctions%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="scan.html"><span class="token function">scan</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">activity<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/activity/ComponentActivity.html">ComponentActivity</a><span class="token punctuation">, </span></span><span class="parameter ">scanCallback<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span><a href="https://developer.android.com/reference/kotlin/android/graphics/Bitmap.html">Bitmap</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Initiates the process of scanning a physical receipt and returns the receipt ID.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="653614961%2FFunctions%2F-634080579" anchor-label="scrape" id="653614961%2FFunctions%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">fun </span><a href="scan.html"><span
+                                                            class="token function">scan</span></a><span
+                                                            class="token punctuation">(</span><span class="parameters "><span
+                                                            class="parameter ">activity<span
+                                                            class="token operator">: </span><a
+                                                            href="https://developer.android.com/reference/kotlin/androidx/activity/ComponentActivity.html">ComponentActivity</a><span
+                                                            class="token punctuation">, </span></span><span
+                                                            class="parameter ">scanCallback<span class="token operator">: </span><span
+                                                            class="token punctuation">(</span><span
+                                                            class="token keyword"></span><a
+                                                            href="https://developer.android.com/reference/kotlin/android/graphics/Bitmap.html">Bitmap</a><span
+                                                            class="token punctuation">)</span><span
+                                                            class="token operator"> -&gt; </span><span
+                                                            class="token keyword"></span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a></span></span><span
+                                                            class="token punctuation">)</span></div>
+                                                    <div class="brief "><p class="paragraph">Initiates the process of
+                                                        scanning a physical receipt and returns the receipt ID.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="653614961%2FFunctions%2F-634080579" anchor-label="scrape"
+                               id="653614961%2FFunctions%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="scrape.html"><span><span>scrape</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="653614961%2FFunctions%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="scrape.html"><span class="token function">scrape</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span class="token punctuation">, </span></span><span class="parameter ">email<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Initiates the process of scraping emails for a user.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="1201699523%2FFunctions%2F-634080579" anchor-label="terms" id="1201699523%2FFunctions%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">fun </span><a href="scrape.html"><span
+                                                            class="token function">scrape</span></a><span
+                                                            class="token punctuation">(</span><span class="parameters "><span
+                                                            class="parameter ">context<span
+                                                            class="token operator">: </span><a
+                                                            href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a><span
+                                                            class="token punctuation">, </span></span><span
+                                                            class="parameter ">email<span
+                                                            class="token operator">: </span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></span></span><span
+                                                            class="token punctuation">)</span></div>
+                                                    <div class="brief "><p class="paragraph">Initiates the process of
+                                                        scraping emails for a user.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="1201699523%2FFunctions%2F-634080579" anchor-label="terms"
+                               id="1201699523%2FFunctions%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="terms.html"><span><span>terms</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1201699523%2FFunctions%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="terms.html"><span class="token function">terms</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Retrieves the terms of the license.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div data-togglable="PROPERTY">
-        <h2 class="">Properties</h2>
-        <div class="table"><a data-name="-2130929817%2FProperties%2F-634080579" anchor-label="auth" id="-2130929817%2FProperties%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">fun </span><a href="terms.html"><span
+                                                            class="token function">terms</span></a><span
+                                                            class="token punctuation">(</span><span class="parameters "><span
+                                                            class="parameter ">context<span
+                                                            class="token operator">: </span><a
+                                                            href="https://developer.android.com/reference/kotlin/android/content/Context.html">Context</a></span></span><span
+                                                            class="token punctuation">)</span><span
+                                                            class="token operator">: </span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a>
+                                                    </div>
+                                                    <div class="brief "><p class="paragraph">Retrieves the terms of the
+                                                        license.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-togglable="PROPERTY">
+                        <h2 class="">Properties</h2>
+                        <div class="table"><a data-name="-2130929817%2FProperties%2F-634080579" anchor-label="auth"
+                                              id="-2130929817%2FProperties%2F-634080579"
+                                              data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="auth.html"><span><span>auth</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2130929817%2FProperties%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="auth.html">auth</a><span class="token operator">: </span><a href="../../com.mytiki.publish.client.auth/-auth-service/index.html">AuthService</a></div><div class="brief "><p class="paragraph">AuthService instance for handling authentication.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="1519622565%2FProperties%2F-634080579" anchor-label="capture" id="1519622565%2FProperties%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">val </span><a
+                                                            href="auth.html">auth</a><span
+                                                            class="token operator">: </span><a
+                                                            href="../../com.mytiki.publish.client.auth/-auth-service/index.html">AuthService</a>
+                                                    </div>
+                                                    <div class="brief "><p class="paragraph">AuthService instance for
+                                                        handling authentication.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="1519622565%2FProperties%2F-634080579" anchor-label="capture"
+                               id="1519622565%2FProperties%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="capture.html"><span><span>capture</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1519622565%2FProperties%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="capture.html">capture</a><span class="token operator">: </span><a href="../../com.mytiki.publish.client.capture/-capture-service/index.html">CaptureService</a></div><div class="brief "><p class="paragraph">CaptureService instance for handling receipt capture.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-662518131%2FProperties%2F-634080579" anchor-label="config" id="-662518131%2FProperties%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">val </span><a href="capture.html">capture</a><span
+                                                            class="token operator">: </span><a
+                                                            href="../../com.mytiki.publish.client.capture/-capture-service/index.html">CaptureService</a>
+                                                    </div>
+                                                    <div class="brief "><p class="paragraph">CaptureService instance for
+                                                        handling receipt capture.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="-662518131%2FProperties%2F-634080579" anchor-label="config"
+                               id="-662518131%2FProperties%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="config.html"><span><span>config</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-662518131%2FProperties%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="config.html">config</a><span class="token operator">: </span><a href="../../com.mytiki.publish.client.config/-config/index.html">Config</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Configuration for the client.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="16860559%2FProperties%2F-634080579" anchor-label="email" id="16860559%2FProperties%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">var </span><a href="config.html">config</a><span
+                                                            class="token operator">: </span><a
+                                                            href="../../com.mytiki.publish.client.config/-config/index.html">Config</a><span
+                                                            class="token operator">?</span></div>
+                                                    <div class="brief "><p class="paragraph">Configuration for the
+                                                        client.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="16860559%2FProperties%2F-634080579" anchor-label="email"
+                               id="16860559%2FProperties%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="email.html"><span><span>email</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="16860559%2FProperties%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="email.html">email</a><span class="token operator">: </span><a href="../../com.mytiki.publish.client.email/-email-service/index.html">EmailService</a></div><div class="brief "><p class="paragraph">EmailService instance for handling email operations.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="900278523%2FProperties%2F-634080579" anchor-label="emailKeys" id="900278523%2FProperties%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">val </span><a
+                                                            href="email.html">email</a><span
+                                                            class="token operator">: </span><a
+                                                            href="../../com.mytiki.publish.client.email/-email-service/index.html">EmailService</a>
+                                                    </div>
+                                                    <div class="brief "><p class="paragraph">EmailService instance for
+                                                        handling email operations.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="900278523%2FProperties%2F-634080579" anchor-label="emailKeys"
+                               id="900278523%2FProperties%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="email-keys.html"><span>email</span><wbr></wbr><span><span>Keys</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="900278523%2FProperties%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="email-keys.html">emailKeys</a><span class="token operator">: </span><a href="../../com.mytiki.publish.client.email/-email-keys/index.html">EmailKeys</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Email keys for the client.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-88941302%2FProperties%2F-634080579" anchor-label="license" id="-88941302%2FProperties%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">var </span><a href="email-keys.html">emailKeys</a><span
+                                                            class="token operator">: </span><a
+                                                            href="../../com.mytiki.publish.client.email/-email-keys/index.html">EmailKeys</a><span
+                                                            class="token operator">?</span></div>
+                                                    <div class="brief "><p class="paragraph">Email keys for the
+                                                        client.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="-88941302%2FProperties%2F-634080579" anchor-label="license"
+                               id="-88941302%2FProperties%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="license.html"><span><span>license</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-88941302%2FProperties%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="license.html">license</a><span class="token operator">: </span><a href="../../com.mytiki.publish.client.license/-license-service/index.html">LicenseService</a></div><div class="brief "><p class="paragraph">LicenseService instance for managing licensing.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-1065775409%2FProperties%2F-634080579" anchor-label="offer" id="-1065775409%2FProperties%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">val </span><a href="license.html">license</a><span
+                                                            class="token operator">: </span><a
+                                                            href="../../com.mytiki.publish.client.license/-license-service/index.html">LicenseService</a>
+                                                    </div>
+                                                    <div class="brief "><p class="paragraph">LicenseService instance for
+                                                        managing licensing.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="-1065775409%2FProperties%2F-634080579" anchor-label="offer"
+                               id="-1065775409%2FProperties%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="offer.html"><span><span>offer</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1065775409%2FProperties%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="offer.html">offer</a><span class="token operator">: </span><a href="../../com.mytiki.publish.client.offer/-offer-service/index.html">OfferService</a></div><div class="brief "><p class="paragraph">OfferService instance for managing offers.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="1019462003%2FProperties%2F-634080579" anchor-label="optIn" id="1019462003%2FProperties%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">val </span><a
+                                                            href="offer.html">offer</a><span
+                                                            class="token operator">: </span><a
+                                                            href="../../com.mytiki.publish.client.offer/-offer-service/index.html">OfferService</a>
+                                                    </div>
+                                                    <div class="brief "><p class="paragraph">OfferService instance for
+                                                        managing offers.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="1019462003%2FProperties%2F-634080579" anchor-label="optIn"
+                               id="1019462003%2FProperties%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="opt-in.html"><span>opt</span><wbr></wbr><span><span>In</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1019462003%2FProperties%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="opt-in.html">optIn</a><span class="token operator">: </span><a href="../../com.mytiki.publish.client.optIn/-opt-in-service/index.html">OptInService</a></div><div class="brief "><p class="paragraph">OptInService instance for managing opt-in operations.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-28748896%2FProperties%2F-634080579" anchor-label="permission" id="-28748896%2FProperties%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">val </span><a
+                                                            href="opt-in.html">optIn</a><span
+                                                            class="token operator">: </span><a
+                                                            href="../../com.mytiki.publish.client.optIn/-opt-in-service/index.html">OptInService</a>
+                                                    </div>
+                                                    <div class="brief "><p class="paragraph">OptInService instance for
+                                                        managing opt-in operations.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="-28748896%2FProperties%2F-634080579" anchor-label="permission"
+                               id="-28748896%2FProperties%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="permission.html"><span><span>permission</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-28748896%2FProperties%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="permission.html">permission</a><span class="token operator">: </span><a href="../../com.mytiki.publish.client.permission/-permission-service/index.html">PermissionService</a></div><div class="brief "><p class="paragraph">PermissionService instance for handling permissions.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-1095211991%2FProperties%2F-634080579" anchor-label="userID" id="-1095211991%2FProperties%2F-634080579" data-filterable-set=":client:dokkaHtml/release"></a>
-          <div class="table-row" data-filterable-current=":client:dokkaHtml/release" data-filterable-set=":client:dokkaHtml/release">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">val </span><a href="permission.html">permission</a><span
+                                                            class="token operator">: </span><a
+                                                            href="../../com.mytiki.publish.client.permission/-permission-service/index.html">PermissionService</a>
+                                                    </div>
+                                                    <div class="brief "><p class="paragraph">PermissionService instance
+                                                        for handling permissions.</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a data-name="-1095211991%2FProperties%2F-634080579" anchor-label="userID"
+                               id="-1095211991%2FProperties%2F-634080579"
+                               data-filterable-set=":client:dokkaHtml/release"></a>
+                            <div class="table-row" data-filterable-current=":client:dokkaHtml/release"
+                                 data-filterable-set=":client:dokkaHtml/release">
+                                <div class="main-subrow keyValue ">
+                                    <div class=""><span class="inline-flex">
                   <div><a href="user-i-d.html"><span>user</span><wbr></wbr><span><span>ID</span></span></a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1095211991%2FProperties%2F-634080579"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                    <div class="copy-popup-wrapper "><span
+                            class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":client:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="user-i-d.html">userID</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">User ID for the client.</p></div></div></div>
+                                    <div>
+                                        <div class="title">
+                                            <div class="platform-hinted " data-platform-hinted="data-platform-hinted">
+                                                <div class="content sourceset-dependent-content" data-active=""
+                                                     data-togglable=":client:dokkaHtml/release">
+                                                    <div class="symbol monospace"><span
+                                                            class="token keyword"></span><span
+                                                            class="token keyword">var </span><a href="user-i-d.html">userID</a><span
+                                                            class="token operator">: </span><a
+                                                            href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span
+                                                            class="token operator">?</span></div>
+                                                    <div class="brief "><p class="paragraph">User ID for the client.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-      <div class="footer">
-        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span
+        <div class="footer">
+            <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span
                 class="pull-right"><span>Generated by </span><a
                 href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
-      </div>
+        </div>
     </div>
 </div>
 </body>

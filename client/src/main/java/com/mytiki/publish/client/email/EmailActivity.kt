@@ -6,12 +6,11 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.mytiki.publish.client.TikiClient
-import com.mytiki.publish.client.auth.AuthToken
 import com.mytiki.publish.client.auth.AuthProviderEnum
+import com.mytiki.publish.client.auth.AuthToken
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.util.*
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
 import net.openid.appauth.AuthorizationResponse
@@ -65,7 +64,7 @@ class EmailActivity : AppCompatActivity() {
                         val emailResp =
                             TikiClient.email.repository.saveData(
                                 this@EmailActivity,
-                                IndexData(emailResponse.email, null, null, false))
+                                EmailIndexData(emailResponse.email, null, null, false))
                         if (authResp && emailResp) {
                           TikiClient.email.loginCallback(authToken.username)
                         } else throw Exception("unable to save data")

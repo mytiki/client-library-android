@@ -3,10 +3,10 @@ package com.mytiki.publish.client.email
 import android.content.Context
 import android.content.Intent
 import com.mytiki.publish.client.TikiClient
-import com.mytiki.publish.client.email.messageResponse.Message
-import com.mytiki.publish.client.email.messageResponse.MessagePart
-import com.mytiki.publish.client.email.messageResponse.MessagePartBody
-import com.mytiki.publish.client.email.messageResponse.MessageResponse
+import com.mytiki.publish.client.email.message.Message
+import com.mytiki.publish.client.email.message.MessagePart
+import com.mytiki.publish.client.email.message.MessagePartBody
+import com.mytiki.publish.client.email.message.MessageResponse
 import com.mytiki.publish.client.utils.apiService.ApiService
 import java.time.LocalDateTime
 import java.util.*
@@ -113,7 +113,7 @@ class EmailService {
       if (indexData != null && indexData.lastDate == null) {
         repository.updateData(
             context,
-            IndexData(
+            EmailIndexData(
                 email, LocalDateTime.now(), indexData.historicDate, indexData.downloadInProgress))
         messagesIndex(context, email, before = LocalDateTime.now()).await()
         indexData = repository.getData(context, email)
@@ -161,7 +161,7 @@ class EmailService {
       val auth = token.auth
 
       val endpoint = provider.messagesIndexListEndpoint
-      val queryList = Sender.toQuery(after, before)
+      val queryList = EmailSender.toQuery(after, before)
       queryList.forEach { query ->
         val response = async {
           ApiService.get(
@@ -191,7 +191,7 @@ class EmailService {
               if (indexData.historicDate == null ||
                   indexData.historicDate.isBefore(message.internalDate)) {
                 val data =
-                    IndexData(
+                    EmailIndexData(
                         email,
                         indexData.lastDate,
                         message.internalDate,
@@ -218,7 +218,7 @@ class EmailService {
   fun downloadEmails(
       context: Context,
       email: String,
-      onDownload: (attachmentList: Array<Attachment>) -> CompletableDeferred<Unit>
+      onDownload: (emailAttachmentList: Array<EmailAttachment>) -> CompletableDeferred<Unit>
   ): CompletableDeferred<Unit> {
     val scrape = CompletableDeferred<Unit>()
     val indexData = repository.getData(context, email)
@@ -226,7 +226,7 @@ class EmailService {
       scrape.complete(Unit)
       return scrape
     } else {
-      val data = IndexData(email, indexData.lastDate, indexData.historicDate, true)
+      val data = EmailIndexData(email, indexData.lastDate, indexData.historicDate, true)
       repository.updateData(context, data)
       CoroutineScope(Dispatchers.IO)
           .launch {
@@ -238,7 +238,7 @@ class EmailService {
           }
           .invokeOnCompletion {
             repository.updateData(
-                context, IndexData(email, indexData.lastDate, indexData.historicDate, false))
+                context, EmailIndexData(email, indexData.lastDate, indexData.historicDate, false))
             scrape.complete(Unit)
           }
       return scrape
@@ -257,7 +257,7 @@ class EmailService {
       context: Context,
       email: String,
       numberOfItems: Int,
-      onDownload: (attachmentList: Array<Attachment>) -> CompletableDeferred<Unit>
+      onDownload: (emailAttachmentList: Array<EmailAttachment>) -> CompletableDeferred<Unit>
   ): CompletableDeferred<Boolean> {
     val scrapeInChunks = CompletableDeferred<Boolean>()
     val indexes = repository.readIndexes(context, email, numberOfItems)
@@ -285,9 +285,9 @@ class EmailService {
       messageResponseList.forEach { apiResponse ->
         val attachmentDeferred = async {
           val message = (Message.fromJson(JSONObject(apiResponse?.string()!!)))
-          val attachmentList = mutableListOf<Attachment>()
-          decodeByMimiType(context, email, message, attachmentList).await()
-          onDownload(attachmentList.toTypedArray()).await()
+          val emailAttachmentList = mutableListOf<EmailAttachment>()
+          decodeByMimiType(context, email, message, emailAttachmentList).await()
+          onDownload(emailAttachmentList.toTypedArray()).await()
         }
         attachmentRequestArray.add(attachmentDeferred)
       }
@@ -305,32 +305,32 @@ class EmailService {
    * @param context The context.
    * @param email The email account.
    * @param message The message to decode.
-   * @param attachmentList The list to store decoded attachments.
+   * @param emailAttachmentList The list to store decoded attachments.
    * @return A CompletableDeferred indicating completion.
    */
   private fun decodeByMimiType(
       context: Context,
       email: String,
       message: Message,
-      attachmentList: MutableList<Attachment>
+      emailAttachmentList: MutableList<EmailAttachment>
   ): CompletableDeferred<Unit> {
     val decodeByMimeType = CompletableDeferred<Unit>()
     CoroutineScope(Dispatchers.IO).launch {
       if (!message.payload?.mimeType.isNullOrEmpty()) {
         if (!message.payload?.body?.data.isNullOrEmpty()) {
           val att = message.payload?.let { sortAttachment(it).await() }
-          if (att != null) attachmentList.add(att)
+          if (att != null) emailAttachmentList.add(att)
         }
 
         val multipart = getAllMultipart(context, message, email).await()
-        if (multipart != null) attachmentList.addAll(multipart)
+        if (multipart != null) emailAttachmentList.addAll(multipart)
 
         if (!message.payload?.body?.attachmentId.isNullOrEmpty()) {
           val attachment =
               getAttachments(context, email, message.id, message.payload?.body?.attachmentId!!)
                   .await()
           val byAttachmentId = message.payload.let { getAllByAttachmentId(it, attachment).await() }
-          if (byAttachmentId != null) attachmentList.addAll(byAttachmentId)
+          if (byAttachmentId != null) emailAttachmentList.addAll(byAttachmentId)
         }
       }
       decodeByMimeType.complete(Unit)
@@ -348,21 +348,21 @@ class EmailService {
   private fun getAllByAttachmentId(
       messagePart: MessagePart,
       attachment: ByteArray
-  ): CompletableDeferred<List<Attachment>?> {
-    val getAllByAttachmentId = CompletableDeferred<List<Attachment>?>()
+  ): CompletableDeferred<List<EmailAttachment>?> {
+    val getAllByEmailAttachmentId = CompletableDeferred<List<EmailAttachment>?>()
     CoroutineScope(Dispatchers.IO).launch {
       if (messagePart.mimeType?.substringBefore("/") == "multipart") {
-        val list = mutableListOf<Attachment>()
+        val list = mutableListOf<EmailAttachment>()
         messagePart.parts?.forEach { part ->
           if (part != null && !part.body?.data.isNullOrEmpty()) {
             val att = sortAttachment(part, attachment).await()
             if (att != null) list.add(att)
           }
         }
-        getAllByAttachmentId.complete(list)
-      } else getAllByAttachmentId.complete(null)
+        getAllByEmailAttachmentId.complete(list)
+      } else getAllByEmailAttachmentId.complete(null)
     }
-    return getAllByAttachmentId
+    return getAllByEmailAttachmentId
   }
 
   /**
@@ -377,13 +377,13 @@ class EmailService {
       context: Context,
       message: Message,
       email: String,
-  ): CompletableDeferred<List<Attachment>?> {
-    val getAllMultipart = CompletableDeferred<List<Attachment>?>()
+  ): CompletableDeferred<List<EmailAttachment>?> {
+    val getAllMultipart = CompletableDeferred<List<EmailAttachment>?>()
     val messagePart = message.payload
     CoroutineScope(Dispatchers.IO).launch {
       // Check if the MIME type of the message part is multipart
       if (messagePart?.mimeType?.substringBefore("/") == "multipart") {
-        val list = mutableListOf<Attachment>()
+        val list = mutableListOf<EmailAttachment>()
         // Iterate over each part of the message
         messagePart.parts?.forEach { part ->
           if (part != null) {
@@ -411,19 +411,19 @@ class EmailService {
   private fun sortAttachment(
       messagePart: MessagePart,
       attachment: ByteArray? = null
-  ): CompletableDeferred<Attachment?> {
-    val sortAttachment = CompletableDeferred<Attachment?>()
+  ): CompletableDeferred<EmailAttachment?> {
+    val sortEmailAttachment = CompletableDeferred<EmailAttachment?>()
     CoroutineScope(Dispatchers.IO).launch {
-      val attachmentType =
-          if (messagePart.mimeType?.substringBefore("/") == "image") AttachmentType.IMAGE
-          else if (messagePart.mimeType?.substringBefore("/") == "text") AttachmentType.TEXT
-          else if (messagePart.mimeType == "application/pdf") AttachmentType.PDF else null
-      if (attachmentType != null) {
+      val emailAttachmentType =
+          if (messagePart.mimeType?.substringBefore("/") == "image") EmailAttachmentType.IMAGE
+          else if (messagePart.mimeType?.substringBefore("/") == "text") EmailAttachmentType.TEXT
+          else if (messagePart.mimeType == "application/pdf") EmailAttachmentType.PDF else null
+      if (emailAttachmentType != null) {
         val att = attachment ?: Base64.UrlSafe.decode(messagePart.body?.data!!)
-        sortAttachment.complete(Attachment(attachmentType, att))
-      } else sortAttachment.complete(null)
+        sortEmailAttachment.complete(EmailAttachment(emailAttachmentType, att))
+      } else sortEmailAttachment.complete(null)
     }
-    return sortAttachment
+    return sortEmailAttachment
   }
 
   /**
