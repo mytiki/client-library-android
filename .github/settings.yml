@@ -54,4 +54,4 @@ milestones:
     description: |
       Implements the UIs for "Improve OptIn rates" feature. Adds pre-built UIs that can be customized 
       to match the app's visual identity.
-    state: open
+    state: closed

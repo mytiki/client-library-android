@@ -213,6 +213,46 @@ In this example, `context` is the current activity or application context from w
 and `Permission.CAMERA` is the permission to check. The method returns a Boolean indicating whether the permission is
 granted.
 
+### OptIn
+
+The Improve OptIn feature provides a structured approach to create compelling ffers, present them to users, and manage user decisions efficiently. 
+
+#### Offer Structure
+
+An OptIn Offer comprises the following components:
+
+- **Description:** A concise, human-readable overview of the offer.
+- **Rewards:** Incentives offered to users for opting in (e.g., virtual currency, exclusive access, upgrades).
+- **Use Cases:** Scenarios outlining how user data may be utilized. The app code can select from predefined options or define custom use cases.
+- **Tags:** Categories specifying the data to be collected. The app code can choose from predefined tags or create custom ones.
+- **Permissions:** Device permissions required for opting in (optional).
+
+#### Presentation Options
+
+Once an Offer is created, it can be presented to users using custom or pre-built UIs. Pre-built UIs offer flexibility through theming options. Users can customize the appearance of the Offer, to match the apps visual identity, using a Theme, with attributes such as:
+
+- Primary text color
+- Secondary text color
+- Primary background color
+- Secondary background color
+- Accent color
+
+#### Offer Flow
+
+The Offer Flow outlines the sequential steps necessary for a successful OptIn process, ensuring compliance with privacy standards mandated by app stores. It consists of:
+
+**Permissions Screen:** This initial screen is mandatory if device permissions are requested. It ensures compliance with app store regulations regarding protected device permissions. Users are prompted to grant necessary permissions based on presented use cases.
+
+**Offer Screen:** Following permission grants (or if no permissions are required), the Offer Screen is displayed. Here, users are informed about the rewards for accepting the offer and how their data will be used. Users can accept or deny the offer at this stage.
+
+User decisions are recorded in a License Record within the TIKI Licensing Infrastructure and can be modified later via the OptIn Settings screen.
+
+#### Settings Management
+
+The Settings screen simplifies user management of OptIn decisions. Here, users can review past decisions and make changes as needed. All license records are automatically updated based on user actions within the settings, including permission states.
+
+This structured approach to OptIn offer management ensures transparency, compliance, and user control over data usage permissions.
+
 ## API Reference
 
 The central API interface in the library is the `TikiClient` object, designed to abstract the complexities of
