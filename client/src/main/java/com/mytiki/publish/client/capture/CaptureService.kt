@@ -5,8 +5,9 @@ import android.content.Intent
 import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
 import com.mytiki.publish.client.TikiClient
-import com.mytiki.publish.client.email.Attachment
-import com.mytiki.publish.client.email.AttachmentType
+import com.mytiki.publish.client.capture.rsp.CaptureReceiptRsp
+import com.mytiki.publish.client.email.EmailAttachment
+import com.mytiki.publish.client.email.EmailAttachmentType
 import com.mytiki.publish.client.utils.apiService.ApiService
 import java.util.*
 import kotlinx.coroutines.*
@@ -32,25 +33,25 @@ class CaptureService {
   }
 
   /**
-   * Publishes an attachment based on its type.
+   * Publishes an emailAttachment based on its type.
    *
-   * This function publishes an attachment. It offerUses the provided Context instance, a string pointer,
-   * and an Attachment object. The function calls the appropriate publish method based on the type
-   * of the attachment (IMAGE, PDF, TEXT).
+   * This function publishes an emailAttachment. It offerUses the provided Context instance, a
+   * string pointer, and an EmailAttachment object. The function calls the appropriate publish
+   * method based on the type of the emailAttachment (IMAGE, PDF, TEXT).
    *
    * @param context The Context instance. This is typically the current activity or application
    *   context from which this function is called. It is used to provide context for the publishing
    *   process.
-   * @param attachment The Attachment object containing the details of the attachment to be
-   *   published.
-   * @return A CompletableDeferred object that will be completed when the attachment has been
+   * @param emailAttachment The EmailAttachment object containing the details of the emailAttachment
+   *   to be published.
+   * @return A CompletableDeferred object that will be completed when the emailAttachment has been
    *   published.
    */
-  fun publish(context: Context, attachment: Attachment): CompletableDeferred<Unit> {
-    return when (attachment.type) {
-      AttachmentType.IMAGE -> publishImage(attachment)
-      AttachmentType.PDF -> publishPdf(context, attachment)
-      AttachmentType.TEXT -> publishText(attachment)
+  fun publish(context: Context, emailAttachment: EmailAttachment): CompletableDeferred<Unit> {
+    return when (emailAttachment.type) {
+      EmailAttachmentType.IMAGE -> publishImage(emailAttachment)
+      EmailAttachmentType.PDF -> publishPdf(context, emailAttachment)
+      EmailAttachmentType.TEXT -> publishText(emailAttachment)
     }
   }
 
@@ -58,46 +59,51 @@ class CaptureService {
    * Publishes an array of attachments.
    *
    * This function publishes an array of attachments. It offerUses the provided Context instance, a
-   * string pointer, and an array of Attachment objects. The function calls the publish method for
-   * each attachment in the array.
+   * string pointer, and an array of EmailAttachment objects. The function calls the publish method
+   * for each attachment in the array.
    *
    * @param context The Context instance. This is typically the current activity or application
    *   context from which this function is called. It is used to provide context for the publishing
    *   process.
-   * @param attachmentList The array of Attachment objects containing the details of the attachments
-   *   to be published.
+   * @param emailAttachmentList The array of EmailAttachment objects containing the details of the
+   *   attachments to be published.
    * @return A CompletableDeferred object that will be completed when all the attachments have been
    *   published.
    */
-  fun publish(context: Context, attachmentList: Array<Attachment>): CompletableDeferred<Unit> {
+  fun publish(
+      context: Context,
+      emailAttachmentList: Array<EmailAttachment>
+  ): CompletableDeferred<Unit> {
     val isPublished = CompletableDeferred<Unit>()
     MainScope().async {
-      attachmentList.forEachIndexed { index, attachment ->
+      emailAttachmentList.forEachIndexed { index, attachment ->
         publish(context, attachment).await()
-        if (index == attachmentList.size - 1) isPublished.complete(Unit)
+        if (index == emailAttachmentList.size - 1) isPublished.complete(Unit)
       }
     }
     return isPublished
   }
 
   /**
-   * Publishes an image attachment.
+   * Publishes an image emailAttachment.
    *
-   * This function publishes an image attachment. It offerUses a string pointer and an Attachment object.
-   * The function calls the post method of the ApiService instance to publish the image.
+   * This function publishes an image emailAttachment. It offerUses a string pointer and an
+   * EmailAttachment object. The function calls the post method of the ApiService instance to
+   * publish the image.
    *
-   * @param attachment The Attachment object containing the details of the image to be published.
+   * @param emailAttachment The EmailAttachment object containing the details of the image to be
+   *   published.
    * @return A CompletableDeferred object that will be completed when the image has been published.
    * @throws Exception if there is an error during the publishing process.
    */
-  private fun publishImage(attachment: Attachment): CompletableDeferred<Unit> {
+  private fun publishImage(emailAttachment: EmailAttachment): CompletableDeferred<Unit> {
     val isPublished = CompletableDeferred<Unit>()
     CoroutineScope(Dispatchers.IO).launch {
       if (!TikiClient.license.verify())
           throw Exception(
               "The License is invalid. OfferUse the TikiClient.license method to issue a new License.")
       val auth = TikiClient.auth.addressToken().await()
-      val image = attachment.toImage()
+      val image = emailAttachment.toImage()
       val id = UUID.randomUUID()
       val body =
           MultipartBody.Builder()
@@ -118,20 +124,24 @@ class CaptureService {
   }
 
   /**
-   * Publishes a PDF attachment.
+   * Publishes a PDF emailAttachment.
    *
-   * This function publishes a PDF attachment. It offerUses the provided Context instance, a string
-   * pointer, and an Attachment object. The function calls the post method of the ApiService
-   * instance to publish the PDF.
+   * This function publishes a PDF emailAttachment. It offerUses the provided Context instance, a
+   * string pointer, and an EmailAttachment object. The function calls the post method of the
+   * ApiService instance to publish the PDF.
    *
    * @param context The Context instance. This is typically the current activity or application
    *   context from which this function is called. It is used to provide context for the publishing
    *   process.
-   * @param attachment The Attachment object containing the details of the PDF to be published.
+   * @param emailAttachment The EmailAttachment object containing the details of the PDF to be
+   *   published.
    * @return A CompletableDeferred object that will be completed when the PDF has been published.
    * @throws Exception if there is an error during the publishing process.
    */
-  private fun publishPdf(context: Context, attachment: Attachment): CompletableDeferred<Unit> {
+  private fun publishPdf(
+      context: Context,
+      emailAttachment: EmailAttachment
+  ): CompletableDeferred<Unit> {
     val isPublished = CompletableDeferred<Unit>()
     CoroutineScope(Dispatchers.IO).launch {
       if (!TikiClient.license.verify())
@@ -140,7 +150,7 @@ class CaptureService {
       val auth = TikiClient.auth.addressToken().await()
 
       val id = UUID.randomUUID()
-      val pdf = attachment.toPdf(context)
+      val pdf = emailAttachment.toPdf(context)
       val body =
           MultipartBody.Builder()
               .setType(MultipartBody.FORM)
@@ -162,16 +172,17 @@ class CaptureService {
   }
 
   /**
-   * Publishes a text attachment.
+   * Publishes a text emailAttachment.
    *
-   * This function publishes a text attachment. It offerUses a string pointer and an Attachment object.
-   * The function completes the CompletableDeferred object immediately as there is no actual
-   * publishing process for text attachments.
+   * This function publishes a text emailAttachment. It offerUses a string pointer and an
+   * EmailAttachment object. The function completes the CompletableDeferred object immediately as
+   * there is no actual publishing process for text attachments.
    *
-   * @param attachment The Attachment object containing the details of the text to be published.
+   * @param emailAttachment The EmailAttachment object containing the details of the text to be
+   *   published.
    * @return A CompletableDeferred object that will be completed immediately.
    */
-  private fun publishText(attachment: Attachment): CompletableDeferred<Unit> {
+  private fun publishText(emailAttachment: EmailAttachment): CompletableDeferred<Unit> {
     val isPublished = CompletableDeferred<Unit>()
     isPublished.complete(Unit)
     return isPublished
@@ -184,8 +195,8 @@ class CaptureService {
    *
    * @param receiptId The unique identifier for the receipt obtained from the publish method.
    * @param token The address token to connect with TIKI API.
-   * @param onResult A callback functions that revceives the array of CaptureReceiptRsp objects, each
-   *   containing the structured data extracted from an image of the receipt, or null if the
+   * @param onResult A callback functions that revceives the array of CaptureReceiptRsp objects,
+   *   each containing the structured data extracted from an image of the receipt, or null if the
    *   retrieval fails.
    */
   suspend fun receipt(

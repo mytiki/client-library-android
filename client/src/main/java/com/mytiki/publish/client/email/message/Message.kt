@@ -1,9 +1,8 @@
-package com.mytiki.publish.client.email.messageResponse
+package com.mytiki.publish.client.email.message
 
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.util.*
 import org.json.JSONArray
 import org.json.JSONObject
 

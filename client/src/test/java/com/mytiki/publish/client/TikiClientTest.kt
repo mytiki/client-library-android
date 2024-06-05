@@ -3,7 +3,7 @@ package com.mytiki.publish.client
 import android.content.Context
 import androidx.activity.ComponentActivity
 import com.mytiki.publish.client.config.Config
-import com.mytiki.publish.client.email.Attachment
+import com.mytiki.publish.client.email.EmailAttachment
 import com.mytiki.publish.client.offer.*
 import com.mytiki.publish.client.permission.Permission
 import io.mockk.*
@@ -49,7 +49,7 @@ class TikiClientTest {
           tosUrl = "validTosUrl",
           privacyUrl = "validPrivacyUrl")
   private val mockActivity = mockk<ComponentActivity>()
-  private val mockAttachmentArray = arrayOf(mockk<Attachment>())
+  private val mockEmailAttachmentArray = arrayOf(mockk<EmailAttachment>())
   private val mockContext = mockk<Context>()
   private val userID = "validUserID"
   private val offer =
@@ -126,11 +126,11 @@ class TikiClientTest {
     TikiClient.configure(mockConfig)
     clearAllMocks()
 
-    every { mockk<Attachment>().toPdf(mockActivity) } returns mockk<File>()
+    every { mockk<EmailAttachment>().toPdf(mockActivity) } returns mockk<File>()
 
     mainCoroutineRule.dispatcher.runBlockingTest { TikiClient.initialize(userID) }
     mainCoroutineRule.dispatcher.runBlockingTest {
-      TikiClient.publish(mockActivity, mockAttachmentArray)
+      TikiClient.publish(mockActivity, mockEmailAttachmentArray)
     }
   }
 

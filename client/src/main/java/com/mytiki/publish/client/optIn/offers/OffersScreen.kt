@@ -43,7 +43,7 @@ fun OffersScreen(offer: Offer, close: () -> Unit, callbackOffer: (Map<Offer, Boo
                   Column(
                       modifier = Modifier.fillMaxWidth(),
                       horizontalAlignment = Alignment.CenterHorizontally) {
-                        RewardAmount(reward = offer.offerRewards[0])
+                        OffersRewardAmount(reward = offer.offerRewards[0])
                       }
                   Spacer(modifier = Modifier.size(39.5.dp))
                   Text(

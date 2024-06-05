@@ -5,7 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import java.io.File
 
-class Attachment(val type: AttachmentType, val data: ByteArray) {
+class EmailAttachment(val type: EmailAttachmentType, val data: ByteArray) {
   fun toImage(): File {
     val resp = BitmapFactory.decodeByteArray(data, 0, data.size)
     val file = File.createTempFile("receipt", ".jpeg")

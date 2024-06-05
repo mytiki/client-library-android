@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-import com.mytiki.publish.client.email.messageResponse.Message
+import com.mytiki.publish.client.email.message.Message
 import java.io.*
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -30,23 +30,23 @@ class EmailRepository {
     }
   }
 
-  fun saveData(context: Context, date: IndexData): Boolean {
+  fun saveData(context: Context, date: EmailIndexData): Boolean {
     checkData(context)
     val dataJson = date.toJson()
     return editor!!.putString(date.email, dataJson).commit()
   }
 
-  fun updateData(context: Context, data: IndexData) {
+  fun updateData(context: Context, data: EmailIndexData) {
     checkData(context)
     if (getData(context, data.email) == null) throw Exception("data not found for this email")
     editor!!.putString(data.email, data.toJson()).commit()
   }
 
-  fun getData(context: Context, email: String): IndexData? {
+  fun getData(context: Context, email: String): EmailIndexData? {
     checkData(context)
     val data = sharedPreferences!!.getString(email, null)
     return if (data != null) {
-      IndexData.fromJson(data, email)
+      EmailIndexData.fromJson(data, email)
     } else {
       null
     }
@@ -57,13 +57,13 @@ class EmailRepository {
     editor!!.remove(email).commit()
   }
 
-  fun accountsData(context: Context): List<IndexData> {
+  fun accountsData(context: Context): List<EmailIndexData> {
     checkData(context)
     val allEntries: MutableMap<String, *>? = sharedPreferences!!.all
-    val data = mutableListOf<IndexData>()
+    val data = mutableListOf<EmailIndexData>()
     allEntries?.forEach { (key, value) ->
       if (value is String) {
-        data.add(IndexData.fromJson(value, key))
+        data.add(EmailIndexData.fromJson(value, key))
       }
     }
     return data

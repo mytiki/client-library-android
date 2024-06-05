@@ -1,6 +1,6 @@
 package com.mytiki.publish.client.email
 
-enum class AttachmentType {
+enum class EmailAttachmentType {
   PDF,
   IMAGE,
   TEXT,

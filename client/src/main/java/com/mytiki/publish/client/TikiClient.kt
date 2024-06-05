@@ -4,10 +4,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import androidx.activity.ComponentActivity
 import com.mytiki.publish.client.auth.AuthService
-import com.mytiki.publish.client.capture.CaptureReceiptRsp
 import com.mytiki.publish.client.capture.CaptureService
+import com.mytiki.publish.client.capture.rsp.CaptureReceiptRsp
 import com.mytiki.publish.client.config.Config
-import com.mytiki.publish.client.email.Attachment
+import com.mytiki.publish.client.email.EmailAttachment
 import com.mytiki.publish.client.email.EmailKeys
 import com.mytiki.publish.client.email.EmailProviderEnum
 import com.mytiki.publish.client.email.EmailService
@@ -269,20 +269,24 @@ object TikiClient {
   }
 
   /**
-   * Publishes an array of attachments for receipt data extraction.
+   * Publishes an array of emailAttachments for receipt data extraction.
    *
-   * This function publishes an array of attachments for receipt data extraction. The provided
-   * attachments are sent to the capture service for processing. The function is asynchronous and
-   * returns a CompletableDeferred object that will be completed when the data has been published.
+   * This function publishes an array of emailAttachments for receipt data extraction. The provided
+   * emailAttachments are sent to the capture service for processing. The function is asynchronous
+   * and returns a CompletableDeferred object that will be completed when the data has been
+   * published.
    *
    * @param context The Context instance. This is typically the current activity or application
    *   context from which this function is called. It is used to provide context for the publishing
    *   process.
-   * @param attachments The array of Attachment objects to be published.
+   * @param emailAttachments The array of EmailAttachment objects to be published.
    * @return A CompletableDeferred object that will be completed when the data has been published.
    */
-  fun publish(context: Context, attachments: Array<Attachment>): CompletableDeferred<Unit> {
-    return capture.publish(context, attachments)
+  fun publish(
+      context: Context,
+      emailAttachments: Array<EmailAttachment>
+  ): CompletableDeferred<Unit> {
+    return capture.publish(context, emailAttachments)
   }
 
   /**

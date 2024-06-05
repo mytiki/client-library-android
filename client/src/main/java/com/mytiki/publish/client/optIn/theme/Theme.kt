@@ -10,7 +10,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
 @Composable
-fun OptInTheme(content: @Composable () -> Unit) {
+fun Theme(content: @Composable () -> Unit) {
   val colorScheme =
       lightColorScheme(
           primary = Colors().primary,

@@ -12,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.mytiki.publish.client.R
@@ -22,7 +21,11 @@ import com.mytiki.publish.client.optIn.components.Button
 import com.mytiki.publish.client.optIn.theme.Colors
 
 @Composable
-fun SettingsScreen(offerList: List<Offer>, close: () -> Unit, callbackOffer: (Map<Offer, Boolean>) -> Unit) {
+fun SettingsScreen(
+    offerList: List<Offer>,
+    close: () -> Unit,
+    callbackOffer: (Map<Offer, Boolean>) -> Unit
+) {
   var offerMap by remember { mutableStateOf(emptyMap<Offer, Boolean>()) }
 
   LaunchedEffect(Unit) {
@@ -51,20 +54,23 @@ fun SettingsScreen(offerList: List<Offer>, close: () -> Unit, callbackOffer: (Ma
 
                 LazyColumn {
                   items(offerList) { offer ->
-                    OfferSettings(offer = offer){pair: Pair<Offer, Boolean> ->
-                        offerMap -= pair.first
-                        offerMap += pair
-                        callbackOffer(offerMap)
+                    SettingsOffer(offer = offer) { pair: Pair<Offer, Boolean> ->
+                      offerMap -= pair.first
+                      offerMap += pair
+                      callbackOffer(offerMap)
                     }
                     Spacer(modifier = Modifier.size(9.5.dp))
                   }
                 }
 
                 Spacer(modifier = Modifier.size(39.dp))
-                Button(title = "Close", true, onClick = {
-                    callbackOffer(offerMap)
-                    close()
-                })
+                Button(
+                    title = "Close",
+                    true,
+                    onClick = {
+                      callbackOffer(offerMap)
+                      close()
+                    })
               }
         }
   }
