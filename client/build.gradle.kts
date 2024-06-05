@@ -9,7 +9,7 @@ plugins {
   id("signing")
 }
 
-val versionName = "0.5.0"
+val versionName = "0.6.0"
 val localProps = Properties()
 
 try {
